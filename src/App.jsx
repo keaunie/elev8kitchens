@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+
 import Navbar from "./components/Navbar.jsx";
 import HeroCarousel from "./components/HeroCarousel.jsx";
 import FeaturesSection from "./components/Features.jsx";
@@ -8,6 +10,9 @@ import Process from "./components/Process.jsx";
 import HabitatSection from "./components/HabitatSection.jsx";
 import CTABanner from "./components/CTABanner.jsx";
 import Footer from "./components/Footer.jsx";
+
+// NEW: import your Story page
+import Story from "./pages/Story.jsx";
 
 const slides = [
   {
@@ -41,11 +46,21 @@ const slides = [
   },
 ];
 
-
-export default function App() {
+// -------- Layout (Navbar + Footer on all pages) --------
+function Layout() {
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+}
+
+// -------- Home page content (what you already had) --------
+function Home() {
+  return (
+    <>
       <HeroCarousel slides={slides} interval={6000} />
       <FeaturesSection
         kicker="What we offer"
@@ -58,17 +73,20 @@ export default function App() {
       <Process />
       <HabitatSection />
       <CTABanner />
-      <Footer />
-      {/* <main className="flex flex-col items-center justify-center py-32 text-center">
-        <h1 className="text-4xl font-light tracking-wide text-[#C1A88B]">
-          Welcome to Elev8 Crafted Kitchens
-        </h1>
-        <p className="mt-4 max-w-xl text-sm text-[#C1A88B]/80">
-          Explore our luxury modular outdoor kitchen collection built for design, functionality, and timeless style.
-        </p>
-      </main> */}
-    </div>
+    </>
+  );
+}
 
-
+// -------- Router --------
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<Home />} />          {/* "/" */}
+          <Route path="/story" element={<Story />} /> {/* "/story" */}
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }

@@ -1,33 +1,58 @@
-/* src/index.css */
 @import "tailwindcss";
 
-html,
-body {
-  font-family: var(--tw-font-body);
+/* ----------------------------------------------------------
+   GOOGLE FONTS (Roboto + EB Garamond)
+   ---------------------------------------------------------- */
+/* Make sure these are in your index.html <head>:
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=EB+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet" />
+*/
+
+/* ----------------------------------------------------------
+   THEME FONT TOKENS
+   ---------------------------------------------------------- */
+@theme {
+  --font-body: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+
+  --font-heading: "EB Garamond", Garamond, Georgia, "Times New Roman", serif;
 }
 
+/* ----------------------------------------------------------
+   GLOBAL COLORS
+   ---------------------------------------------------------- */
+:root {
+  --brand-gold: #C1A88B;
+}
+
+/* ----------------------------------------------------------
+   GLOBAL FONT + BASE STYLES
+   ---------------------------------------------------------- */
+html,
+body {
+  @apply font-body;
+  background: #000;
+  color: #fff;
+}
+
+/* Headings use Garamond */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: var(--tw-font-heading);
+  @apply font-heading text-[#C1A88B];
 }
 
-/* Base colors */
-:root {
-  --brand-gold: #C1A88B;
-}
-
-body {
-  @apply font-serif;
-  background: #000;
-  color: #fff;
-}
-
-/* Headings: use the custom display stack */
+/* Optional base layer if you want to ensure consistency in typography utilities */
 @layer base {
+  body {
+    @apply font-body;
+  }
 
   h1,
   h2,
@@ -35,8 +60,6 @@ body {
   h4,
   h5,
   h6 {
-    /* Arbitrary font utility bound to the CSS var above */
-    @apply text-[#C1A88B];
-    font-family: var(--font-display);
+    @apply font-heading text-[#C1A88B];
   }
 }

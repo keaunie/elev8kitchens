@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 /**
  * Navbar — React + Tailwind (Vite)
@@ -22,7 +23,7 @@ export default function Navbar() {
 
   const navItems = [
     { label: "Home", href: "/" },
-    { label: "About Us", href: "/about" },
+    { label: "About Us", href: "/story" },
     { label: "Product", href: "/products" },
     { label: "Product Features", href: "/features" },
     { label: "FAQ", href: "/faq" },
