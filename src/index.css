@@ -1,16 +1,42 @@
+/* src/index.css */
 @import "tailwindcss";
 
-/* optional custom base */
+html,
+body {
+  font-family: var(--tw-font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--tw-font-heading);
+}
+
+/* Base colors */
 :root {
   --brand-gold: #C1A88B;
 }
 
 body {
+  @apply font-serif;
   background: #000;
   color: #fff;
 }
 
- /* @keyframes flame {
-   0% { background-position: 0% 50%; filter: hue-rotate(0deg) brightness(1); }
-   50% { background-position: 100% 50%; filter: hue-rotate(45deg) brightness(1.3); }
-   100% { background-position: 0% 50%; filter: hue-rotate(0deg) brightness(1); } } */
+/* Headings: use the custom display stack */
+@layer base {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    /* Arbitrary font utility bound to the CSS var above */
+    @apply text-[#C1A88B];
+    font-family: var(--font-display);
+  }
+}

@@ -1,9 +1,11 @@
 // tailwind.config.js
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}", // must include .jsx
-  ],
-  theme: { extend: {} },
-  plugins: [],
+  theme: {
+    extend: {
+      fontFamily: {
+        body: ['"Elms Sans"', "sans-serif"],
+        heading: ['"EB Garamond"', "serif"],
+      },
+    },
+  },
 };

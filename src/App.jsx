@@ -6,7 +6,8 @@ import Reviews from "./components/Reviews.jsx";
 import Payment from "./components/Payment.jsx";
 import Process from "./components/Process.jsx";
 import HabitatSection from "./components/HabitatSection.jsx";
-
+import CTABanner from "./components/CTABanner.jsx";
+import Footer from "./components/Footer.jsx";
 
 const slides = [
   {
@@ -56,6 +57,8 @@ export default function App() {
       <Payment />
       <Process />
       <HabitatSection />
+      <CTABanner />
+      <Footer />
       {/* <main className="flex flex-col items-center justify-center py-32 text-center">
         <h1 className="text-4xl font-light tracking-wide text-[#C1A88B]">
           Welcome to Elev8 Crafted Kitchens
