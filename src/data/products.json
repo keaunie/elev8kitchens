@@ -1,0 +1,142 @@
+{
+    "products": [
+        {
+            "id": "elev8-modular-outdoor-bbq-kitchen",
+            "title": "ELEV8 Modular Outdoor BBQ Kitchen",
+            "handle": "elev8-modular-outdoor-bbq-kitchen",
+            "vendor": "ELEV8 Crafted Kitchens",
+            "category": "Outdoor Kitchens",
+            "currency": "USD",
+            "availability": "LIMITED STOCK",
+            "sale_badge": "ON SALE & LIMITED STOCK!",
+            "stock_note": "A 60 to 90 day waiting period may apply if the desired product is not in stock.",
+            "options": [
+                {
+                    "name": "Size",
+                    "values": [
+                        "XL",
+                        "XXL"
+                    ]
+                },
+                {
+                    "name": "Color",
+                    "values": [
+                        "TITANIUM",
+                        "PLATINUM",
+                        "ANTHRACITE"
+                    ]
+                }
+            ],
+            "key_features": [
+                "Professional-grade grilling: 4/6 burners up to 85,000 BTU with rotisserie",
+                "SS304 all-weather stainless steel construction",
+                "Smart TV (42\" XXL / 26\" XL) + Bluetooth speakers",
+                "Luxury storage: honeycomb drawers, wine-glass rack, upper storage, pull-out trash",
+                "Outdoor-rated bar fridge on sintered-stone countertop",
+                "Electro-hydraulic lift door with manual override",
+                "Advanced safety: gas leak detection, exhaust hood, hydraulic safety monitor, 50A plug-and-play",
+                "LED ambience lighting (interior/exterior)"
+            ],
+            "variants": [
+                {
+                    "sku": "ELEV8-XL-TITANIUM",
+                    "options": {
+                        "Size": "XL",
+                        "Color": "TITANIUM"
+                    },
+                    "price": 17300,
+                    "compare_at_price": 18900,
+                    "images": [
+                        "https://placehold.co/1600x1600?text=XL+Titanium+1",
+                        "https://placehold.co/1600x1600?text=XL+Titanium+2",
+                        "https://placehold.co/1600x1600?text=XL+Titanium+3"
+                    ],
+                    "available": true
+                },
+                {
+                    "sku": "ELEV8-XL-PLATINUM",
+                    "options": {
+                        "Size": "XL",
+                        "Color": "PLATINUM"
+                    },
+                    "price": 17600,
+                    "compare_at_price": null,
+                    "images": [
+                        "https://placehold.co/1600x1600?text=XL+Platinum+1",
+                        "https://placehold.co/1600x1600?text=XL+Platinum+2"
+                    ],
+                    "available": true
+                },
+                {
+                    "sku": "ELEV8-XL-ANTHRACITE",
+                    "options": {
+                        "Size": "XL",
+                        "Color": "ANTHRACITE"
+                    },
+                    "price": 17900,
+                    "compare_at_price": 18900,
+                    "images": [
+                        "https://placehold.co/1600x1600?text=XL+Anthracite+1",
+                        "https://placehold.co/1600x1600?text=XL+Anthracite+2"
+                    ],
+                    "available": true
+                },
+                {
+                    "sku": "ELEV8-XXL-TITANIUM",
+                    "options": {
+                        "Size": "XXL",
+                        "Color": "TITANIUM"
+                    },
+                    "price": 19300,
+                    "compare_at_price": 20900,
+                    "images": [
+                        "https://placehold.co/1600x1600?text=XXL+Titanium+1",
+                        "https://placehold.co/1600x1600?text=XXL+Titanium+2",
+                        "https://placehold.co/1600x1600?text=XXL+Titanium+3"
+                    ],
+                    "available": true
+                },
+                {
+                    "sku": "ELEV8-XXL-PLATINUM",
+                    "options": {
+                        "Size": "XXL",
+                        "Color": "PLATINUM"
+                    },
+                    "price": 19600,
+                    "compare_at_price": null,
+                    "images": [
+                        "https://placehold.co/1600x1600?text=XXL+Platinum+1",
+                        "https://placehold.co/1600x1600?text=XXL+Platinum+2"
+                    ],
+                    "available": true
+                },
+                {
+                    "sku": "ELEV8-XXL-ANTHRACITE",
+                    "options": {
+                        "Size": "XXL",
+                        "Color": "ANTHRACITE"
+                    },
+                    "price": 19900,
+                    "compare_at_price": 20900,
+                    "images": [
+                        "https://placehold.co/1600x1600?text=XXL+Anthracite+1",
+                        "https://placehold.co/1600x1600?text=XXL+Anthracite+2"
+                    ],
+                    "available": true
+                }
+            ],
+            "swatches": {
+                "TITANIUM": "#c0c0c2",
+                "PLATINUM": "#d9d9de",
+                "ANTHRACITE": "#232427"
+            },
+            "badges": [
+                "U.S. & Canada Shipping",
+                "30-Day Returns",
+                "2-Year Warranty"
+            ],
+            "rating": 4.9,
+            "reviewsCount": 168
+        }
+    ]
+}

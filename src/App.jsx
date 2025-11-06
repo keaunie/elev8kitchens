@@ -10,6 +10,8 @@ import Process from "./components/Process.jsx";
 import HabitatSection from "./components/HabitatSection.jsx";
 import CTABanner from "./components/CTABanner.jsx";
 import Footer from "./components/Footer.jsx";
+import ProductPage from "./pages/ProductPage.jsx";
+import FaqPage from "./pages/FaqPage.jsx";
 
 // NEW: import your Story page
 import Story from "./pages/Story.jsx";
@@ -85,6 +87,8 @@ export default function App() {
         <Route element={<Layout />}>
           <Route index element={<Home />} />          {/* "/" */}
           <Route path="/story" element={<Story />} /> {/* "/story" */}
+          <Route path="/Elev8Kitchens" element={<ProductPage />} /> {/* "/Elev8Kitchens" */}
+          <Route path="/FAQ" element={<FaqPage />} /> {/* "/story" */}
         </Route>
       </Routes>
     </BrowserRouter>

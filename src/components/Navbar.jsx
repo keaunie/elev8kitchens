@@ -24,17 +24,16 @@ export default function Navbar() {
   const navItems = [
     { label: "Home", href: "/" },
     { label: "About Us", href: "/story" },
-    { label: "Product", href: "/products" },
+    { label: "Product", href: "/Elev8Kitchens" },
     { label: "Product Features", href: "/features" },
-    { label: "FAQ", href: "/faq" },
+    { label: "FAQ", href: "/FAQ" },
     { label: "Book a Consultation", href: "/consultation" },
   ];
 
   return (
     <header
       className={
-        `sticky top-0 z-50 w-full transition-shadow ${
-          scrolled ? "shadow-[0_1px_0_0_rgba(193,168,139,0.2)]" : ""
+        `sticky top-0 z-50 w-full transition-shadow ${scrolled ? "shadow-[0_1px_0_0_rgba(193,168,139,0.2)]" : ""
         }`
       }
     >
@@ -87,9 +86,8 @@ export default function Navbar() {
 
         {/* Mobile panel */}
         <div
-          className={`lg:hidden overflow-hidden transition-[max-height] duration-300 ${
-            open ? "max-h-96" : "max-h-0"
-          }`}
+          className={`lg:hidden overflow-hidden transition-[max-height] duration-300 ${open ? "max-h-96" : "max-h-0"
+            }`}
         >
           <div className="mx-auto max-w-7xl px-4 pb-4 md:px-6">
             <nav>
@@ -108,9 +106,9 @@ export default function Navbar() {
               </ul>
             </nav>
             <div className="mt-3 flex items-center gap-5 border-t border-[#C1A88B]/20 pt-3 text-[#C1A88B]">
-              <a href="#" className="inline-flex items-center gap-2"><Search size={20}/>Search</a>
-              <a href="#" className="inline-flex items-center gap-2"><User size={20}/>Account</a>
-              <a href="#" className="inline-flex items-center gap-2"><ShoppingBag size={20}/>Cart</a>
+              <a href="#" className="inline-flex items-center gap-2"><Search size={20} />Search</a>
+              <a href="#" className="inline-flex items-center gap-2"><User size={20} />Account</a>
+              <a href="#" className="inline-flex items-center gap-2"><ShoppingBag size={20} />Cart</a>
             </div>
           </div>
         </div>
