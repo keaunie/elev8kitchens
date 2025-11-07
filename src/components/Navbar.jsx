@@ -25,7 +25,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "About Us", href: "/story" },
     { label: "Product", href: "/Elev8Kitchens" },
-    { label: "Product Features", href: "/features" },
+    // { label: "Product Features", href: "/features" },
     { label: "FAQ", href: "/FAQ" },
     { label: "Book a Consultation", href: "/consultation" },
   ];

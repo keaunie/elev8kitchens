@@ -12,6 +12,7 @@ import CTABanner from "./components/CTABanner.jsx";
 import Footer from "./components/Footer.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import FaqPage from "./pages/FaqPage.jsx";
+import Consultation from "./pages/Consultation.jsx";
 
 // NEW: import your Story page
 import Story from "./pages/Story.jsx";
@@ -88,7 +89,8 @@ export default function App() {
           <Route index element={<Home />} />          {/* "/" */}
           <Route path="/story" element={<Story />} /> {/* "/story" */}
           <Route path="/Elev8Kitchens" element={<ProductPage />} /> {/* "/Elev8Kitchens" */}
-          <Route path="/FAQ" element={<FaqPage />} /> {/* "/story" */}
+          <Route path="/FAQ" element={<FaqPage />} /> {/* "/FAQs" */}
+          <Route path="/consultation" element={<Consultation />} /> {/* "/consultation" */}
         </Route>
       </Routes>
     </BrowserRouter>

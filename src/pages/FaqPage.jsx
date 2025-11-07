@@ -321,7 +321,7 @@ export default function FaqPage() {
                             className="w-full rounded-full bg-white/5 py-3 pl-9 pr-4 text-sm text-white placeholder-white/50 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60"
                         />
                     </div>
-                    <div className="flex w-full items-center justify-between gap-3 md:w-auto">
+                    {/* <div className="flex w-full items-center justify-between gap-3 md:w-auto">
                         <div className="flex flex-wrap items-center gap-2">
                             {categories.map((c) => (
                                 <button
@@ -340,7 +340,7 @@ export default function FaqPage() {
                         >
                             {expandAll ? "Collapse All" : "Expand All"}
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
