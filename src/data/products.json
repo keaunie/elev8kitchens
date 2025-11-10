@@ -47,9 +47,12 @@
                     "price": 17300,
                     "compare_at_price": 18900,
                     "images": [
-                        "https://placehold.co/1600x1600?text=XL+Titanium+1",
-                        "https://placehold.co/1600x1600?text=XL+Titanium+2",
-                        "https://placehold.co/1600x1600?text=XL+Titanium+3"
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804000/elev8-modular-outdoor-bbq-kitchen-xl-titanium-canada_oaujii.png",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286650/NF-101_10_copy_gcozbn.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286625/Enscape_2025-04-28-16-47-03_copy_a1nydp.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286620/elev8_3_without_bg_copy_ujslty.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286600/IMG-20250228-WA0013_copy_myskc5.webp"
                     ],
                     "available": true
                 },
@@ -62,8 +65,10 @@
                     "price": 17600,
                     "compare_at_price": null,
                     "images": [
-                        "https://placehold.co/1600x1600?text=XL+Platinum+1",
-                        "https://placehold.co/1600x1600?text=XL+Platinum+2"
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804000/elev8-modular-outdoor-bbq-kitchen-xl-platinum-canada_nztzop.png",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286626/Enscape_2025-04-28-16-52-30_copy_gyinpz.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762285483/hero3_djf8cr.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286599/IMG-20250228-WA0011_copy_isgkzj.webp"
                     ],
                     "available": true
                 },
@@ -76,8 +81,8 @@
                     "price": 17900,
                     "compare_at_price": 18900,
                     "images": [
-                        "https://placehold.co/1600x1600?text=XL+Anthracite+1",
-                        "https://placehold.co/1600x1600?text=XL+Anthracite+2"
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-anthracite-canada_2_pij6nh.png",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp"
                     ],
                     "available": true
                 },
@@ -90,9 +95,12 @@
                     "price": 19300,
                     "compare_at_price": 20900,
                     "images": [
-                        "https://placehold.co/1600x1600?text=XXL+Titanium+1",
-                        "https://placehold.co/1600x1600?text=XXL+Titanium+2",
-                        "https://placehold.co/1600x1600?text=XXL+Titanium+3"
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-titanium-canada_bmeykg.png",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286663/Untitled_design_copy_tpqrpg.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286651/NF-101_17_copy_ydwdhm.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286650/NF-101_10_copy_gcozbn.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286618/Elev8_Front_Facing_1200_X_1200_-_Xxl_TiDim_copy_yvaabr.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp"
                     ],
                     "available": true
                 },
@@ -105,8 +113,11 @@
                     "price": 19600,
                     "compare_at_price": null,
                     "images": [
-                        "https://placehold.co/1600x1600?text=XXL+Platinum+1",
-                        "https://placehold.co/1600x1600?text=XXL+Platinum+2"
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-platinum-canada_v0huwz.png",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286621/Enscape_2025-04-23-16-45-32_copy_uvsddh.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286619/elev8_1_without_bg_copy_t6yuqf.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286619/elev8_2_without_bg_copy_m873us.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286618/Elev8_Front_Facing_1200_X_1200_-_Xxl_PlDim_copy_rqa1zu.webp","https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/k2_copy_qcz1bi.webp","https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/k1_copy_ij8xt4.webp"
                     ],
                     "available": true
                 },
@@ -119,8 +130,15 @@
                     "price": 19900,
                     "compare_at_price": 20900,
                     "images": [
-                        "https://placehold.co/1600x1600?text=XXL+Anthracite+1",
-                        "https://placehold.co/1600x1600?text=XXL+Anthracite+2"
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-anthracite-canada_bswk07.png",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286652/NF-101_20_copy_mewtvm.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286626/Enscape_2025-04-28-16-55-12_copy_zrhv78.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286620/elev8_kitchen_bg_copy_rcjdjn.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286617/Elev8_Front_Facing_1200_X_1200_-_Xxl_anDim_copy_gzkqgd.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286603/NF-101_12_copy_on3yzt.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286602/NF-101_7_copy_rozn9p.webp",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1761439478/Elev8_Front_Facing_1200_X_1200_-_Xxl_an_wqnmrg.webp"
                     ],
                     "available": true
                 }

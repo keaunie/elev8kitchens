@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
  * Tailwind color notes:
  *   Brand gold: #C1A88B (used via arbitrary value text-[#C1A88B]/border-[#C1A88B])
  */
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
