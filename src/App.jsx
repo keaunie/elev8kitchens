@@ -10,6 +10,7 @@ import Process from "./components/Process.jsx";
 import HabitatSection from "./components/HabitatSection.jsx";
 import CTABanner from "./components/CTABanner.jsx";
 import Footer from "./components/Footer.jsx";
+import Elev8ChatWidget from "./components/BrandChatWidget.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import FaqPage from "./pages/FaqPage.jsx";
 import Consultation from "./pages/Consultation.jsx";
@@ -93,6 +94,7 @@ export default function App() {
           <Route path="/consultation" element={<Consultation />} /> {/* "/consultation" */}
         </Route>
       </Routes>
+      <Elev8ChatWidget endpoint="/api/chat" />
     </BrowserRouter>
   );
 }
