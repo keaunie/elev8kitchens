@@ -147,13 +147,12 @@ export default function Footer() {
                     {/* Payment rail */}
                     <div className="flex flex-wrap items-center gap-3 opacity-85">
                         {[
-                            "https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo_%282018%29.svg",
-                            "https://upload.wikimedia.org/wikipedia/commons/3/3c/Apple_Pay_logo.svg",
-                            "https://upload.wikimedia.org/wikipedia/commons/5/5f/Discover_Card_logo.svg",
-                            "https://upload.wikimedia.org/wikipedia/commons/5/5a/Google_Pay_Logo.svg",
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/120px-American_Express_logo_%282018%29.svg.png?20191022102801",
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Apple_Pay_Acceptance_Mark.svg/640px-Apple_Pay_Acceptance_Mark.svg.png",
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Font_Awesome_5_brands_cc-discover.svg/640px-Font_Awesome_5_brands_cc-discover.svg.png",
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/640px-Google_Pay_Logo.svg.png",
                             "https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png",
-                            "https://upload.wikimedia.org/wikipedia/commons/5/53/PayPal_2014_logo.png",
-                            "https://upload.wikimedia.org/wikipedia/commons/8/8e/Shopify_logo_2018.svg",
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/PayPal_Logo2014.svg/640px-PayPal_Logo2014.svg.png",
                             "https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg",
                         ].map((src, i) => (
                             <div

@@ -1,16 +1,6 @@
 import { useState, useEffect } from "react";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
-
-/**
- * Navbar — React + Tailwind (Vite)
- * - Sticky, dark navbar with brand gold accents
- * - Desktop: logo • links • icons
- * - Mobile: logo • menu button → slide-down panel
- *
- * Tailwind color notes:
- *   Brand gold: #C1A88B (used via arbitrary value text-[#C1A88B]/border-[#C1A88B])
- */
+// If you prefer <Link> from react-router, swap <a> with <Link to=...>
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -26,26 +16,37 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "About Us", href: "/story" },
     { label: "Product", href: "/Elev8Kitchens" },
-    // { label: "Product Features", href: "/features" },
     { label: "FAQ", href: "/FAQ" },
     { label: "Book a Consultation", href: "/consultation" },
   ];
 
   return (
     <header
-      className={
-        `sticky top-0 z-50 w-full transition-shadow ${scrolled ? "shadow-[0_1px_0_0_rgba(193,168,139,0.2)]" : ""
-        }`
-      }
+      className={[
+        "sticky top-0 z-50 w-full transition-shadow duration-300",
+        scrolled ? "shadow-[0_1px_0_0_rgba(193,168,139,0.22)]" : "",
+      ].join(" ")}
     >
-      <div className="w-full bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-black/80">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
+      <div
+        className={[
+          // background + blur
+          "w-full backdrop-blur supports-[backdrop-filter]:bg-black/75",
+          scrolled ? "bg-black/90" : "bg-black/95",
+          // height + spacing animate
+          "transition-[padding,background-color] duration-300 ease-out",
+          scrolled ? "py-2" : "py-4 md:py-6",
+        ].join(" ")}
+      >
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 md:px-6">
           {/* Left: Logo */}
           <a href="/" className="flex items-center gap-3">
             <img
-              src="https://elev8kitchens.com/cdn/shop/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896&width=240"
+              src="https://elev8kitchens.com/cdn/shop/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896&width=480"
               alt="ELEV8 Crafted Kitchens logo"
-              className="h-7 w-auto md:h-8"
+              className={[
+                "w-auto transition-all duration-300 ease-out will-change-transform",
+                scrolled ? "h-7 md:h-8" : "h-10 md:h-12",
+              ].join(" ")}
               loading="lazy"
               decoding="async"
             />
@@ -53,12 +54,23 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <nav className="hidden lg:block">
-            <ul className="flex items-center gap-9">
+            <ul
+              className={[
+                "flex items-center transition-[gap] duration-300 ease-out",
+                scrolled ? "gap-7" : "gap-9",
+              ].join(" ")}
+            >
               {navItems.map((item) => (
                 <li key={item.href}>
                   <a
                     href={item.href}
-                    className="text-sm tracking-widest text-[#C1A88B] transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1A88B]/40"
+                    className={[
+                      "tracking-widest transition-colors focus:outline-none",
+                      "text-[#C1A88B] hover:text-white",
+                      "focus-visible:ring-2 focus-visible:ring-[#C1A88B]/40",
+                      // font size compress slightly when scrolled
+                      scrolled ? "text-[0.78rem]" : "text-sm",
+                    ].join(" ")}
                   >
                     {item.label.toUpperCase()}
                   </a>
@@ -68,15 +80,31 @@ export default function Navbar() {
           </nav>
 
           {/* Right icons (desktop) */}
-          <div className="hidden lg:flex items-center gap-6 text-[#C1A88B]">
-            <IconButton ariaLabel="Search"><Search size={22} /></IconButton>
-            <IconButton ariaLabel="Account"><User size={22} /></IconButton>
-            <IconButton ariaLabel="Cart"><ShoppingBag size={22} /></IconButton>
+          <div
+            className={[
+              "hidden lg:flex items-center text-[#C1A88B] transition-[gap] duration-300 ease-out",
+              scrolled ? "gap-4" : "gap-6",
+            ].join(" ")}
+          >
+            <IconButton ariaLabel="Search" compact={scrolled}>
+              <Search size={scrolled ? 20 : 22} />
+            </IconButton>
+            <IconButton ariaLabel="Account" compact={scrolled}>
+              <User size={scrolled ? 20 : 22} />
+            </IconButton>
+            <IconButton ariaLabel="Cart" compact={scrolled}>
+              <ShoppingBag size={scrolled ? 20 : 22} />
+            </IconButton>
           </div>
 
           {/* Mobile menu button */}
           <button
-            className="lg:hidden inline-flex items-center justify-center rounded-md border border-[#C1A88B]/40 p-2 text-[#C1A88B] hover:bg-[#C1A88B]/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1A88B]/50"
+            className={[
+              "lg:hidden inline-flex items-center justify-center rounded-md border p-2 text-[#C1A88B]",
+              "transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1A88B]/50",
+              "border-[#C1A88B]/40 hover:bg-[#C1A88B]/10",
+              scrolled ? "scale-95" : "scale-100",
+            ].join(" ")}
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
@@ -87,8 +115,10 @@ export default function Navbar() {
 
         {/* Mobile panel */}
         <div
-          className={`lg:hidden overflow-hidden transition-[max-height] duration-300 ${open ? "max-h-96" : "max-h-0"
-            }`}
+          className={[
+            "lg:hidden overflow-hidden transition-[max-height] duration-300",
+            open ? "max-h-96" : "max-h-0",
+          ].join(" ")}
         >
           <div className="mx-auto max-w-7xl px-4 pb-4 md:px-6">
             <nav>
@@ -107,9 +137,18 @@ export default function Navbar() {
               </ul>
             </nav>
             <div className="mt-3 flex items-center gap-5 border-t border-[#C1A88B]/20 pt-3 text-[#C1A88B]">
-              <a href="#" className="inline-flex items-center gap-2"><Search size={20} />Search</a>
-              <a href="#" className="inline-flex items-center gap-2"><User size={20} />Account</a>
-              <a href="#" className="inline-flex items-center gap-2"><ShoppingBag size={20} />Cart</a>
+              <a href="#" className="inline-flex items-center gap-2">
+                <Search size={20} />
+                Search
+              </a>
+              <a href="#" className="inline-flex items-center gap-2">
+                <User size={20} />
+                Account
+              </a>
+              <a href="#" className="inline-flex items-center gap-2">
+                <ShoppingBag size={20} />
+                Cart
+              </a>
             </div>
           </div>
         </div>
@@ -118,13 +157,18 @@ export default function Navbar() {
   );
 }
 
-function IconButton({ children, ariaLabel }) {
+function IconButton({ children, ariaLabel, compact = false }) {
   return (
     <button
       aria-label={ariaLabel}
-      className="grid h-9 w-9 place-items-center rounded-full transition hover:bg-[#C1A88B]/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1A88B]/50"
+      className={[
+        "grid place-items-center rounded-full transition-all duration-300 ease-out",
+        "hover:bg-[#C1A88B]/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1A88B]/50",
+        compact ? "h-8 w-8" : "h-9 w-9",
+      ].join(" ")}
     >
       {children}
     </button>
   );
 }
+
