@@ -63,3 +63,20 @@ h6 {
     @apply font-heading text-[#C1A88B];
   }
 }
+
+
+/* Remove extra Calendly footer space */
+.calendly-inline-widget iframe {
+  height: 680px !important;
+}
+
+.calendly-badge-widget,
+.calendly-badge-content,
+.calendly-footer,
+.calendly-cookie-wrapper {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}

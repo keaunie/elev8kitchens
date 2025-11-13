@@ -14,6 +14,7 @@ import Elev8ChatWidget from "./components/BrandChatWidget.jsx";
 import ProductPage from "./pages/ProductPage.jsx";
 import FaqPage from "./pages/FaqPage.jsx";
 import Consultation from "./pages/Consultation.jsx";
+import CartPage from "./pages/CartPage.jsx";
 
 // NEW: import your Story page
 import Story from "./pages/Story.jsx";
@@ -92,6 +93,7 @@ export default function App() {
           <Route path="/Elev8Kitchens" element={<ProductPage />} /> {/* "/Elev8Kitchens" */}
           <Route path="/FAQ" element={<FaqPage />} /> {/* "/FAQs" */}
           <Route path="/consultation" element={<Consultation />} /> {/* "/consultation" */}
+          <Route path="/cart" element={<CartPage />} /> {/* "/cart" */}
         </Route>
       </Routes>
       <Elev8ChatWidget endpoint="/api/chat" />

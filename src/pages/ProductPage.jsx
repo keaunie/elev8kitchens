@@ -3,20 +3,38 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import {
-    Star, ShieldCheck, Truck, RefreshCcw, Zap, Sparkles, Check,
-    Plus, Minus, X, ChevronLeft, ChevronRight, ChevronRight as ChevronRightIcon
+    Star,
+    ShieldCheck,
+    Truck,
+    RefreshCcw,
+    Zap,
+    Sparkles,
+    Check,
+    Plus,
+    Minus,
+    X,
+    ChevronLeft,
+    ChevronRight,
+    ChevronRight as ChevronRightIcon,
 } from "lucide-react";
 
+import { useNavigate } from "react-router-dom";
 import catalog from "../data/products.json"; // <— path to the JSON file
+import { useCart } from "../context/CartContext";
 
 const formatMoney = (dollars) =>
-    `$ ${Number(dollars).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    `$ ${Number(dollars).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    })}`;
 
 const getProductByHandle = (handle) =>
     catalog.products.find((p) => p.handle === handle) || catalog.products[0];
 
 const getVariant = (product, size, color) =>
-    product.variants.find((v) => v.options.Size === size && v.options.Color === color);
+    product.variants.find(
+        (v) => v.options.Size === size && v.options.Color === color
+    );
 
 function useSticky(ref, rootMargin = "0px 0px -80% 0px") {
     const [stuck, setStuck] = useState(false);
@@ -37,7 +55,10 @@ function Stars({ rating }) {
     return (
         <div className="flex items-center gap-1 text-[#C1A88B]">
             {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className={`h-4 w-4 ${i < Math.floor(r) ? "fill-current" : ""}`} />
+                <Star
+                    key={i}
+                    className={`h-4 w-4 ${i < Math.floor(r) ? "fill-current" : ""}`}
+                />
             ))}
             <span className="ml-2 text-sm text-white/80">{r.toFixed(1)}</span>
         </div>
@@ -61,13 +82,40 @@ function Lightbox({ images, index, onClose }) {
         <AnimatePresence>
             <motion.div
                 className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
             >
-                <button aria-label="Close" onClick={onClose} className="absolute right-6 top-6 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"><X /></button>
-                <button aria-label="Prev" onClick={prev} className="absolute left-6 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"><ChevronLeft /></button>
-                <button aria-label="Next" onClick={next} className="absolute right-6 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"><ChevronRight /></button>
-                <motion.img key={i} src={images[i]} alt="Gallery image" className="mx-6 max-h-[86vh] rounded-2xl shadow-2xl"
-                    initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -12, opacity: 0 }} />
+                <button
+                    aria-label="Close"
+                    onClick={onClose}
+                    className="absolute right-6 top-6 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+                >
+                    <X />
+                </button>
+                <button
+                    aria-label="Prev"
+                    onClick={prev}
+                    className="absolute left-6 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+                >
+                    <ChevronLeft />
+                </button>
+                <button
+                    aria-label="Next"
+                    onClick={next}
+                    className="absolute right-6 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+                >
+                    <ChevronRight />
+                </button>
+                <motion.img
+                    key={i}
+                    src={images[i]}
+                    alt="Gallery image"
+                    className="mx-6 max-h-[86vh] rounded-2xl shadow-2xl"
+                    initial={{ y: 12, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -12, opacity: 0 }}
+                />
             </motion.div>
         </AnimatePresence>
     );
@@ -88,7 +136,12 @@ function MediaGallery({ images, onOpen }) {
                     transition={{ duration: 0.5 }}
                 />
                 <div className="absolute inset-0 pointer-events-none rounded-[28px] shadow-[inset_0_0_80px_rgba(0,0,0,0.35)]" />
-                <button onClick={() => onOpen?.(active)} className="absolute right-3 top-3 rounded-full bg-black/45 px-3 py-1 text-xs text-white backdrop-blur hover:bg-black/60">View</button>
+                <button
+                    onClick={() => onOpen?.(active)}
+                    className="absolute right-3 top-3 rounded-full bg-black/45 px-3 py-1 text-xs text-white backdrop-blur hover:bg-black/60"
+                >
+                    View
+                </button>
             </div>
             <div className="mt-3 grid grid-cols-5 gap-2">
                 {images.map((src, i) => (
@@ -96,7 +149,8 @@ function MediaGallery({ images, onOpen }) {
                         key={i}
                         aria-label={`Preview ${i + 1}`}
                         onClick={() => setActive(i)}
-                        className={`overflow-hidden rounded-xl ring-1 ring-white/10 ${active === i ? "outline outline-2 outline-[#C1A88B]" : ""}`}
+                        className={`overflow-hidden rounded-xl ring-1 ring-white/10 ${active === i ? "outline outline-2 outline-[#C1A88B]" : ""
+                            }`}
                     >
                         <img src={src} alt="thumb" className="aspect-square w-full object-cover" />
                     </button>
@@ -110,7 +164,10 @@ function AccordionItem({ title, children }) {
     const [open, setOpen] = useState(false);
     return (
         <div>
-            <button onClick={() => setOpen((v) => !v)} className="flex w-full items-center justify-between p-5 text-left">
+            <button
+                onClick={() => setOpen((v) => !v)}
+                className="flex w-full items-center justify-between p-5 text-left"
+            >
                 <span className="font-medium text-white">{title}</span>
                 <motion.span animate={{ rotate: open ? 180 : 0 }}>
                     <ChevronRightIcon className="h-5 w-5 text-white/70" />
@@ -118,7 +175,12 @@ function AccordionItem({ title, children }) {
             </button>
             <AnimatePresence>
                 {open && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="px-5 pb-5">
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="px-5 pb-5"
+                    >
                         {children}
                     </motion.div>
                 )}
@@ -126,6 +188,7 @@ function AccordionItem({ title, children }) {
         </div>
     );
 }
+
 function StickyATC({ visible, title, price, onClick }) {
     return (
         <AnimatePresence>
@@ -140,9 +203,11 @@ function StickyATC({ visible, title, price, onClick }) {
                         <div className="flex items-center justify-between gap-4">
                             <div>
                                 <p className="text-sm text-white/70">{title}</p>
-                                <p className="text-xl font-semibold text-white">{`$ ${price.toLocaleString(undefined, {
-                                    minimumFractionDigits: 2,
-                                })}`}</p>
+                                <p className="text-xl font-semibold text-white">
+                                    {`$ ${price.toLocaleString(undefined, {
+                                        minimumFractionDigits: 2,
+                                    })}`}
+                                </p>
                             </div>
 
                             {/* Responsive button size */}
@@ -166,31 +231,24 @@ function StickyATC({ visible, title, price, onClick }) {
     );
 }
 
-
 /* ===================== FULL-BLEED STORY (PARALLAX) ===================== */
-// ======== Full-bleed wrapper (edge-to-edge) ========
+
 function FullBleed({ children, className = "" }) {
     return (
-        <div className={`relative left-1/2 right-1/2 w-screen -ml-[50vw] -mr-[50vw] ${className}`}>
+        <div
+            className={`relative left-1/2 right-1/2 w-screen -ml-[50vw] -mr-[50vw] ${className}`}
+        >
             {children}
         </div>
     );
 }
 
-// ======== Full-bleed Parallax Panel (image + overlay copy) ========
-function ParallaxPanel({
-    title,
-    kicker,
-    copy,
-    image,
-    align = "right", // "left" | "right" | "center"
-}) {
+function ParallaxPanel({ title, kicker, copy, image, align = "right" }) {
     const ref = useRef(null);
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start end", "end start"],
     });
-    // subtle motion for depth (image drifts slightly)
     const yImg = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
     const scaleImg = useTransform(scrollYProgress, [0, 1], [1.04, 1]);
 
@@ -202,16 +260,14 @@ function ParallaxPanel({
                 : "items-end text-right";
 
     const alignPad =
-        align === "left"
-            ? "lg:pl-24"
-            : align === "center"
-                ? ""
-                : "lg:pr-24";
+        align === "left" ? "lg:pl-24" : align === "center" ? "" : "lg:pr-24";
 
     return (
         <FullBleed className="bg-black">
-            <section ref={ref} className="relative h-[80vh] min-h-[520px] w-screen overflow-hidden">
-                {/* Image */}
+            <section
+                ref={ref}
+                className="relative h-[80vh] min-h-[520px] w-screen overflow-hidden"
+            >
                 <motion.img
                     src={image}
                     alt={title || kicker}
@@ -220,11 +276,7 @@ function ParallaxPanel({
                     loading="lazy"
                     decoding="async"
                 />
-
-                {/* Scrim for readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/35 to-black/20" />
-
-                {/* Overlay copy */}
                 <div className={`relative z-10 mx-auto flex h-full max-w-7xl px-6 ${alignPad}`}>
                     <div className={`mt-auto mb-14 flex w-full flex-col ${alignStyles}`}>
                         {kicker && (
@@ -235,37 +287,52 @@ function ParallaxPanel({
                         <h3 className="mt-2 font-heading text-3xl md:text-4xl text-[#C1A88B]">
                             {title}
                         </h3>
-                        <div className={`mt-3 max-w-2xl ${align === "right" ? "ml-auto" : align === "center" ? "mx-auto" : ""}`}>
-                            {Array.isArray(copy)
-                                ? copy.map((p, i) => (
+                        <div
+                            className={`mt-3 max-w-2xl ${align === "right"
+                                ? "ml-auto"
+                                : align === "center"
+                                    ? "mx-auto"
+                                    : ""
+                                }`}
+                        >
+                            {Array.isArray(copy) ? (
+                                copy.map((p, i) => (
                                     <p key={i} className="text-white/90 md:text-lg leading-relaxed">
                                         {p}
                                     </p>
                                 ))
-                                : <p className="text-white/90 md:text-lg leading-relaxed">{copy}</p>}
+                            ) : (
+                                <p className="text-white/90 md:text-lg leading-relaxed">
+                                    {copy}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>
-
-                {/* Soft inner vignette edge */}
                 <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_140px_rgba(0,0,0,0.55)]" />
             </section>
         </FullBleed>
     );
 }
+
 function ProductStoryParallax() {
     const IMGS = {
-        weather: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_15_1_copy_l9li1j.webp",
-        grilling: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_20_copy_m8kfku.webp",
-        entertainment: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_17_copy_vrkn4s.webp",
-        storage: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp",
-        hydraulic: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/NF-101_4_copy_isrpfu.webp",
-        safety: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762285478/hero1_pbo5gx.webp",
+        weather:
+            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_15_1_copy_l9li1j.webp",
+        grilling:
+            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_20_copy_m8kfku.webp",
+        entertainment:
+            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_17_copy_vrkn4s.webp",
+        storage:
+            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp",
+        hydraulic:
+            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/NF-101_4_copy_isrpfu.webp",
+        safety:
+            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762285478/hero1_pbo5gx.webp",
     };
 
     return (
         <div className="bg-black">
-            {/* Opening band */}
             <FullBleed>
                 <section className="bg-gradient-to-b from-black to-[#0b0b0b] py-20 md:py-28">
                     <div className="mx-auto max-w-4xl px-6 text-center">
@@ -285,15 +352,15 @@ function ProductStoryParallax() {
                             transition={{ delay: 0.15, duration: 0.6 }}
                             className="mx-auto mt-4 max-w-3xl text-white/85 md:text-lg"
                         >
-                            Crafted by Habitat28, ELEV8 isn’t just a BBQ—it’s a complete outdoor living upgrade.
-                            Built from premium SS304 stainless steel, it delivers extreme durability, sleek aesthetics,
-                            and weather resistance that lasts.
+                            Crafted by Habitat28, ELEV8 isn’t just a BBQ—it’s a complete
+                            outdoor living upgrade. Built from premium SS304 stainless steel,
+                            it delivers extreme durability, sleek aesthetics, and weather
+                            resistance that lasts.
                         </motion.p>
                     </div>
                 </section>
             </FullBleed>
 
-            {/* Panels */}
             <ParallaxPanel
                 title="Weatherproof, Year-Round Durability"
                 kicker="Built for Every Season"
@@ -301,7 +368,7 @@ function ProductStoryParallax() {
                 align="left"
                 copy={[
                     "Engineered with SS304 commercial-grade stainless steel to thrive through harsh Canadian winters, hot California summers, and everything in between.",
-                    "No rust, no fading—just lasting performance and a timeless finish."
+                    "No rust, no fading—just lasting performance and a timeless finish.",
                 ]}
             />
 
@@ -312,7 +379,7 @@ function ProductStoryParallax() {
                 align="right"
                 copy={[
                     "Cook like a pro with 4- or 6-burner power up to 85,000 BTU, rotisserie with dedicated rear infrared burner, vent hood, and a 50A power panel.",
-                    "Full-width drip tray and black stainless internals simplify cleanup and maximize lifespan."
+                    "Full-width drip tray and black stainless internals simplify cleanup and maximize lifespan.",
                 ]}
             />
 
@@ -323,7 +390,7 @@ function ProductStoryParallax() {
                 align="left"
                 copy={[
                     "Weatherproof 26” (XL) or 42” (XXL) Smart TV keeps games, shows, and recipes in view while you cook.",
-                    "Premium in-wall Bluetooth speakers deliver immersive audio for movie nights or lively socials."
+                    "Premium in-wall Bluetooth speakers deliver immersive audio for movie nights or lively socials.",
                 ]}
             />
 
@@ -334,7 +401,7 @@ function ProductStoryParallax() {
                 align="right"
                 copy={[
                     "Built-in fridge, wine-glass rack, soft-close honeycomb drawers, upper storage, and a pull-out trash bin.",
-                    "Sintered-stone worktops balance refined design with rugged practicality."
+                    "Sintered-stone worktops balance refined design with rugged practicality.",
                 ]}
             />
 
@@ -345,7 +412,7 @@ function ProductStoryParallax() {
                 align="left"
                 copy={[
                     "Remote-controlled electro-hydraulic lift door with manual override combines convenience with dramatic flair.",
-                    "Integrated LED lighting elevates visibility and ambiance after sunset."
+                    "Integrated LED lighting elevates visibility and ambiance after sunset.",
                 ]}
             />
 
@@ -356,7 +423,7 @@ function ProductStoryParallax() {
                 align="right"
                 copy={[
                     "Standard gas-leak detector, exhaust system, GFCI outlets, USB ports, and winter-ready plumbing.",
-                    "ELEV8 is as safe and smart as it is beautiful."
+                    "ELEV8 is as safe and smart as it is beautiful.",
                 ]}
             />
         </div>
@@ -365,7 +432,9 @@ function ProductStoryParallax() {
 
 /* ===================== END STORY ===================== */
 
-export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitchen" }) {
+export default function ProductPage({
+    handle = "elev8-modular-outdoor-bbq-kitchen",
+}) {
     const product = useMemo(() => getProductByHandle(handle), [handle]);
 
     const defaultSize = product.options.find((o) => o.name === "Size").values[0];
@@ -375,20 +444,66 @@ export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitche
     const [color, setColor] = useState(defaultColor);
     const [qty, setQty] = useState(1);
     const [lightbox, setLightbox] = useState(null);
+    const [toastVisible, setToastVisible] = useState(false);
 
-    const variant = useMemo(() => getVariant(product, size, color), [product, size, color]);
+
+    const variant = useMemo(
+        () => getVariant(product, size, color),
+        [product, size, color]
+    );
     const gallery = variant?.images ?? [];
     const price = variant?.price ?? 0;
     const compareAt = variant?.compare_at_price ?? null;
 
-    const colorSwatches = product.options.find((o) => o.name === "Color").values
-        .map((c) => ({ id: c.toLowerCase(), name: c, swatch: product.swatches?.[c] || "#d4d4d4" }));
+    const colorSwatches = product.options
+        .find((o) => o.name === "Color")
+        .values.map((c) => ({
+            id: c.toLowerCase(),
+            name: c,
+            swatch: product.swatches?.[c] || "#d4d4d4",
+        }));
     const sizes = product.options.find((o) => o.name === "Size").values;
 
     const topRef = useRef(null);
     const stuck = useSticky(topRef);
 
     const badges = product.badges || [];
+
+    const { addItem } = useCart();
+    const navigate = useNavigate();
+
+    const handleAddToCart = () => {
+        if (!variant) return;
+
+        addItem({
+            productId: product.id,
+            handle: product.handle,
+            sku: variant.sku,
+            size,
+            color,
+            qty,
+        });
+
+        // Show a quick toast
+        setToastVisible(true);
+        setTimeout(() => {
+            setToastVisible(false);
+        }, 2000);
+    };
+
+
+    const handleBuyNow = () => {
+        if (!variant) return;
+        addItem({
+            productId: product.id,
+            handle: product.handle,
+            sku: variant.sku,
+            size,
+            color,
+            qty,
+        });
+        navigate("/cart");
+    };
 
     return (
         <section className="relative bg-black text-white">
@@ -405,11 +520,18 @@ export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitche
             >
                 {/* Left: Sticky Gallery */}
                 <div className="lg:col-span-7 lg:sticky lg:top-24 lg:self-start">
-                    <MediaGallery images={gallery} onOpen={(i) => setLightbox({ index: i })} />
+                    <MediaGallery
+                        images={gallery}
+                        onOpen={(i) => setLightbox({ index: i })}
+                    />
                     <div className="mt-6 grid grid-cols-3 gap-3 text-white/80">
                         {badges.map((b) => (
-                            <div key={b} className="flex items-center gap-2 rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
-                                <Check className="h-4 w-4 text-[#C1A88B]" /> <span className="text-sm">{b}</span>
+                            <div
+                                key={b}
+                                className="flex items-center gap-2 rounded-xl bg-white/5 p-3 ring-1 ring-white/10"
+                            >
+                                <Check className="h-4 w-4 text-[#C1A88B]" />{" "}
+                                <span className="text-sm">{b}</span>
                             </div>
                         ))}
                     </div>
@@ -419,18 +541,30 @@ export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitche
                 <div className="lg:col-span-5">
                     <div className="rounded-[28px] bg-[#0f0f0f]/70 p-6 ring-1 ring-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
                         <div className="mb-3">
-                            <h1 className="font-heading text-3xl md:text-4xl text-[#C1A88B]">{product.title}</h1>
+                            <h1 className="font-heading text-3xl md:text-4xl text-[#C1A88B]">
+                                {product.title}
+                            </h1>
                             <div className="mt-2 flex items-center gap-3">
                                 <Stars rating={product.rating} />
-                                <span className="text-sm text-white/70">({product.reviewsCount} reviews)</span>
+                                <span className="text-sm text-white/70">
+                                    ({product.reviewsCount} reviews)
+                                </span>
                             </div>
                         </div>
 
                         <div className="flex items-end gap-3">
-                            <p className="text-3xl font-semibold text-white">{formatMoney(price)}</p>
-                            {compareAt && <p className="text-lg text-white/60 line-through">{formatMoney(compareAt)}</p>}
+                            <p className="text-3xl font-semibold text-white">
+                                {formatMoney(price)}
+                            </p>
+                            {compareAt && (
+                                <p className="text-lg text-white/60 line-through">
+                                    {formatMoney(compareAt)}
+                                </p>
+                            )}
                         </div>
-                        <p className="mt-1 text-sm text-white/70">Installments available at checkout.</p>
+                        <p className="mt-1 text-sm text-white/70">
+                            Installments available at checkout.
+                        </p>
 
                         <div className="mt-6 space-y-5">
                             {/* Color */}
@@ -442,7 +576,9 @@ export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitche
                                             key={c.id}
                                             aria-label={c.name}
                                             onClick={() => setColor(c.name)}
-                                            className={`h-8 w-8 rounded-full ring-1 ring-white/20 transition hover:scale-105 ${color === c.name ? "outline outline-2 outline-[#C1A88B]" : ""
+                                            className={`h-8 w-8 rounded-full ring-1 ring-white/20 transition hover:scale-105 ${color === c.name
+                                                ? "outline outline-2 outline-[#C1A88B]"
+                                                : ""
                                                 }`}
                                             style={{ background: c.swatch }}
                                             title={c.name}
@@ -460,7 +596,9 @@ export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitche
                                         <button
                                             key={s}
                                             onClick={() => setSize(s)}
-                                            className={`rounded-full px-4 py-2 ring-1 ring-white/15 hover:bg-white/5 ${size === s ? "bg:white/10 outline outline-2 outline-[#C1A88B]" : ""
+                                            className={`rounded-full px-4 py-2 ring-1 ring-white/15 hover:bg-white/5 ${size === s
+                                                ? "bg-white/10 outline outline-2 outline-[#C1A88B]"
+                                                : ""
                                                 }`}
                                         >
                                             {s}
@@ -472,25 +610,42 @@ export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitche
                             {/* Qty + Warranty note */}
                             <div className="flex items-center justify-between">
                                 <div className="inline-flex items-center rounded-full bg-white/5 ring-1 ring-white/10">
-                                    <button className="p-2" aria-label="Decrease" onClick={() => setQty(Math.max(1, qty - 1))}>
+                                    <button
+                                        className="p-2"
+                                        aria-label="Decrease"
+                                        onClick={() => setQty(Math.max(1, qty - 1))}
+                                    >
                                         <Minus />
                                     </button>
                                     <span className="px-4 tabular-nums">{qty}</span>
-                                    <button className="p-2" aria-label="Increase" onClick={() => setQty(qty + 1)}>
+                                    <button
+                                        className="p-2"
+                                        aria-label="Increase"
+                                        onClick={() => setQty(qty + 1)}
+                                    >
                                         <Plus />
                                     </button>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm text-white/70">
-                                    <ShieldCheck className="h-4 w-4 text-[#C1A88B]" /> 2-Year warranty included
+                                    <ShieldCheck className="h-4 w-4 text-[#C1A88B]" /> 2-Year
+                                    warranty included
                                 </div>
                             </div>
 
                             {/* CTAs */}
                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                <button className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95">
+                                <button
+                                    className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed"
+                                    disabled={!variant}
+                                    onClick={handleAddToCart}
+                                >
                                     Add to Cart
                                 </button>
-                                <button className="rounded-full border border-[#C1A88B]/30 px-6 py-4 font-medium text-white hover:bg:white/5">
+                                <button
+                                    className="rounded-full border border-[#C1A88B]/30 px-6 py-4 font-medium text-white hover:bg-white/5 disabled:opacity-60 disabled:cursor-not-allowed"
+                                    disabled={!variant}
+                                    onClick={handleBuyNow}
+                                >
                                     Buy Now
                                 </button>
                             </div>
@@ -500,9 +655,18 @@ export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitche
                                 <p className="text-white/90">Highlights</p>
                                 <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                     {product.key_features.slice(0, 4).map((txt, i) => (
-                                        <li key={i} className="flex items-start gap-3 rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
+                                        <li
+                                            key={i}
+                                            className="flex items-start gap-3 rounded-xl bg-white/5 p-3 ring-1 ring-white/10"
+                                        >
                                             <span className="mt-0.5 text-[#C1A88B]">
-                                                {i === 0 ? <Zap className="h-5 w-5" /> : i === 1 ? <Sparkles className="h-5 w-5" /> : <ShieldCheck className="h-5 w-5" />}
+                                                {i === 0 ? (
+                                                    <Zap className="h-5 w-5" />
+                                                ) : i === 1 ? (
+                                                    <Sparkles className="h-5 w-5" />
+                                                ) : (
+                                                    <ShieldCheck className="h-5 w-5" />
+                                                )}
                                             </span>
                                             <span className="text-sm text-white/90">{txt}</span>
                                         </li>
@@ -513,10 +677,24 @@ export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitche
                             {/* Accordion */}
                             <div className="divide-y divide-white/10 rounded-2xl ring-1 ring-white/10 bg-[#0f0f0f]/70">
                                 {[
-                                    { title: "Details", content: "Premium materials, entertainment features, and a safety-first design." },
-                                    { title: "Specifications", content: "SS304 stainless, hydraulic lift, 4/6 burners up to 85,000 BTU." },
-                                    { title: "Shipping & Returns", content: `U.S. & Canada shipping. 30-day returns. ${product.stock_note}` },
-                                    { title: "Warranty", content: "2-Year limited warranty." }
+                                    {
+                                        title: "Details",
+                                        content:
+                                            "Premium materials, entertainment features, and a safety-first design.",
+                                    },
+                                    {
+                                        title: "Specifications",
+                                        content:
+                                            "SS304 stainless, hydraulic lift, 4/6 burners up to 85,000 BTU.",
+                                    },
+                                    {
+                                        title: "Shipping & Returns",
+                                        content: `U.S. & Canada shipping. 30-day returns. ${product.stock_note}`,
+                                    },
+                                    {
+                                        title: "Warranty",
+                                        content: "2-Year limited warranty.",
+                                    },
                                 ].map((it, idx) => (
                                     <AccordionItem key={idx} title={it.title}>
                                         <p className="text-white/80">{it.content}</p>
@@ -537,13 +715,41 @@ export default function ProductPage({ handle = "elev8-modular-outdoor-bbq-kitche
                 visible={stuck}
                 title={`${product.title} — ${size} / ${color}`}
                 price={price}
-                onClick={() => { }}
+                onClick={handleAddToCart}
             />
 
             {lightbox && (
-                <Lightbox images={gallery} index={lightbox.index} onClose={() => setLightbox(null)} />
+                <Lightbox
+                    images={gallery}
+                    index={lightbox.index}
+                    onClose={() => setLightbox(null)}
+                />
             )}
+
+            {/* Add-to-cart toast */}
+            <AnimatePresence>
+                {toastVisible && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 16 }}
+                        className="fixed right-4 bottom-24 z-50 rounded-2xl bg-[#111]/90 px-4 py-3 text-sm text-white shadow-lg ring-1 ring-white/15"
+                    >
+                        <div className="flex items-center gap-2">
+                            <div className="h-6 w-6 rounded-full bg-[#C1A88B]/15 flex items-center justify-center">
+                                <Check className="h-4 w-4 text-[#C1A88B]" />
+                            </div>
+                            <div>
+                                <p className="font-medium">Added to cart</p>
+                                <p className="text-xs text-white/70">
+                                    {product.title} — {size} / {color}
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
         </section>
     );
-
 }

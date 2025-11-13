@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
+import CartButton from "./CartButton";
 // If you prefer <Link> from react-router, swap <a> with <Link to=...>
 
 export default function Navbar() {
@@ -93,7 +94,7 @@ export default function Navbar() {
               <User size={scrolled ? 20 : 22} />
             </IconButton>
             <IconButton ariaLabel="Cart" compact={scrolled}>
-              <ShoppingBag size={scrolled ? 20 : 22} />
+              <CartButton />
             </IconButton>
           </div>
 

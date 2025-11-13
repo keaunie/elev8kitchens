@@ -63,7 +63,7 @@ export default function Process() {
 
       <div className="mt-12">
         <a
-          href="/contact"
+          href="/consultation"
           className="inline-flex items-center rounded-full bg-[#C1A88B] px-8 py-3 text-sm font-medium text-black shadow-lg transition hover:scale-105 hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1A88B]/60"
         >
           Start Your Project
