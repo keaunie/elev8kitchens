@@ -37,6 +37,71 @@ export default function Footer() {
                             Enjoy premium materials, cutting-edge safety tech, and sleek design — all in
                             one modular setup.
                         </p>
+                        {/* Social Icons — SVG + Gold Accents */}
+                        <div className="mt-5 flex items-center gap-4">
+
+                            {/* Facebook */}
+                            <a
+                                href="https://www.facebook.com/elev8kitchens"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Facebook"
+                                className="group grid h-11 w-11 place-items-center rounded-full 
+        ring-1 ring-[#C1A88B]/50 bg-black/40
+        transition-all duration-300 hover:scale-110 hover:ring-[#C1A88B] hover:bg-black/60"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="#C1A88B"
+                                    className="h-5 w-5 transition duration-300 group-hover:brightness-125"
+                                >
+                                    <path d="M22 12.07C22 6.48 17.52 2 12 2S2 6.48 2 12.07c0 5.02 3.66 9.18 8.44 9.93v-7.03H7.9v-2.9h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22c4.78-.75 8.44-4.91 8.44-9.93z" />
+                                </svg>
+                            </a>
+
+                            {/* Instagram */}
+                            <a
+                                href="https://www.instagram.com/elev8kitchens"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Instagram"
+                                className="group grid h-11 w-11 place-items-center rounded-full 
+        ring-1 ring-[#C1A88B]/50 bg-black/40
+        transition-all duration-300 hover:scale-110 hover:ring-[#C1A88B] hover:bg-black/60"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="#C1A88B"
+                                    viewBox="0 0 24 24"
+                                    className="h-5 w-5 transition duration-300 group-hover:brightness-125"
+                                >
+                                    <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.65 0 3 1.35 3 3v10c0 1.65-1.35 3-3 3H7c-1.65 0-3-1.35-3-3V7c0-1.65 1.35-3 3-3h10zm-5 3c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 2c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3zm4.5-.25c-.69 0-1.25.56-1.25 1.25S15.81 9 16.5 9s1.25-.56 1.25-1.25S17.19 6.75 16.5 6.75z" />
+                                </svg>
+                            </a>
+
+                            {/* YouTube */}
+                            <a
+                                href="https://www.youtube.com/@elev8kitchens"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="YouTube"
+                                className="group grid h-11 w-11 place-items-center rounded-full 
+        ring-1 ring-[#C1A88B]/50 bg-black/40
+        transition-all duration-300 hover:scale-110 hover:ring-[#C1A88B] hover:bg-black/60"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="#C1A88B"
+                                    viewBox="0 0 24 24"
+                                    className="h-5 w-5 transition duration-300 group-hover:brightness-125"
+                                >
+                                    <path d="M21.8 8.001a3 3 0 0 0-2.11-2.12C18.03 5.5 12 5.5 12 5.5s-6.03 0-7.69.381A3 3 0 0 0 2.2 8.001 31.36 31.36 0 0 0 1.8 12a31.36 31.36 0 0 0 .39 3.999 3 3 0 0 0 2.11 2.12C5.97 18.5 12 18.5 12 18.5s6.03 0 7.69-.381a3 3 0 0 0 2.11-2.12A31.36 31.36 0 0 0 22.2 12a31.36 31.36 0 0 0-.39-3.999zM10 15.5v-7l6 3.5-6 3.5z" />
+                                </svg>
+                            </a>
+
+                        </div>
+
                     </div>
 
                     {/* Contact info */}

@@ -122,7 +122,7 @@ export default function App() {
         />
       </a> */}
 
-      <FloatingSocials />
+      {/* <FloatingSocials /> */}
       {/* <Elev8ChatWidget endpoint="/api/chat" /> */}
     </BrowserRouter>
   );
