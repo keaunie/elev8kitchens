@@ -88,11 +88,8 @@ export default function Navbar() {
             </ul>
           </nav>
 
-          {/* Cart button (always visible) */}
-          <IconButton ariaLabel="Cart" compact={scrolled}>
-            <CartButton />
-          </IconButton>
-          
+
+
           {/* Right icons (desktop) */}
           <div
             className={[
@@ -101,39 +98,10 @@ export default function Navbar() {
             ].join(" ")}
           >
 
-            {/* Socials – Instagram */}
-            <a
-              href="https://instagram.com/elev8kitchens"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Visit our Instagram"
-              className="grid place-items-center rounded-full h-9 w-9 md:h-10 md:w-10 transition-all duration-300 hover:bg-[#C1A88B]/10 hover:text-white"
-            >
-              <Instagram className="h-5 w-5" />
-            </a>
-
-            {/* Socials – Facebook */}
-            <a
-              href="https://facebook.com/elev8kitchens"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Visit our Facebook"
-              className="grid place-items-center rounded-full h-9 w-9 md:h-10 md:w-10 transition-all duration-300 hover:bg-[#C1A88B]/10 hover:text-white"
-            >
-              <Facebook className="h-5 w-5" />
-            </a>
-
-            {/* Socials – WhatsApp */}
-            <a
-              href="https://wa.me/19056930028?text=Hello%2C%20I%27m%20interested%20in%20your%20products"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Chat with us on WhatsApp"
-              className="grid place-items-center rounded-full h-9 w-9 md:h-10 md:w-10 transition-all duration-300 hover:bg-[#25D366]/10 hover:text-[#25D366]"
-            >
-              <MessageCircle className="h-5 w-5" />
-            </a>
-
+            {/* Cart button (always visible) */}
+            <IconButton ariaLabel="Cart" compact={scrolled}>
+              <CartButton />
+            </IconButton>
 
           </div>
 
