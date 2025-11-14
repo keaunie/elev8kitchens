@@ -108,13 +108,22 @@ function DT_Lightbox({ images, index, onClose, onPrev, onNext }) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <button onClick={onClose} className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20">
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+        >
           <X />
         </button>
-        <button onClick={onPrev} className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20">
+        <button
+          onClick={onPrev}
+          className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+        >
           <ChevronLeft />
         </button>
-        <button onClick={onNext} className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20">
+        <button
+          onClick={onNext}
+          className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+        >
           <ChevronRight />
         </button>
         <motion.img
@@ -161,31 +170,58 @@ function DT_SectionSplit({ title, image, reverse = false, children, caption, onO
 function DesktopTablet() {
   // ----- shared data (same as your original) -----
   const pool = [
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286610/Untitled_Design_-_1_copy_tana54.webp", alt: "ELEV8 Anthracite — Hydraulic canopy shown" },
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp", alt: "ELEV8 marble worktop with gold fixtures" },
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_20_copy_m8kfku.webp", alt: "ELEV8 island module with premium grill" },
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_17_copy_vrkn4s.webp", alt: "ELEV8 light outdoor kitchen by pool" },
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_15_1_copy_l9li1j.webp", alt: "ELEV8 charcoal finish closeup" },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286610/Untitled_Design_-_1_copy_tana54.webp",
+      alt: "ELEV8 Anthracite — Hydraulic canopy shown",
+    },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp",
+      alt: "ELEV8 marble worktop with gold fixtures",
+    },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_20_copy_m8kfku.webp",
+      alt: "ELEV8 island module with premium grill",
+    },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_17_copy_vrkn4s.webp",
+      alt: "ELEV8 light outdoor kitchen by pool",
+    },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_15_1_copy_l9li1j.webp",
+      alt: "ELEV8 charcoal finish closeup",
+    },
   ];
 
   const pairedBlocks = [
     {
       title: "Our Origin",
-      copy: <>ELEV8 Kitchens was born from a simple idea: the best memories are made around great food and they shouldn’t be limited to the indoors. As part of the <strong className="text-white">Habitat28</strong> family, we’ve applied our proven expertise in <strong className="text-white">modular design</strong> to the outdoors.</>,
+      copy: (
+        <>
+          ELEV8 Kitchens was born from a simple idea: the best memories are made around great food and they shouldn’t be
+          limited to the indoors. As part of the <strong className="text-white">Habitat28</strong> family, we’ve applied
+          our proven expertise in <strong className="text-white">modular design</strong> to the outdoors.
+        </>
+      ),
       caption: "ELEV8 — Hydraulic canopy shown",
     },
     {
       title: "",
-      copy: <>We craft <strong className="text-white">luxury modular outdoor kitchens</strong> built for performance, durability, and style. Each ELEV8 kitchen transforms your backyard into a gourmet cooking space, blending modern design with premium materials to bring the heart of the home outdoors.</>,
+      copy: (
+        <>
+          We craft <strong className="text-white">luxury modular outdoor kitchens</strong> built for performance,
+          durability, and style. Each ELEV8 kitchen transforms your backyard into a gourmet cooking space, blending
+          modern design with premium materials to bring the heart of the home outdoors.
+        </>
+      ),
       caption: "",
     },
   ];
 
   const featureRows = [
     {
-      kicker: "Built in Canada. Designed for Everywhere.",
+      kicker: "Built For Canada & U.S.A Harsh Weather. Designed for Anywhere.",
       copy:
-        "Each ELEV8 Modular Outdoor Kitchen is proudly built in Canada using commercial-grade stainless steel and engineered to thrive through harsh winters, summer BBQs, and everything in between. With E-SAFE Certification, plug-and-play installation, and luxury finishes, ELEV8 Kitchens deliver the perfect blend of durability, performance, and designer style.",
+        "Each ELEV8 Modular Outdoor Kitchen is designed to withstand the harsh climates of Canada and the U.S., using commercial-grade stainless steel and engineered to thrive through harsh winters, summers, and everything in between. With UL-Certification, plug-and-play installation, and luxury finishes, ELEV8 Kitchens deliver the perfect blend of durability, performance, and designer style.",
     },
     {
       kicker: "More Than a BBQ",
@@ -225,12 +261,22 @@ function DesktopTablet() {
   return (
     <section className="bg-black text-white">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-24 md:pt-32">
-        <motion.h1 className="font-heading text-center text-4xl md:text-6xl text-[#C1A88B]"
-          initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+        <motion.h1
+          className="font-heading text-center text-4xl md:text-6xl text-[#C1A88B]"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           About Us
         </motion.h1>
-        <motion.p className="mx-auto mt-4 max-w-2xl text-center text-white/80 font-body"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.6 }}>
+        <motion.p
+          className="mx-auto mt-4 max-w-2xl text-center text-white/80 font-body"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
           Crafting luxury modular outdoor kitchens built for performance, durability, and style.
         </motion.p>
       </div>
@@ -259,15 +305,34 @@ function DesktopTablet() {
             align={i % 2 ? "right" : "left"}
             className="mt-8"
           >
-            <p className="font-heading text-sm tracking-[0.2em] text-[#C1A88B]/90">{f.kicker.toUpperCase()}</p>
+            <p className="font-heading text-sm tracking-[0.2em] text-[#C1A88B]/90">
+              {f.kicker.toUpperCase()}
+            </p>
             <p className="mt-2 font-body text-[15px] leading-7 text-white/90">{f.copy}</p>
+
+            {f.kicker.startsWith("Built For Canada") && (
+              <div className="mt-4 flex items-center gap-3">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/UL_Mark.svg/512px-UL_Mark.svg.png?20160322023709"
+                  alt="UL Certification"
+                  className="h-10 w-auto md:h-12 opacity-90 drop-shadow-[0_0_10px_rgba(193,168,139,0.45)] transition-transform duration-300 hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="text-white/70 text-sm md:text-base tracking-wide">
+                  UL Certified for Safety & Performance
+                </span>
+              </div>
+            )}
           </DT_TiltImage>
         ))}
 
         <blockquote className="rounded-2xl bg-[#111]/60 p-8 ring-1 ring-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
           <p className="font-heading text-2xl text-[#C1A88B]">Join the Outdoor Revolution</p>
           <p className="mt-3 font-body text-white/85">
-            From Sunday brunches to evening wine nights or full backyard parties, ELEV8 Kitchens bring the soul of indoor living outdoors. Experience bold design, seamless performance, and an unmatched outdoor cooking experience, crafted for those who demand more from their space.
+            From Sunday brunches to evening wine nights or full backyard parties, ELEV8 Kitchens bring the soul of
+            indoor living outdoors. Experience bold design, seamless performance, and an unmatched outdoor cooking
+            experience, crafted for those who demand more from their space.
           </p>
         </blockquote>
       </div>
@@ -359,13 +424,22 @@ function M_Lightbox({ images, index, onClose, onPrev, onNext }) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        <button onClick={onClose} className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20">
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+        >
           <X />
         </button>
-        <button onClick={onPrev} className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20">
+        <button
+          onClick={onPrev}
+          className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+        >
           <ChevronLeft />
         </button>
-        <button onClick={onNext} className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20">
+        <button
+          onClick={onNext}
+          className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
+        >
           <ChevronRight />
         </button>
         <motion.img
@@ -385,7 +459,13 @@ function M_Lightbox({ images, index, onClose, onPrev, onNext }) {
 function M_SectionSplit({ title, image, reverse = false, children, caption, onOpen, index }) {
   return (
     <div className="mx-auto w-full">
-      <div className={["grid items-center gap-8 lg:gap-12", "lg:grid-cols-12", reverse ? "lg:[&>*:first-child]:order-2" : ""].join(" ")}>
+      <div
+        className={[
+          "grid items-center gap-8 lg:gap-12",
+          "lg:grid-cols-12",
+          reverse ? "lg:[&>*:first-child]:order-2" : "",
+        ].join(" ")}
+      >
         <motion.figure
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -393,11 +473,24 @@ function M_SectionSplit({ title, image, reverse = false, children, caption, onOp
           transition={{ duration: 0.6 }}
           className="lg:col-span-5"
         >
-          <div onClick={() => onOpen?.(index)} className="group relative cursor-pointer overflow-hidden rounded-[28px] ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.55)]">
-            <img src={image} alt={title || "image"} className="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.03]" loading="lazy" decoding="async" />
+          <div
+            onClick={() => onOpen?.(index)}
+            className="group relative cursor-pointer overflow-hidden rounded-[28px] ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.55)]"
+          >
+            <img
+              src={image}
+              alt={title || "image"}
+              className="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.03]"
+              loading="lazy"
+              decoding="async"
+            />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/25 via-transparent to-transparent" />
             <div className="pointer-events-none absolute inset-0 rounded-[28px] shadow-[inset_0_0_80px_rgba(0,0,0,0.35)]" />
-            {caption && <figcaption className="pointer-events-none absolute bottom-2 right-3 rounded-full bg-black/45 px-3 py-1 text-xs text-white/85 backdrop-blur">{caption}</figcaption>}
+            {caption && (
+              <figcaption className="pointer-events-none absolute bottom-2 right-3 rounded-full bg-black/45 px-3 py-1 text-xs text-white/85 backdrop-blur">
+                {caption}
+              </figcaption>
+            )}
           </div>
         </motion.figure>
 
@@ -409,14 +502,16 @@ function M_SectionSplit({ title, image, reverse = false, children, caption, onOp
           className="lg:col-span-7"
         >
           {title && <h2 className="font-heading text-3xl md:text-5xl text-[#C1A88B]">{title}</h2>}
-          <div className="mt-5 space-y-5 font-body text-white/85 leading-7 md:text-[17px]">{children}</div>
+          <div className="mt-5 space-y-5 font-body text-white/85 leading-7 md:text-[17px]">
+            {children}
+          </div>
         </motion.div>
       </div>
     </div>
   );
 }
 
-function M_Section({ kicker, copy }) {
+function M_Section({ kicker, copy, showUL = false }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 18 }}
@@ -425,38 +520,82 @@ function M_Section({ kicker, copy }) {
       transition={{ duration: 0.5 }}
       className="rounded-2xl bg-[#0f0f0f]/70 p-6 md:p-8 ring-1 ring-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.45)]"
     >
-      <p className="font-heading text-sm tracking-[0.2em] text-[#C1A88B]/90">{kicker?.toUpperCase()}</p>
+      <p className="font-heading text-sm tracking-[0.2em] text-[#C1A88B]/90">
+        {kicker?.toUpperCase()}
+      </p>
       <p className="mt-3 font-body text-[15px] leading-7 text-white/85">{copy}</p>
+
+      {showUL && (
+        <div className="mt-4 flex items-center gap-3">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/UL_Mark.svg/512px-UL_Mark.svg.png?20160322023709"
+            alt="UL Certification"
+            className="h-10 w-auto opacity-90 drop-shadow-[0_0_10px_rgba(193,168,139,0.45)] transition-transform duration-300 hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+          <span className="text-white/70 text-[13px] tracking-wide">
+            UL Certified for Safety & Performance
+          </span>
+        </div>
+      )}
     </motion.div>
   );
 }
 
 function Mobile() {
   const pool = [
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286610/Untitled_Design_-_1_copy_tana54.webp", alt: "ELEV8 Anthracite — Hydraulic canopy shown" },
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp", alt: "ELEV8 marble worktop with gold fixtures" },
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_20_copy_m8kfku.webp", alt: "ELEV8 island module with premium grill" },
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_17_copy_vrkn4s.webp", alt: "ELEV8 light outdoor kitchen by pool" },
-    { src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_15_1_copy_l9li1j.webp", alt: "ELEV8 charcoal finish closeup" },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286610/Untitled_Design_-_1_copy_tana54.webp",
+      alt: "ELEV8 Anthracite — Hydraulic canopy shown",
+    },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp",
+      alt: "ELEV8 marble worktop with gold fixtures",
+    },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_20_copy_m8kfku.webp",
+      alt: "ELEV8 island module with premium grill",
+    },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_17_copy_vrkn4s.webp",
+      alt: "ELEV8 light outdoor kitchen by pool",
+    },
+    {
+      src: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_15_1_copy_l9li1j.webp",
+      alt: "ELEV8 charcoal finish closeup",
+    },
   ];
 
   const pairedBlocks = [
     {
       title: "Our Origin",
-      copy: <>ELEV8 Kitchens was born from a simple idea: the best memories are made around great food and they shouldn’t be limited to the indoors. As part of the <strong className="text-white">Habitat28</strong> family, we’ve applied our proven expertise in <strong className="text-white">modular design</strong> to the outdoors.</>,
+      copy: (
+        <>
+          ELEV8 Kitchens was born from a simple idea: the best memories are made around great food and they shouldn’t be
+          limited to the indoors. As part of the <strong className="text-white">Habitat28</strong> family, we’ve applied
+          our proven expertise in <strong className="text-white">modular design</strong> to the outdoors.
+        </>
+      ),
       caption: "ELEV8 — Hydraulic canopy shown",
     },
     {
       title: "",
-      copy: <>We craft <strong className="text-white">luxury modular outdoor kitchens</strong> built for performance, durability, and style. Each ELEV8 kitchen transforms your backyard into a gourmet cooking space, blending modern design with premium materials to bring the heart of the home outdoors.</>,
+      copy: (
+        <>
+          We craft <strong className="text-white">luxury modular outdoor kitchens</strong> built for performance,
+          durability, and style. Each ELEV8 kitchen transforms your backyard into a gourmet cooking space, blending
+          modern design with premium materials to bring the heart of the home outdoors.
+        </>
+      ),
     },
   ];
 
   const featureRows = [
     {
-      kicker: "Built in Canada. Designed for Everywhere.",
+      kicker: "Built For Canada & U.S.A Harsh Weather. Designed for Anywhere.",
       copy:
-        "Each ELEV8 Modular Outdoor Kitchen is proudly built in Canada using commercial-grade stainless steel and engineered to thrive through harsh winters, summer BBQs, and everything in between. With E-SAFE Certification, plug-and-play installation, and luxury finishes, ELEV8 Kitchens deliver the perfect blend of durability, performance, and designer style.",
+        "Each ELEV8 Modular Outdoor Kitchen is designed to withstand the harsh climates of Canada and the U.S., using commercial-grade stainless steel and engineered to thrive through harsh winters, summers, and everything in between. With UL-Certification, plug-and-play installation, and luxury finishes, ELEV8 Kitchens deliver the perfect blend of durability, performance, and designer style.",
     },
     {
       kicker: "More Than a BBQ",
@@ -496,12 +635,22 @@ function Mobile() {
   return (
     <section className="bg-black text-white">
       <div className="mx-auto max-w-6xl px-6 pt-24 md:pt-32">
-        <motion.h1 className="font-heading text-center text-4xl md:text-6xl text-[#C1A88B]"
-          initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+        <motion.h1
+          className="font-heading text-center text-4xl md:text-6xl text-[#C1A88B]"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           About Us
         </motion.h1>
-        <motion.p className="mx-auto mt-4 max-w-2xl text-center text-white/80 font-body"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.6 }}>
+        <motion.p
+          className="mx-auto mt-4 max-w-2xl text-center text-white/80 font-body"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
           Crafting luxury modular outdoor kitchens built for performance, durability, and style.
         </motion.p>
       </div>
@@ -524,10 +673,18 @@ function Mobile() {
         {featuresWithImages.map((f, i) => (
           <div key={`f-${i}`} className="grid items-center gap-6 md:grid-cols-12">
             <div className={`md:col-span-5 ${i % 2 ? "md:order-2" : ""}`}>
-              <M_TiltImage img={f.img} index={i + 4} onOpen={() => setOpenIndex(indexBySrc(f.img.src))} />
+              <M_TiltImage
+                img={f.img}
+                index={i + 4}
+                onOpen={() => setOpenIndex(indexBySrc(f.img.src))}
+              />
             </div>
             <div className={`md:col-span-7 ${i % 2 ? "md:order-1" : ""}`}>
-              <M_Section kicker={f.kicker} copy={f.copy} />
+              <M_Section
+                kicker={f.kicker}
+                copy={f.copy}
+                showUL={f.kicker.startsWith("Built For Canada")}
+              />
             </div>
           </div>
         ))}
@@ -535,7 +692,9 @@ function Mobile() {
         <blockquote className="rounded-2xl bg-[#111]/60 p-8 ring-1 ring-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
           <p className="font-heading text-2xl text-[#C1A88B]">Join the Outdoor Revolution</p>
           <p className="mt-3 font-body text-white/85">
-            From Sunday brunches to evening wine nights or full backyard parties, ELEV8 Kitchens bring the soul of indoor living outdoors. Experience bold design, seamless performance, and an unmatched outdoor cooking experience, crafted for those who demand more from their space.
+            From Sunday brunches to evening wine nights or full backyard parties, ELEV8 Kitchens bring the soul of
+            indoor living outdoors. Experience bold design, seamless performance, and an unmatched outdoor cooking
+            experience, crafted for those who demand more from their space.
           </p>
         </blockquote>
       </div>

@@ -77,7 +77,7 @@ export default function TeamHero({
                     Book a Visit
                 </a>
 
-                <a
+                {/* <a
                     href="/story#makers"
                     className="
             inline-flex items-center justify-center rounded-full
@@ -85,8 +85,8 @@ export default function TeamHero({
             backdrop-blur-sm ring-1 ring-white/20 transition hover:bg-white/15
           "
                 >
-                    Meet the Makers
-                </a>
+                    
+                </a> */}
             </motion.div>
 
         </section>

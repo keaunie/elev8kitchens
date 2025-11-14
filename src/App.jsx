@@ -18,6 +18,7 @@ import CartPage from "./pages/CartPage.jsx";
 
 // NEW: import your Story page
 import Story from "./pages/Story.jsx";
+import FloatingSocials from "./components/FloatingSocials.jsx";
 
 const slides = [
   {
@@ -96,7 +97,33 @@ export default function App() {
           <Route path="/cart" element={<CartPage />} /> {/* "/cart" */}
         </Route>
       </Routes>
-      <Elev8ChatWidget endpoint="/api/chat" />
+
+      {/* <a
+        href="https://wa.me/19056930028?text=Hello%2C%20I%27m%20interested%20in%20your%20products"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+        className="
+                          fixed bottom-6 right-6 z-50
+                          w-16 h-16
+                          flex items-center justify-center
+                          rounded-full
+                          bg-[#25D366]
+                          shadow-xl
+                          transition-all duration-300 ease-out
+                          hover:scale-110 hover:shadow-2xl
+                          animate-pulse
+                        "
+      >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+          alt="WhatsApp"
+          className="w-10 h-10 drop-shadow-md"
+        />
+      </a> */}
+
+      <FloatingSocials />
+      {/* <Elev8ChatWidget endpoint="/api/chat" /> */}
     </BrowserRouter>
   );
 }

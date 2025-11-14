@@ -689,7 +689,7 @@ export default function ProductPage({
                                     },
                                     {
                                         title: "Shipping & Returns",
-                                        content: `U.S. & Canada shipping. 30-day returns. ${product.stock_note}`,
+                                        content: `U.S. & Canada shipping. ${product.stock_note}`,
                                     },
                                     {
                                         title: "Warranty",

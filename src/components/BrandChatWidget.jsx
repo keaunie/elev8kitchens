@@ -53,7 +53,7 @@ const useLocalSession = (key, initial) => {
   useEffect(() => {
     try {
       localStorage.setItem(key, JSON.stringify(state));
-    } catch {}
+    } catch { }
   }, [key, state]);
   return [state, setState];
 };
@@ -165,10 +165,11 @@ export default function Elev8ChatWidget({
             exit={{ opacity: 0, y: 10 }}
           >
             <MessageCircle className="w-5 h-5" />
-            <span className="font-medium tracking-wide" style={{ color: theme.subtle }}>
+            {/* <span className="font-medium tracking-wide" style={{ color: theme.subtle }}>
               Chat with {theme.name}
-            </span>
+            </span> */}
           </motion.button>
+          
         )}
       </AnimatePresence>
 
