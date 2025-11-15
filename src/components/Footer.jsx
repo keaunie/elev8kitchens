@@ -4,11 +4,11 @@ import { Mail, MapPin } from "lucide-react";
 const links = [
     { label: "Contact Us", href: "/contact" },
     { label: "FAQ", href: "/faq" },
-    { label: "Terms of Service", href: "/policies/terms" },
-    { label: "Shipping Policy", href: "/policies/shipping" },
-    { label: "Privacy Policy", href: "/policies/privacy" },
-    { label: "Return & Refund Policy", href: "/policies/refund" },
-    { label: "Track Your Order", href: "/orders/lookup" },
+    { label: "Terms of Service", href: "/terms-of-service" },
+    { label: "Shipping Policy", href: "/shipping" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    // { label: "Return & Refund Policy", href: "/policies/refund" },
+    // { label: "Track Your Order", href: "/orders/lookup" },
 ];
 
 export default function Footer() {

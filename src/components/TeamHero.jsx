@@ -78,7 +78,7 @@ export default function TeamHero({
                 </a>
 
                 <a
-                    href="/story#makers"
+                    href="/gallery"
                     className="
             inline-flex items-center justify-center rounded-full
             bg-white/10 px-6 py-3 text-[15px] font-medium text-white

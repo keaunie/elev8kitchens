@@ -45,7 +45,7 @@
                         "Color": "TITANIUM"
                     },
                     "price": 17300,
-                    "compare_at_price": 18900,
+                    "compare_at_price": null,
                     "images": [
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804000/elev8-modular-outdoor-bbq-kitchen-xl-titanium-canada_oaujii.png",
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286650/NF-101_10_copy_gcozbn.webp",
@@ -55,7 +55,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286600/IMG-20250228-WA0013_copy_myskc5.webp"
                     ],
                     "available": true,
-                    "payment_link": "https://square.link/u/fcuOpRhk"
+                    "payment_link": "https://square.link/u/8y8kb2OE"
                 },
                 {
                     "sku": "ELEV8-XL-PLATINUM",
@@ -63,7 +63,7 @@
                         "Size": "XL",
                         "Color": "PLATINUM"
                     },
-                    "price": 17600,
+                    "price": 17300,
                     "compare_at_price": null,
                     "images": [
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804000/elev8-modular-outdoor-bbq-kitchen-xl-platinum-canada_nztzop.png",
@@ -80,8 +80,8 @@
                         "Size": "XL",
                         "Color": "ANTHRACITE"
                     },
-                    "price": 17900,
-                    "compare_at_price": 18900,
+                    "price": 17300,
+                    "compare_at_price": null,
                     "images": [
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-anthracite-canada_2_pij6nh.png",
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp"
@@ -96,7 +96,7 @@
                         "Color": "TITANIUM"
                     },
                     "price": 19300,
-                    "compare_at_price": 20900,
+                    "compare_at_price": null,
                     "images": [
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-titanium-canada_bmeykg.png",
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286663/Untitled_design_copy_tpqrpg.webp",
@@ -114,7 +114,7 @@
                         "Size": "XXL",
                         "Color": "PLATINUM"
                     },
-                    "price": 19600,
+                    "price": 19300,
                     "compare_at_price": null,
                     "images": [
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-platinum-canada_v0huwz.png",
@@ -134,8 +134,8 @@
                         "Size": "XXL",
                         "Color": "ANTHRACITE"
                     },
-                    "price": 19900,
-                    "compare_at_price": 20900,
+                    "price": 19300,
+                    "compare_at_price": null,
                     "images": [
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-anthracite-canada_bswk07.png",
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286652/NF-101_20_copy_mewtvm.webp",

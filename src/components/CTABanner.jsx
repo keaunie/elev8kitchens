@@ -13,20 +13,66 @@ export default function CTABanner() {
         company: "",
     });
 
-    const update = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+    const update = (e) =>
+        setForm((f) => ({
+            ...f,
+            [e.target.name]: e.target.value,
+        }));
 
     const submit = async (e) => {
         e.preventDefault();
+
         if (!form.name || !form.email || !form.phone) {
             alert("Please complete the required fields.");
             return;
         }
-        if (form.company) return; // bot trap
+
+        // bot trap
+        if (form.company) return;
+
         setLoading(true);
-        // TODO: wire this to your backend or form service (e.g., Formspark, Netlify Forms, EmailJS)
-        await new Promise((r) => setTimeout(r, 900));
-        setLoading(false);
-        setSent(true);
+
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    access_key: "7eb54f95-3ec0-46ee-9c0b-5463a7fad524", // ⬅️ put your key here
+                    name: form.name,
+                    email: form.email,
+                    phone: form.phone,
+                    comment: form.comment,
+                    subject: "New quotation request from website",
+                    from_name: "Website Contact Form",
+                    // You can add more fields if you want; Web3Forms will just include them in the email
+                }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                setSent(true);
+                // optional: reset form fields
+                setForm({
+                    name: "",
+                    email: "",
+                    phone: "",
+                    comment: "",
+                    company: "",
+                });
+            } else {
+                console.error(result);
+                alert("Something went wrong sending your request. Please try again.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Network error. Please check your connection and try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -127,7 +173,8 @@ export default function CTABanner() {
 
                             {/* tiny reassurance text */}
                             <p className="mt-4 text-center text-xs text-white/60">
-                                We usually respond within 24 hours. Your information is secure and will not be shared.
+                                We usually respond within 24 hours. Your information is secure and
+                                will not be shared.
                             </p>
                         </motion.form>
                     ) : (

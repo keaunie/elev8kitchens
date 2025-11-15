@@ -77,7 +77,7 @@ export default function CartPage({ onCheckout }) {
   const total = subtotal + shippingEstimate + taxEstimate;
 
   const MULTI_ITEM_CHECKOUT_URL =
-    "https://square.link/u/your-multi-item-link"; // ← put your Square Payment Link here
+    "https://square.link/u/mxVoc1Ak"; // ← put your Square Payment Link here
 
   const handleCheckout = () => {
     if (!hydrated.length) return;
@@ -427,7 +427,7 @@ function EmptyCartState() {
         your size, finish, and layout — then add it to your cart to see it here.
       </p>
       <Link
-        to="/"
+        to="/Elev8Kitchens"
         className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow hover:brightness-95"
       >
         <ArrowLeft className="h-4 w-4" />

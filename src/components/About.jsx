@@ -10,7 +10,7 @@ export default function About({
         "Enjoy premium materials, cutting-edge safety tech, and sleek design all-in-one modular setup.",
         "We bring luxury, function, and style to your outdoor space. With smart features and pro-level grills, the ELEV8 system turns any backyard into a modern cooking and entertainment hub.",
     ],
-    cta = { label: "Order Now", href: "/products" },
+    cta = { label: "Order Now", href: "/Elev8Kitchens" },
     leftImage = {
         src: "https://elev8kitchens.com/cdn/shop/files/about-left.jpg?v=1",
         alt: "ELEV8 black outdoor kitchen",

@@ -320,7 +320,7 @@ function DesktopTablet() {
                   decoding="async"
                 />
                 <span className="text-white/70 text-sm md:text-base tracking-wide">
-                  UL Certified for Safety & Performance
+                  UL Certified Components for Safety & Performance
                 </span>
               </div>
             )}
@@ -595,7 +595,7 @@ function Mobile() {
     {
       kicker: "Built For Canada & U.S.A Harsh Weather. Designed for Anywhere.",
       copy:
-        "Each ELEV8 Modular Outdoor Kitchen is designed to withstand the harsh climates of Canada and the U.S., using commercial-grade stainless steel and engineered to thrive through harsh winters, summers, and everything in between. With UL-Certification, plug-and-play installation, and luxury finishes, ELEV8 Kitchens deliver the perfect blend of durability, performance, and designer style.",
+        "Each ELEV8 Modular Outdoor Kitchen is designed to withstand the harsh climates of Canada and the U.S., using commercial-grade stainless steel and engineered to thrive through harsh winters, summers, and everything in between. With UL certified components, plug-and-play installation, and luxury finishes, ELEV8 Kitchens deliver the perfect blend of durability, performance, and designer style.",
     },
     {
       kicker: "More Than a BBQ",

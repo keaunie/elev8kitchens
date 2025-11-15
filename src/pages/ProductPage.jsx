@@ -335,7 +335,10 @@ function ProductStoryParallax() {
         <div className="bg-black">
             <FullBleed>
                 <section className="bg-gradient-to-b from-black to-[#0b0b0b] py-20 md:py-28">
-                    <div className="mx-auto max-w-4xl px-6 text-center">
+                    <div
+                        className="mx-auto max-w-4xl px-6 text-center"
+                        id="why-elev8"             // ✅ no "#"
+                    >
                         <motion.h2
                             initial={{ opacity: 0, y: 16 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -353,13 +356,12 @@ function ProductStoryParallax() {
                             className="mx-auto mt-4 max-w-3xl text-white/85 md:text-lg"
                         >
                             Crafted by Habitat28, ELEV8 isn’t just a BBQ—it’s a complete
-                            outdoor living upgrade. Built from premium SS304 stainless steel,
-                            it delivers extreme durability, sleek aesthetics, and weather
-                            resistance that lasts.
+                            outdoor living upgrade...
                         </motion.p>
                     </div>
                 </section>
             </FullBleed>
+
 
             <ParallaxPanel
                 title="Weatherproof, Year-Round Durability"

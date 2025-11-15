@@ -20,6 +20,13 @@ import ContactPage from "./pages/ContactUs.jsx";
 // NEW: import your Story page
 import Story from "./pages/Story.jsx";
 import FloatingSocials from "./components/FloatingSocials.jsx";
+import TermsOfServicePage from "./policies/TermsofService.jsx";
+import ShippingPolicyPage from "./policies/Shipping.jsx";
+import PrivacyPolicyPage from "./policies/PrivacyPolicy.jsx";
+import GalleryPage from "./pages/GalleryPage.jsx";
+import ScrollToHash from "./components/ScrollToHash.jsx";
+import OrderComplete from "./pages/OrderComplete.jsx";
+
 
 const slides = [
   {
@@ -30,7 +37,7 @@ const slides = [
     subtitle:
       "Premium materials, precision engineering, and timeless design for your backyard oasis.",
     cta: "Explore Products",
-    href: "/products",
+    href: "/Elev8Kitchens",
   },
   {
     image: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762285478/hero2_rzdzke.webp",
@@ -39,7 +46,7 @@ const slides = [
     title: "Engineered for Real Life",
     subtitle: "Weather-resistant, easy to install, and built to last.",
     cta: "See Features",
-    href: "/features",
+    href: "/Elev8Kitchens#why-elev8",
   },
   {
     image: "https://res.cloudinary.com/dczzibbkw/image/upload/v1762285483/hero3_djf8cr.webp",
@@ -72,7 +79,7 @@ function Home() {
       <FeaturesSection
         kicker="What we offer"
         title="Next-Level Outdoor Kitchen Features"
-        cta={{ label: "Explore All Products", href: "/products" }}
+        cta={{ label: "Explore All Products", href: "/Elev8Kitchens" }}
       />
       <About />
       <Reviews />
@@ -88,6 +95,7 @@ function Home() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToHash />
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />          {/* "/" */}
@@ -96,7 +104,12 @@ export default function App() {
           <Route path="/FAQ" element={<FaqPage />} /> {/* "/FAQs" */}
           <Route path="/consultation" element={<Consultation />} /> {/* "/consultation" */}
           <Route path="/cart" element={<CartPage />} /> {/* "/cart" */}
-          <Route path="/contact" element={<ContactPage />} /> {/* "/cart" */}
+          <Route path="/contact" element={<ContactPage />} /> {/* "/Contact" */}
+          <Route path="/terms-of-service" element={<TermsOfServicePage />} /> {/* "/TOS" */}
+          <Route path="/shipping" element={<ShippingPolicyPage />} /> {/* "/Shipping" */}
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} /> {/* "/PrivacyPolicy" */}
+          <Route path="/gallery" element={<GalleryPage />} /> {/* "/Gallery" */}
+          <Route path="/order-complete" element={<OrderComplete />} />
         </Route>
       </Routes>
 

@@ -114,7 +114,7 @@ export default function CalendlyLuxePage({
                 <Phone color={GOLD} /> Call
               </a>
               <a
-                href="mailto:hello@example.com"
+                href="mailto:sales.elev8@habitat28.com"
                 className="flex items-center justify-center gap-2 rounded-xl bg-white/5 p-3 ring-1 ring-white/10 hover:bg-white/[0.08]"
               >
                 <Mail color={GOLD} /> Email
