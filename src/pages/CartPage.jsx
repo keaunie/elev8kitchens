@@ -76,20 +76,49 @@ export default function CartPage({ onCheckout }) {
   const taxEstimate = 0; // "Calculated at checkout"
   const total = subtotal + shippingEstimate + taxEstimate;
 
+  const MULTI_ITEM_CHECKOUT_URL =
+    "https://square.link/u/your-multi-item-link"; // ← put your Square Payment Link here
+
   const handleCheckout = () => {
-    if (onCheckout) {
-      onCheckout({
-        items: hydrated,
-        subtotal,
-        shippingEstimate,
-        taxEstimate,
-        total,
-      });
+    if (!hydrated.length) return;
+
+    // If all items are the same variant (same SKU), send directly to that variant's Square link
+    const skus = hydrated
+      .map((item) => item.variant?.sku)
+      .filter(Boolean);
+
+    const uniqueSkus = Array.from(new Set(skus));
+
+    if (uniqueSkus.length === 1) {
+      const firstVariant = hydrated[0]?.variant;
+      const paymentLink = firstVariant?.payment_link; // from products.json
+
+      if (paymentLink) {
+        window.location.href = paymentLink;
+        return;
+      }
+    }
+
+    // Fallback: multi-item cart → generic Square link with buyer-entered amount
+    const totalFormatted = formatMoney(total);
+
+    const proceed = window.confirm(
+      `Your current cart total is ${totalFormatted}.\n\n` +
+      "On the next page, you'll be redirected to our secure Square checkout.\n" +
+      "Please enter this total amount when prompted to complete payment."
+    );
+
+    if (!proceed) return;
+
+    if (MULTI_ITEM_CHECKOUT_URL) {
+      window.location.href = MULTI_ITEM_CHECKOUT_URL;
     } else {
-      // placeholder, wire to your checkout later
-      alert("Proceeding to checkout (hook this to your checkout flow).");
+      alert(
+        "Checkout link is not configured yet. Please contact support or try again later."
+      );
     }
   };
+
 
   return (
     <section className="relative min-h-screen bg-black text-white pb-24">
@@ -355,16 +384,14 @@ function SummaryRow({ label, value, bold = false, large = false }) {
   return (
     <div className="flex items-center justify-between gap-4">
       <span
-        className={`text-xs md:text-sm text-white/60 ${
-          bold ? "font-medium text-white/80" : ""
-        }`}
+        className={`text-xs md:text-sm text-white/60 ${bold ? "font-medium text-white/80" : ""
+          }`}
       >
         {label}
       </span>
       <span
-        className={`tabular-nums ${
-          large ? "text-lg font-semibold text-white" : "text-sm text-white/90"
-        }`}
+        className={`tabular-nums ${large ? "text-lg font-semibold text-white" : "text-sm text-white/90"
+          }`}
       >
         {value}
       </span>

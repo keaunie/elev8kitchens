@@ -15,6 +15,7 @@ import ProductPage from "./pages/ProductPage.jsx";
 import FaqPage from "./pages/FaqPage.jsx";
 import Consultation from "./pages/Consultation.jsx";
 import CartPage from "./pages/CartPage.jsx";
+import ContactPage from "./pages/ContactUs.jsx";
 
 // NEW: import your Story page
 import Story from "./pages/Story.jsx";
@@ -95,6 +96,7 @@ export default function App() {
           <Route path="/FAQ" element={<FaqPage />} /> {/* "/FAQs" */}
           <Route path="/consultation" element={<Consultation />} /> {/* "/consultation" */}
           <Route path="/cart" element={<CartPage />} /> {/* "/cart" */}
+          <Route path="/contact" element={<ContactPage />} /> {/* "/cart" */}
         </Route>
       </Routes>
 
@@ -122,7 +124,7 @@ export default function App() {
         />
       </a> */}
 
-      {/* <FloatingSocials /> */}
+      <FloatingSocials />
       {/* <Elev8ChatWidget endpoint="/api/chat" /> */}
     </BrowserRouter>
   );

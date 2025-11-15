@@ -385,10 +385,10 @@ export default function FaqPage() {
                                 <a href="mailto:sales.elev8@habitat28.com" className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-sm text-white ring-1 ring-white/10 hover:bg-white/10">
                                     <Mail size={16} /> sales.elev8@habitat28.com
                                 </a>
-                                <a href="tel:+10000000000" className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-sm text-white ring-1 ring-white/10 hover:bg-white/10">
+                                {/* <a href="tel:+10000000000" className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-sm text-white ring-1 ring-white/10 hover:bg-white/10">
                                     <Phone size={16} /> +1 (000) 000-0000
-                                </a>
-                                <a href="https://wa.me/15551234567" className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-sm text-white ring-1 ring-white/10 hover:bg-white/10">
+                                </a> */}
+                                <a href="https://wa.me/19056930028?text=Hello%2C%20I%27m%20interested%20in%20your%20products" className="inline-flex items-center gap-2 rounded-xl bg-white/5 px-4 py-2 text-sm text-white ring-1 ring-white/10 hover:bg-white/10">
                                     <MessageCircle size={16} /> WhatsApp Specialist
                                 </a>
                             </div>

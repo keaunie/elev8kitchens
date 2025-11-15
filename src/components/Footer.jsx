@@ -42,7 +42,7 @@ export default function Footer() {
 
                             {/* Facebook */}
                             <a
-                                href="https://www.facebook.com/elev8kitchens"
+                                href="https://www.facebook.com/profile.php?id=61582925968352 "
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Facebook"
@@ -62,7 +62,7 @@ export default function Footer() {
 
                             {/* Instagram */}
                             <a
-                                href="https://www.instagram.com/elev8kitchens"
+                                href="https://www.instagram.com/habitat28modular/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Instagram"
@@ -80,25 +80,27 @@ export default function Footer() {
                                 </svg>
                             </a>
 
-                            {/* YouTube */}
+                            {/* WhatsApp */}
                             <a
-                                href="https://www.youtube.com/@elev8kitchens"
+                                href="https://wa.me/19056930028?text=Hello%2C%20I%27m%20interested%20in%20your%20products"   // replace with your WhatsApp number
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label="YouTube"
+                                aria-label="WhatsApp"
                                 className="group grid h-11 w-11 place-items-center rounded-full 
         ring-1 ring-[#C1A88B]/50 bg-black/40
         transition-all duration-300 hover:scale-110 hover:ring-[#C1A88B] hover:bg-black/60"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 32 32"
                                     fill="#C1A88B"
-                                    viewBox="0 0 24 24"
                                     className="h-5 w-5 transition duration-300 group-hover:brightness-125"
                                 >
-                                    <path d="M21.8 8.001a3 3 0 0 0-2.11-2.12C18.03 5.5 12 5.5 12 5.5s-6.03 0-7.69.381A3 3 0 0 0 2.2 8.001 31.36 31.36 0 0 0 1.8 12a31.36 31.36 0 0 0 .39 3.999 3 3 0 0 0 2.11 2.12C5.97 18.5 12 18.5 12 18.5s6.03 0 7.69-.381a3 3 0 0 0 2.11-2.12A31.36 31.36 0 0 0 22.2 12a31.36 31.36 0 0 0-.39-3.999zM10 15.5v-7l6 3.5-6 3.5z" />
+                                    <path d="M16.04 3C9.402 3 4 8.403 4 15.04c0 2.658.803 5.108 2.177 7.155L4 29l7.037-2.147A12.9 12.9 0 0 0 16.04 27c6.636 0 12.04-5.402 12.04-12.04C28.08 8.403 22.676 3 16.04 3zm0 22.04c-2.22 0-4.293-.687-6.01-1.983l-.43-.31-4.176 1.276 1.316-4.07-.28-.42A9.92 9.92 0 0 1 6.12 15.04c0-5.477 4.443-9.92 9.92-9.92 5.476 0 9.92 4.443 9.92 9.92 0 5.477-4.444 9.92-9.92 9.92z" />
+                                    <path d="M22.247 18.596c-.338-.169-2.003-.99-2.313-1.102-.31-.113-.536-.17-.763.17-.226.338-.875 1.102-1.073 1.328-.199.226-.397.254-.735.085-.338-.169-1.426-.526-2.717-1.68-.999-.89-1.673-1.987-1.872-2.325-.199-.339-.021-.522.148-.69.152-.151.338-.397.508-.596.17-.198.226-.339.338-.564.113-.226.057-.423-.028-.596-.085-.169-.763-1.84-1.045-2.516-.275-.66-.556-.573-.763-.573-.198 0-.423-.028-.65-.028s-.596.085-.907.423c-.31.338-1.19 1.159-1.19 2.825s1.219 3.276 1.39 3.504c.169.226 2.373 3.626 5.856 5.07.818.352 1.456.564 1.953.725.821.26 1.57.223 2.162.135.66-.099 2.003-.816 2.287-1.606.283-.79.283-1.474.197-1.605-.085-.141-.31-.226-.65-.395z" />
                                 </svg>
                             </a>
+
 
                         </div>
 
