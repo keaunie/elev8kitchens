@@ -695,7 +695,7 @@ export default function ProductPage({
                                     },
                                     {
                                         title: "Warranty",
-                                        content: "2-Year limited warranty.",
+                                        content: "1-Year limited warranty.",
                                     },
                                 ].map((it, idx) => (
                                     <AccordionItem key={idx} title={it.title}>

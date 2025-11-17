@@ -209,8 +209,8 @@ export default function CartPage({ onCheckout }) {
             />
             <ReassuranceItem
               icon={<ShieldCheck className="h-5 w-5" />}
-              title="2-Year Warranty"
-              body="ELEV8 is engineered to last, backed by a limited 2-year warranty on core components."
+              title="1-Year Warranty"
+              body="ELEV8 is engineered to last, backed by a limited 1-year warranty on core components."
             />
             <ReassuranceItem
               icon={<CreditCard className="h-5 w-5" />}
@@ -363,6 +363,7 @@ function OrderSummaryCard({
         </div>
       </div>
 
+      {/* Primary checkout button */}
       <button
         onClick={onCheckout}
         disabled={disabled}
@@ -372,10 +373,38 @@ function OrderSummaryCard({
         {disabled ? "Cart is Empty" : "Proceed to Checkout"}
       </button>
 
+      {/* Alternative checkout options */}
+      <div className="mt-4 grid gap-2 md:grid-cols-3">
+        <button
+          type="button"
+          onClick={onCheckout}
+          disabled={disabled}
+          className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs md:text-sm text-white/80 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          BNPL / Pay Over Time
+        </button>
+        <button
+          type="button"
+          onClick={onCheckout}
+          disabled={disabled}
+          className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs md:text-sm text-white/80 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Split Payments
+        </button>
+        <button
+          type="button"
+          onClick={onCheckout}
+          disabled={disabled}
+          className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs md:text-sm text-white/80 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Group Payments
+        </button>
+      </div>
+
       <p className="mt-3 text-xs text-white/60">
-        By proceeding, you’ll confirm your ELEV8 configuration and delivery
-        details. A Habitat28 specialist can follow up for site-specific
-        questions if needed.
+        All options are processed via our secure Square checkout. A Habitat28
+        specialist can assist with financing, shared payments, or group
+        purchases after you complete your payment.
       </p>
 
       <div className="mt-4 flex items-center gap-2 rounded-2xl bg-white/5 px-3 py-2 text-xs text-white/75 ring-1 ring-white/10">
@@ -386,22 +415,21 @@ function OrderSummaryCard({
   );
 }
 
+
 function SummaryRow({ label, value, bold = false, large = false }) {
   return (
     <div className="flex items-center justify-between gap-4">
       <span
-        className={`text-xs md:text-sm text-white/60 ${
-          bold ? "font-medium text-white/80" : ""
-        }`}
+        className={`text-xs md:text-sm text-white/60 ${bold ? "font-medium text-white/80" : ""
+          }`}
       >
         {label}
       </span>
       <span
-        className={`tabular-nums ${
-          large
+        className={`tabular-nums ${large
             ? "text-lg font-semibold text-white"
             : "text-sm text-white/90"
-        }`}
+          }`}
       >
         {value}
       </span>
