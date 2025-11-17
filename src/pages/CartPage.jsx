@@ -356,7 +356,6 @@ function CartLineItem({ entry, onIncrease, onDecrease, onRemove }) {
     </motion.div>
   );
 }
-
 function OrderSummaryCard({
   subtotal,
   shipping,
@@ -366,6 +365,44 @@ function OrderSummaryCard({
   onCheckout,
   onSplitCheckout,
 }) {
+  const [paymentOption, setPaymentOption] = useState("full"); // "full" | "split" | "bnpl" | "group"
+  const [open, setOpen] = useState(false);
+
+  const paymentOptions = [
+    { value: "full", label: "Pay in full today" },
+    { value: "split", label: "Split Payments (20% Deposit)" },
+    { value: "bnpl", label: "BNPL / Pay Over Time" },
+    { value: "group", label: "Group Payments" },
+  ];
+
+  const current =
+    paymentOptions.find((opt) => opt.value === paymentOption) ||
+    paymentOptions[0];
+
+  const primaryLabel =
+    paymentOption === "split"
+      ? "Proceed with 20% Split Payment"
+      : paymentOption === "bnpl"
+        ? "Proceed with BNPL / Pay Over Time"
+        : paymentOption === "group"
+          ? "Proceed with Group Payment"
+          : "Proceed to Checkout";
+
+  const handlePrimaryClick = () => {
+    if (disabled) return;
+    if (paymentOption === "split") {
+      (onSplitCheckout || onCheckout)();
+    } else {
+      // full, bnpl, group currently all go through standard checkout
+      onCheckout();
+    }
+  };
+
+  const handleSelect = (value) => {
+    setPaymentOption(value);
+    setOpen(false);
+  };
+
   return (
     <div className="rounded-[28px] bg-[#0f0f0f]/80 p-5 md:p-6 ring-1 ring-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.55)]">
       <h2 className="font-heading text-xl text-[#C1A88B]">Order Summary</h2>
@@ -385,42 +422,63 @@ function OrderSummaryCard({
         </div>
       </div>
 
-      {/* Primary checkout button */}
+      {/* Primary checkout button (respects selected payment option) */}
       <button
-        onClick={onCheckout}
+        onClick={handlePrimaryClick}
         disabled={disabled}
         className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-[#C1A88B] px-6 py-3.5 text-sm md:text-base font-medium text-black shadow transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <CreditCard className="h-4 w-4" />
-        {disabled ? "Cart is Empty" : "Proceed to Checkout"}
+        {disabled ? "Cart is Empty" : primaryLabel}
       </button>
 
-      {/* Alternative checkout options */}
-      <div className="mt-4 grid gap-2 md:grid-cols-3">
-        <button
-          type="button"
-          onClick={onCheckout}
-          disabled={disabled}
-          className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs md:text-sm text-white/80 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          BNPL / Pay Over Time
-        </button>
-        <button
-          type="button"
-          onClick={onSplitCheckout || onCheckout}
-          disabled={disabled}
-          className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs md:text-sm text-white/80 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Split Payments (20% Deposit)
-        </button>
-        <button
-          type="button"
-          onClick={onCheckout}
-          disabled={disabled}
-          className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs md:text-sm text-white/80 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Group Payments
-        </button>
+      {/* Custom dropdown for payment options */}
+      <div className="mt-4">
+        <label className="mb-1 block text-xs text-white/60">
+          Payment option
+        </label>
+        <div className="relative">
+          <button
+            type="button"
+            disabled={disabled}
+            onClick={() => setOpen((v) => !v)}
+            className={[
+              "flex w-full items-center justify-between rounded-full border border-white/15",
+              "bg-black/70 px-4 py-2.5 text-xs md:text-sm text-white/80",
+              "hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60",
+              disabled ? "cursor-not-allowed opacity-50" : "",
+            ].join(" ")}
+          >
+            <span className="truncate">{current.label}</span>
+            <span className="ml-3 text-[10px] text-white/60">▼</span>
+          </button>
+
+          <AnimatePresence>
+            {open && !disabled && (
+              <motion.div
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 4 }}
+                className="absolute left-0 right-0 z-20 mt-2 rounded-2xl border border-white/15 bg-black/95 shadow-xl"
+              >
+                {paymentOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => handleSelect(opt.value)}
+                    className={[
+                      "w-full px-4 py-2.5 text-left text-xs md:text-sm",
+                      "text-white/85 hover:bg-white/10",
+                      opt.value === paymentOption ? "bg-white/5" : "",
+                    ].join(" ")}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
       <p className="mt-3 text-xs text-white/60">
@@ -437,22 +495,21 @@ function OrderSummaryCard({
   );
 }
 
+
 function SummaryRow({ label, value, bold = false, large = false }) {
   return (
     <div className="flex items-center justify-between gap-4">
       <span
-        className={`text-xs md:text-sm text-white/60 ${
-          bold ? "font-medium text-white/80" : ""
-        }`}
+        className={`text-xs md:text-sm text-white/60 ${bold ? "font-medium text-white/80" : ""
+          }`}
       >
         {label}
       </span>
       <span
-        className={`tabular-nums ${
-          large
+        className={`tabular-nums ${large
             ? "text-lg font-semibold text-white"
             : "text-sm text-white/90"
-        }`}
+          }`}
       >
         {value}
       </span>
