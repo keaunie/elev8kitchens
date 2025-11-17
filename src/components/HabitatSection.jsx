@@ -12,7 +12,7 @@ export default function HabitatSection() {
                 className="absolute inset-0 pointer-events-none"
                 style={{
                     background:
-                        "radial-gradient(circle at center, rgba(0,0,0,0) 10%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.2) 100%)",
+                        "radial-gradient(circle at center, rgba(0,0,0,0) 10%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0.1) 100%)",
                 }}
             />
 
