@@ -629,7 +629,7 @@ export default function ProductPage({
                                     </button>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm text-white/70">
-                                    <ShieldCheck className="h-4 w-4 text-[#C1A88B]" /> 2-Year
+                                    <ShieldCheck className="h-4 w-4 text-[#C1A88B]" /> 1-Year
                                     warranty included
                                 </div>
                             </div>

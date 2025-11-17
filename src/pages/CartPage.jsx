@@ -46,8 +46,9 @@ function findVariant(product, { sku, size, color }) {
 export default function CartPage({ onCheckout }) {
   const { items, updateQuantity, removeItem } = useCart();
 
-  // Modal state for multi-item checkout
+  // Modal state for checkout
   const [showMultiModal, setShowMultiModal] = useState(false);
+  const [checkoutMode, setCheckoutMode] = useState("standard"); // "standard" | "split"
 
   // Hydrate each cart line with product + variant data
   const hydrated = useMemo(() => {
@@ -78,8 +79,13 @@ export default function CartPage({ onCheckout }) {
   const taxEstimate = 0; // "Calculated at checkout"
   const total = subtotal + shippingEstimate + taxEstimate;
 
+  // Standard full-payment checkout (multi-item)
   const MULTI_ITEM_CHECKOUT_URL =
-    "https://square.link/u/EKt1svLu"; // ← put your Square Payment Link here
+    "https://square.link/u/EKt1svLu";
+
+  // Split payment checkout (20% deposit)
+  const SPLIT_PAYMENT_CHECKOUT_URL =
+    "https://square.link/u/4WPmgEHA";
 
   const handleCheckout = () => {
     if (!hydrated.length) return;
@@ -101,19 +107,32 @@ export default function CartPage({ onCheckout }) {
       }
     }
 
-    // Fallback: multi-item cart → open luxurious confirmation modal
+    // Fallback: multi-item cart → standard full-payment checkout via modal
+    setCheckoutMode("standard");
+    setShowMultiModal(true);
+  };
+
+  const handleSplitCheckout = () => {
+    if (!hydrated.length) return;
+    // Use the same luxe modal but with 20% deposit logic
+    setCheckoutMode("split");
     setShowMultiModal(true);
   };
 
   const handleConfirmMultiCheckout = () => {
-    if (!MULTI_ITEM_CHECKOUT_URL) {
+    const targetUrl =
+      checkoutMode === "split"
+        ? SPLIT_PAYMENT_CHECKOUT_URL
+        : MULTI_ITEM_CHECKOUT_URL;
+
+    if (!targetUrl) {
       alert(
         "Checkout link is not configured yet. Please contact support or try again later."
       );
       return;
     }
     setShowMultiModal(false);
-    window.location.href = MULTI_ITEM_CHECKOUT_URL;
+    window.location.href = targetUrl;
   };
 
   const handleCancelMultiCheckout = () => {
@@ -195,6 +214,7 @@ export default function CartPage({ onCheckout }) {
               total={total}
               disabled={!hasItems}
               onCheckout={handleCheckout}
+              onSplitCheckout={handleSplitCheckout}
             />
           </div>
         </div>
@@ -221,11 +241,12 @@ export default function CartPage({ onCheckout }) {
         </div>
       </div>
 
-      {/* Luxurious multi-item checkout modal */}
+      {/* Luxurious multi-item / split checkout modal */}
       <AnimatePresence>
         {showMultiModal && (
           <MultiItemCheckoutModal
             total={total}
+            mode={checkoutMode}
             onConfirm={handleConfirmMultiCheckout}
             onCancel={handleCancelMultiCheckout}
           />
@@ -343,6 +364,7 @@ function OrderSummaryCard({
   total,
   disabled,
   onCheckout,
+  onSplitCheckout,
 }) {
   return (
     <div className="rounded-[28px] bg-[#0f0f0f]/80 p-5 md:p-6 ring-1 ring-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.55)]">
@@ -385,11 +407,11 @@ function OrderSummaryCard({
         </button>
         <button
           type="button"
-          onClick={onCheckout}
+          onClick={onSplitCheckout || onCheckout}
           disabled={disabled}
           className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs md:text-sm text-white/80 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Split Payments
+          Split Payments (20% Deposit)
         </button>
         <button
           type="button"
@@ -402,9 +424,9 @@ function OrderSummaryCard({
       </div>
 
       <p className="mt-3 text-xs text-white/60">
-        All options are processed via our secure Square checkout. A Habitat28
-        specialist can assist with financing, shared payments, or group
-        purchases after you complete your payment.
+        All options are processed via our secure Square checkout. For split
+        payments, you&apos;ll pay a 20% deposit today, and a Habitat28
+        specialist can assist with the remaining balance and delivery details.
       </p>
 
       <div className="mt-4 flex items-center gap-2 rounded-2xl bg-white/5 px-3 py-2 text-xs text-white/75 ring-1 ring-white/10">
@@ -415,21 +437,22 @@ function OrderSummaryCard({
   );
 }
 
-
 function SummaryRow({ label, value, bold = false, large = false }) {
   return (
     <div className="flex items-center justify-between gap-4">
       <span
-        className={`text-xs md:text-sm text-white/60 ${bold ? "font-medium text-white/80" : ""
-          }`}
+        className={`text-xs md:text-sm text-white/60 ${
+          bold ? "font-medium text-white/80" : ""
+        }`}
       >
         {label}
       </span>
       <span
-        className={`tabular-nums ${large
+        className={`tabular-nums ${
+          large
             ? "text-lg font-semibold text-white"
             : "text-sm text-white/90"
-          }`}
+        }`}
       >
         {value}
       </span>
@@ -475,10 +498,24 @@ function EmptyCartState() {
   );
 }
 
-/* ====== Luxurious Multi-Item Modal ====== */
+/* ====== Luxurious Multi-Item / Split Modal ====== */
 
-function MultiItemCheckoutModal({ total, onConfirm, onCancel }) {
-  const totalFormatted = formatMoney(total);
+function MultiItemCheckoutModal({ total, mode = "standard", onConfirm, onCancel }) {
+  const isSplit = mode === "split";
+  const amountToPay = isSplit ? total * 0.2 : total; // 20% deposit for split
+  const amountFormatted = formatMoney(amountToPay);
+
+  const label = isSplit
+    ? "Split Payment (20% Deposit)"
+    : "Multi-Item ELEV8 Checkout";
+
+  const heading = isSplit
+    ? "Pay 20% today to reserve your ELEV8 kitchen"
+    : "Confirm your cart total";
+
+  const caption = isSplit
+    ? "Today’s payment (20% deposit)"
+    : "Cart total";
 
   return (
     <motion.div
@@ -512,38 +549,51 @@ function MultiItemCheckoutModal({ total, onConfirm, onCancel }) {
         <div className="relative space-y-4">
           <div className="inline-flex items-center gap-2 rounded-full bg-[#C1A88B]/10 px-3 py-1 text-xs font-medium text-[#C1A88B] ring-1 ring-[#C1A88B]/30">
             <CreditCard className="h-3 w-3" />
-            Multi-Item ELEV8 Checkout
+            {label}
           </div>
 
           <h2 className="font-heading text-2xl md:text-3xl text-white">
-            Confirm your cart total
+            {heading}
           </h2>
 
           <p className="text-sm md:text-base text-white/70">
             You&apos;re checking out multiple ELEV8 items. On the next page,
-            you&apos;ll be redirected to our secure Square payment portal. To
-            keep things simple and transparent, please enter this exact amount:
+            you&apos;ll be redirected to our secure Square payment portal.
+            {isSplit
+              ? " For split payments, you’ll pay a 20% deposit today and arrange the remaining balance with our team before delivery."
+              : " Please review the amount below before completing your payment."}
           </p>
 
           <div className="rounded-2xl bg-black/60 p-4 ring-1 ring-white/10">
             <p className="text-xs uppercase tracking-[0.2em] text-white/50">
-              Cart total to enter
+              {caption}
             </p>
             <p className="mt-2 text-3xl md:text-4xl font-semibold text-[#C1A88B]">
-              {totalFormatted}
+              {amountFormatted}
             </p>
             <p className="mt-2 text-xs md:text-sm text-white/60">
-              This includes your current configuration. Final shipping and any
-              applicable taxes may be adjusted during the final invoice review.
+              {isSplit
+                ? "This 20% deposit secures your ELEV8 configuration. Our team will follow up to confirm the remaining balance, timing, and delivery details."
+                : "This reflects your current configuration. A Habitat28 specialist can assist with delivery, access, and installation after payment."}
             </p>
           </div>
 
           <ul className="space-y-2 text-xs md:text-sm text-white/70">
             <li>• Click &quot;Continue to Secure Square Checkout&quot; below.</li>
-            <li>• When prompted, enter the total shown above as your payment.</li>
+            {isSplit ? (
+              <li>
+                • Complete the 20% deposit payment on the next page to reserve
+                your ELEV8 kitchen.
+              </li>
+            ) : (
+              <li>
+                • Complete the full payment on the next page to finalize your
+                ELEV8 order.
+              </li>
+            )}
             <li>
-              • A Habitat28 specialist can follow up regarding site access,
-              delivery, and installation details if needed.
+              • Our team can assist with site access, delivery timing, and
+              installation questions after payment.
             </li>
           </ul>
 
