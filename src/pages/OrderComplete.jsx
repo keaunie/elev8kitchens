@@ -12,7 +12,7 @@ export default function OrderComplete() {
   // Auto redirect after 4 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/products"); // <— redirect to product catalog page
+      navigate("/"); // <— redirect to product catalog page
     }, 4000);
 
     return () => clearTimeout(timer);
