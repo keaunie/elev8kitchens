@@ -1,6 +1,6 @@
 // CartPage.jsx — Elev8 Kitchens / ELEV8 theme
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Minus,
@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   CreditCard,
   CheckCircle2,
+  X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -36,9 +37,7 @@ function findVariant(product, { sku, size, color }) {
   return (
     product.variants.find((v) => v.sku === sku) ||
     product.variants.find(
-      (v) =>
-        v.options?.Size === size &&
-        v.options?.Color === color
+      (v) => v.options?.Size === size && v.options?.Color === color
     ) ||
     product.variants[0]
   );
@@ -46,6 +45,9 @@ function findVariant(product, { sku, size, color }) {
 
 export default function CartPage({ onCheckout }) {
   const { items, updateQuantity, removeItem } = useCart();
+
+  // Modal state for multi-item checkout
+  const [showMultiModal, setShowMultiModal] = useState(false);
 
   // Hydrate each cart line with product + variant data
   const hydrated = useMemo(() => {
@@ -77,7 +79,7 @@ export default function CartPage({ onCheckout }) {
   const total = subtotal + shippingEstimate + taxEstimate;
 
   const MULTI_ITEM_CHECKOUT_URL =
-    "https://square.link/u/mxVoc1Ak"; // ← put your Square Payment Link here
+    "https://square.link/u/EKt1svLu"; // ← put your Square Payment Link here
 
   const handleCheckout = () => {
     if (!hydrated.length) return;
@@ -99,26 +101,24 @@ export default function CartPage({ onCheckout }) {
       }
     }
 
-    // Fallback: multi-item cart → generic Square link with buyer-entered amount
-    const totalFormatted = formatMoney(total);
+    // Fallback: multi-item cart → open luxurious confirmation modal
+    setShowMultiModal(true);
+  };
 
-    const proceed = window.confirm(
-      `Your current cart total is ${totalFormatted}.\n\n` +
-      "On the next page, you'll be redirected to our secure Square checkout.\n" +
-      "Please enter this total amount when prompted to complete payment."
-    );
-
-    if (!proceed) return;
-
-    if (MULTI_ITEM_CHECKOUT_URL) {
-      window.location.href = MULTI_ITEM_CHECKOUT_URL;
-    } else {
+  const handleConfirmMultiCheckout = () => {
+    if (!MULTI_ITEM_CHECKOUT_URL) {
       alert(
         "Checkout link is not configured yet. Please contact support or try again later."
       );
+      return;
     }
+    setShowMultiModal(false);
+    window.location.href = MULTI_ITEM_CHECKOUT_URL;
   };
 
+  const handleCancelMultiCheckout = () => {
+    setShowMultiModal(false);
+  };
 
   return (
     <section className="relative min-h-screen bg-black text-white pb-24">
@@ -220,6 +220,17 @@ export default function CartPage({ onCheckout }) {
           </div>
         </div>
       </div>
+
+      {/* Luxurious multi-item checkout modal */}
+      <AnimatePresence>
+        {showMultiModal && (
+          <MultiItemCheckoutModal
+            total={total}
+            onConfirm={handleConfirmMultiCheckout}
+            onCancel={handleCancelMultiCheckout}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
@@ -348,12 +359,7 @@ function OrderSummaryCard({
           value={tax === 0 ? "Calculated at checkout" : formatMoney(tax)}
         />
         <div className="border-t border-white/10 pt-3">
-          <SummaryRow
-            label="Total"
-            value={formatMoney(total)}
-            bold
-            large
-          />
+          <SummaryRow label="Total" value={formatMoney(total)} bold large />
         </div>
       </div>
 
@@ -384,14 +390,18 @@ function SummaryRow({ label, value, bold = false, large = false }) {
   return (
     <div className="flex items-center justify-between gap-4">
       <span
-        className={`text-xs md:text-sm text-white/60 ${bold ? "font-medium text-white/80" : ""
-          }`}
+        className={`text-xs md:text-sm text-white/60 ${
+          bold ? "font-medium text-white/80" : ""
+        }`}
       >
         {label}
       </span>
       <span
-        className={`tabular-nums ${large ? "text-lg font-semibold text-white" : "text-sm text-white/90"
-          }`}
+        className={`tabular-nums ${
+          large
+            ? "text-lg font-semibold text-white"
+            : "text-sm text-white/90"
+        }`}
       >
         {value}
       </span>
@@ -434,5 +444,98 @@ function EmptyCartState() {
         Browse ELEV8 Kitchens
       </Link>
     </div>
+  );
+}
+
+/* ====== Luxurious Multi-Item Modal ====== */
+
+function MultiItemCheckoutModal({ total, onConfirm, onCancel }) {
+  const totalFormatted = formatMoney(total);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      role="dialog"
+      aria-modal="true"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.97 }}
+        className="relative w-full max-w-lg rounded-3xl bg-gradient-to-br from-[#0b0b0b] via-black to-[#151515] p-6 md:p-8 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.85)]"
+      >
+        {/* Glow accent */}
+        <div className="pointer-events-none absolute -inset-px rounded-3xl border border-white/5">
+          <div className="absolute -top-10 right-10 h-32 w-32 rounded-full bg-[#C1A88B]/15 blur-3xl" />
+        </div>
+
+        {/* Close button */}
+        <button
+          onClick={onCancel}
+          className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+          aria-label="Close"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="relative space-y-4">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#C1A88B]/10 px-3 py-1 text-xs font-medium text-[#C1A88B] ring-1 ring-[#C1A88B]/30">
+            <CreditCard className="h-3 w-3" />
+            Multi-Item ELEV8 Checkout
+          </div>
+
+          <h2 className="font-heading text-2xl md:text-3xl text-white">
+            Confirm your cart total
+          </h2>
+
+          <p className="text-sm md:text-base text-white/70">
+            You&apos;re checking out multiple ELEV8 items. On the next page,
+            you&apos;ll be redirected to our secure Square payment portal. To
+            keep things simple and transparent, please enter this exact amount:
+          </p>
+
+          <div className="rounded-2xl bg-black/60 p-4 ring-1 ring-white/10">
+            <p className="text-xs uppercase tracking-[0.2em] text-white/50">
+              Cart total to enter
+            </p>
+            <p className="mt-2 text-3xl md:text-4xl font-semibold text-[#C1A88B]">
+              {totalFormatted}
+            </p>
+            <p className="mt-2 text-xs md:text-sm text-white/60">
+              This includes your current configuration. Final shipping and any
+              applicable taxes may be adjusted during the final invoice review.
+            </p>
+          </div>
+
+          <ul className="space-y-2 text-xs md:text-sm text-white/70">
+            <li>• Click &quot;Continue to Secure Square Checkout&quot; below.</li>
+            <li>• When prompted, enter the total shown above as your payment.</li>
+            <li>
+              • A Habitat28 specialist can follow up regarding site access,
+              delivery, and installation details if needed.
+            </li>
+          </ul>
+
+          <div className="mt-4 flex flex-col gap-3 md:flex-row md:justify-end">
+            <button
+              onClick={onCancel}
+              className="inline-flex items-center justify-center rounded-full bg-white/5 px-5 py-2.5 text-sm font-medium text-white/80 ring-1 ring-white/10 hover:bg-white/10"
+            >
+              Review Cart Again
+            </button>
+            <button
+              onClick={onConfirm}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#C1A88B] px-6 py-2.5 text-sm font-medium text-black shadow hover:brightness-95"
+            >
+              <CreditCard className="h-4 w-4" />
+              Continue to Secure Square Checkout
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
