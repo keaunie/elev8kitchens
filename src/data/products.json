@@ -72,7 +72,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286599/IMG-20250228-WA0011_copy_isgkzj.webp"
                     ],
                     "available": true,
-                    "payment_link": "/pay/ELEV8-XL-PLATINUM"
+                    "payment_link": "https://square.link/u/IkrDtxqv"
                 },
                 {
                     "sku": "ELEV8-XL-ANTHRACITE",
@@ -87,7 +87,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp"
                     ],
                     "available": true,
-                    "payment_link": "/pay/ELEV8-XL-ANTHRACITE"
+                    "payment_link": "https://square.link/u/fHjwonOa"
                 },
                 {
                     "sku": "ELEV8-XXL-TITANIUM",
@@ -106,7 +106,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp"
                     ],
                     "available": true,
-                    "payment_link": "/pay/ELEV8-XXL-TITANIUM"
+                    "payment_link": "https://square.link/u/BSj8OmHb"
                 },
                 {
                     "sku": "ELEV8-XXL-PLATINUM",
@@ -126,7 +126,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/k1_copy_ij8xt4.webp"
                     ],
                     "available": true,
-                    "payment_link": "/pay/ELEV8-XXL-PLATINUM"
+                    "payment_link": "https://square.link/u/JsQsklna"
                 },
                 {
                     "sku": "ELEV8-XXL-ANTHRACITE",
@@ -148,7 +148,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1761439478/Elev8_Front_Facing_1200_X_1200_-_Xxl_an_wqnmrg.webp"
                     ],
                     "available": true,
-                    "payment_link": "/pay/ELEV8-XXL-ANTHRACITE"
+                    "payment_link": "https://square.link/u/QBqDfAIa"
                 }
             ],
             "swatches": {
