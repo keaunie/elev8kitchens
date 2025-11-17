@@ -163,7 +163,7 @@ const defaultOptions = [
             "Afterpay (Pay-in-4) where available",
             "PCI-compliant, encrypted payments",
         ],
-        cta: { label: "Pay with Square", href: "/checkout" },
+        cta: { label: "Pay with Square", href: "/cart" },
     },
 ];
 
