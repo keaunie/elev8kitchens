@@ -1,19 +1,22 @@
-// netlify/functions/create-deposit.js
-const { Client, ApiError } = require("square");
-const { randomUUID } = require("crypto");
+// netlify/functions/create-deposits.js
+import { Client, ApiError } from "square";
+import { randomUUID } from "crypto";
 
-// Make sure these are set in Netlify environment variables
+// Make sure these are set in Netlify environment variables:
 // SQUARE_ACCESS_TOKEN (sandbox or production)
 // SQUARE_LOCATION_ID
-
 const client = new Client({
   accessToken: process.env.SQUARE_ACCESS_TOKEN,
-  environment: "sandbox", // change to 'production' when you go live
+  environment: "sandbox", // change to "production" when you go live
 });
 
-const MIN_DEPOSIT = 1000 * 100; // $1,000 in cents (number, not BigInt)
+const MIN_DEPOSIT = 1000 * 100; // $1,000 in cents (number)
 
-exports.handler = async (event) => {
+/**
+ * Netlify Function: create-deposits
+ * Path: /.netlify/functions/create-deposits
+ */
+export const handler = async (event) => {
   // CORS preflight
   if (event.httpMethod === "OPTIONS") {
     return {
@@ -48,7 +51,7 @@ exports.handler = async (event) => {
       };
     }
 
-    // Validate deposit amount from frontend
+    // Validate deposit amount from frontend (in minor units / cents)
     let amountMinor = 0;
     if (typeof depositAmount === "number") {
       amountMinor = depositAmount;
@@ -100,7 +103,7 @@ exports.handler = async (event) => {
     const payment = paymentResponse.result.payment;
     if (!payment) throw new Error("No payment returned from Square.");
 
-    // 2️⃣ Ensure we have a customer (optional)
+    // 2️⃣ Ensure we have a customer (if no customerId was passed)
     let finalCustomerId = customerId;
     if (!finalCustomerId) {
       const customersApi = client.customersApi;
@@ -111,9 +114,6 @@ exports.handler = async (event) => {
       });
       finalCustomerId = custResp.result.customer?.id;
     }
-
-    // (Optional) You can later add card-on-file here if you really need it.
-    // For now, we keep it simple: just record payment + customer.
 
     return {
       statusCode: 200,

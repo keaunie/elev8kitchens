@@ -668,7 +668,7 @@ function DepositCheckoutSection({ disabled, total }) {
       const nonce = result.token;
       const depositAmountMinor = Math.round(amount * 100); // cents
 
-      const res = await fetch("/.netlify/functions/create-deposit", {
+      const res = await fetch("/.netlify/functions/create-deposits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
