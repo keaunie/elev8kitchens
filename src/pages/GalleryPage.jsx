@@ -53,13 +53,13 @@ const galleryMedia = [
     alt: "Elev8 Kitchens – image 0153",
     // name: "Factory View 0153",
   },
-  {
-    id: 6,
-    type: "video",
-    src: vid0100,
-    alt: "Elev8 Kitchens – factory video 0100",
-    // name: "Factory Video 0100",
-  },
+  // {
+  //   id: 6,
+  //   type: "video",
+  //   src: vid0100,
+  //   alt: "Elev8 Kitchens – factory video 0100",
+  //   // name: "Factory Video 0100",
+  // },
 ];
 
 export default function GalleryPage() {
