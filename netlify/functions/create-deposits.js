@@ -7,6 +7,7 @@ const { SquareClient, SquareEnvironment, SquareError } = Square;
 
 const ACCESS_TOKEN = process.env.SQUARE_ACCESS_TOKEN;
 const LOCATION_ID = process.env.SQUARE_LOCATION_ID;
+const ENVIRONMENT = process.env.SQUARE_ENVIRONMENT;
 
 console.log("ENV CHECK:", {
     APP_ID: process.env.VITE_SQUARE_APP_ID,
