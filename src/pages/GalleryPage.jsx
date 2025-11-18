@@ -14,7 +14,6 @@ import img0108 from "../assets/IMG_0108.jpg";
 import img0128 from "../assets/IMG_0128.jpg";
 import img0140 from "../assets/IMG_0140.jpg";
 import img0153 from "../assets/IMG_0153.jpg";
-import vid0100 from "../assets/VID_0100.MOV";
 
 // One flat list of all media
 const galleryMedia = [
