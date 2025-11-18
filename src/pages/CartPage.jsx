@@ -681,12 +681,18 @@ function DepositCheckoutSection({ disabled, total }) {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        console.error("Deposit error", data);
-        const apiError =
+        console.error("Deposit error response:", data);
+
+        const firstDetail = data?.details?.errors?.[0]?.detail;
+        const firstCode = data?.details?.errors?.[0]?.code;
+        const message =
+          firstDetail ||
+          firstCode ||
           data.error ||
-          data?.details?.errors?.[0]?.detail ||
           "Unknown error from payment gateway.";
-        setStatus("Deposit payment failed: " + apiError);
+
+        setStatus("Deposit payment failed: " + message);
+        return;
       } else {
         setStatus(
           `Deposit successful! A $${amount.toLocaleString(undefined, {
