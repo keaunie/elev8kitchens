@@ -8,5 +8,5 @@
   publish = "dist" # or "build" if you're using CRA
 
 [functions]
-  directory = "netlify/functions"
+  directory = ".netlify/functions"
   node_bundler = "esbuild"

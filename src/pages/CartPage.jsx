@@ -1,6 +1,6 @@
 // CartPage.jsx — Elev8 Kitchens / ELEV8 theme
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Minus,
@@ -17,6 +17,11 @@ import { Link } from "react-router-dom";
 
 import { useCart } from "../context/CartContext";
 import catalog from "../data/products.json";
+
+const SQUARE_APP_ID =
+  import.meta.env.VITE_SQUARE_APP_ID || "REPLACE_WITH_APP_ID";
+const SQUARE_LOCATION_ID =
+  import.meta.env.VITE_SQUARE_LOCATION_ID || "REPLACE_WITH_LOCATION_ID";
 
 const formatMoney = (dollars) =>
   `$ ${Number(dollars || 0).toLocaleString(undefined, {
@@ -49,7 +54,7 @@ export default function CartPage({ onCheckout }) {
   // Modal state for checkout
   const [showMultiModal, setShowMultiModal] = useState(false);
   const [checkoutMode, setCheckoutMode] = useState("standard"); // "standard" | "split" | "custom"
-  const [customDepositAmount, setCustomDepositAmount] = useState(null); // NEW
+  const [customDepositAmount, setCustomDepositAmount] = useState(null);
 
   // Hydrate each cart line with product + variant data
   const hydrated = useMemo(() => {
@@ -113,12 +118,10 @@ export default function CartPage({ onCheckout }) {
 
   const handleSplitCheckout = () => {
     if (!hydrated.length) return;
-    // Use the same luxe modal but with 20% deposit logic
     setCheckoutMode("split");
     setShowMultiModal(true);
   };
 
-  // NEW: Custom deposit checkout (still uses multi-item link)
   const handleCustomDepositCheckout = (amount) => {
     if (!hydrated.length) return;
     if (!amount || amount <= 0) {
@@ -230,7 +233,7 @@ export default function CartPage({ onCheckout }) {
               disabled={!hasItems}
               onCheckout={handleCheckout}
               onSplitCheckout={handleSplitCheckout}
-              onCustomDepositCheckout={handleCustomDepositCheckout} // NEW
+              onCustomDepositCheckout={handleCustomDepositCheckout}
             />
           </div>
         </div>
@@ -263,7 +266,7 @@ export default function CartPage({ onCheckout }) {
           <MultiItemCheckoutModal
             total={total}
             mode={checkoutMode}
-            customAmount={customDepositAmount} // NEW
+            customAmount={customDepositAmount}
             onConfirm={handleConfirmMultiCheckout}
             onCancel={handleCancelMultiCheckout}
           />
@@ -382,17 +385,17 @@ function OrderSummaryCard({
   disabled,
   onCheckout,
   onSplitCheckout,
-  onCustomDepositCheckout, // NEW
+  onCustomDepositCheckout,
 }) {
   const [paymentOption, setPaymentOption] = useState("full"); // "full" | "split" | "bnpl" | "group" | "custom"
   const [open, setOpen] = useState(false);
-  const [customDeposit, setCustomDeposit] = useState(""); // NEW
-  const [customError, setCustomError] = useState(""); // NEW
+  const [customDeposit, setCustomDeposit] = useState("");
+  const [customError, setCustomError] = useState("");
 
   const paymentOptions = [
     { value: "full", label: "Pay in full today" },
     { value: "split", label: "Split Payments (20% Deposit)" },
-    { value: "custom", label: "Custom Deposit Amount" }, // NEW
+    { value: "custom", label: "Custom Deposit Amount" },
     { value: "bnpl", label: "BNPL / Pay Over Time" },
     { value: "group", label: "Group Payments" },
   ];
@@ -405,12 +408,12 @@ function OrderSummaryCard({
     paymentOption === "split"
       ? "Proceed with 20% Split Payment"
       : paymentOption === "bnpl"
-      ? "Proceed with BNPL / Pay Over Time"
-      : paymentOption === "group"
-      ? "Proceed with Group Payment"
-      : paymentOption === "custom"
-      ? "Proceed with Custom Deposit"
-      : "Proceed to Checkout";
+        ? "Proceed with BNPL / Pay Over Time"
+        : paymentOption === "group"
+          ? "Proceed with Group Payment"
+          : paymentOption === "custom"
+            ? "Proceed with Custom Deposit"
+            : "Proceed to Checkout";
 
   const handlePrimaryClick = () => {
     if (disabled) return;
@@ -449,7 +452,6 @@ function OrderSummaryCard({
   const handleSelect = (value) => {
     setPaymentOption(value);
     setOpen(false);
-    // clear error when switching options
     if (value !== "custom") {
       setCustomError("");
     }
@@ -497,7 +499,7 @@ function OrderSummaryCard({
             className={[
               "flex w-full items-center justify-between rounded-full border border-white/15",
               "bg-black/70 px-4 py-2.5 text-xs md:text-sm text-white/80",
-              "hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60",
+              "hover:bg.white/5 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60",
               disabled ? "cursor-not-allowed opacity-50" : "",
             ].join(" ")}
           >
@@ -532,7 +534,7 @@ function OrderSummaryCard({
           </AnimatePresence>
         </div>
 
-        {/* NEW: Custom deposit input */}
+        {/* Custom deposit input */}
         {paymentOption === "custom" && !disabled && (
           <div className="mt-3 space-y-1">
             <label className="block text-xs text-white/60">
@@ -548,13 +550,13 @@ function OrderSummaryCard({
                 setCustomError("");
               }}
               placeholder="e.g. 1000"
-              className="w-full rounded-2xl border border-white/15 bg-black/70 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60"
+              className="w-full rounded-2xl border border.white/15 bg-black/70 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60"
             />
             {customError && (
               <p className="text-[11px] text-red-300 mt-1">{customError}</p>
             )}
             <p className="text-[11px] text-white/50">
-              You’ll pay this custom deposit now via our multi-item Square
+              You&apos;ll pay this custom deposit now via our multi-item Square
               checkout, and our team will coordinate the remaining balance and
               delivery details with you.
             </p>
@@ -562,7 +564,10 @@ function OrderSummaryCard({
         )}
       </div>
 
-      <p className="mt-3 text-xs text-white/60">
+      {/* 🔥 NEW: Inline $1,000 Square deposit checkout */}
+      <DepositCheckoutSection disabled={disabled} total={total} />
+
+      <p className="mt-3 text-xs text.white/60">
         All options are processed via our secure Square checkout. For split or
         custom payments, you&apos;ll pay a deposit today, and a Habitat28
         specialist can assist with the remaining balance and delivery details.
@@ -576,22 +581,219 @@ function OrderSummaryCard({
   );
 }
 
+/* === NEW: Square $1,000 Deposit Section === */
+
+/* === NEW: Square variable deposit (min $1,000) Section === */
+
+/* === Square custom deposit section (min $1,000) === */
+
+function DepositCheckoutSection({ disabled, total }) {
+  const [card, setCard] = useState(null);
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [deposit, setDeposit] = useState("1000"); // default $1,000
+  const [error, setError] = useState("");
+
+  // ensure we only initialize Square once
+  const initialized = React.useRef(false);
+
+  // Initialize Square Web Payments SDK
+  useEffect(() => {
+    if (disabled) return;
+    if (initialized.current) return;
+
+    async function initSquare() {
+      try {
+        if (!window.Square) {
+          console.error("Square Web Payments SDK not loaded.");
+          setStatus("Payment SDK not loaded. Please refresh the page.");
+          return;
+        }
+
+        const payments = window.Square.payments(
+          SQUARE_APP_ID,
+          SQUARE_LOCATION_ID
+        );
+
+        const cardInstance = await payments.card();
+        await cardInstance.attach("#square-card-container");
+
+        setCard(cardInstance);
+        initialized.current = true;
+      } catch (err) {
+        console.error("Error initializing Square", err);
+        setStatus("Failed to initialize Square payments.");
+      }
+    }
+
+    initSquare();
+  }, [disabled]);
+
+  const handleDepositPay = async () => {
+    if (disabled || !card) return;
+
+    // validate deposit
+    const raw = (deposit || "").toString().replace(/,/g, "");
+    const amount = parseFloat(raw);
+
+    if (Number.isNaN(amount) || amount <= 0) {
+      setError("Please enter a valid deposit amount.");
+      return;
+    }
+    if (amount < 1000) {
+      setError("Minimum deposit is $1,000.");
+      return;
+    }
+    if (amount > total) {
+      setError("Deposit cannot be greater than the cart total.");
+      return;
+    }
+
+    setError("");
+    setLoading(true);
+    setStatus("");
+
+    try {
+      const result = await card.tokenize();
+      if (result.status !== "OK") {
+        console.error("Tokenization failed:", result);
+        const firstError = result.errors?.[0]?.message;
+        setStatus(
+          firstError || "Card tokenization failed. Please check your details."
+        );
+        setLoading(false);
+        return;
+      }
+
+      const nonce = result.token;
+      const depositAmountMinor = Math.round(amount * 100); // cents
+
+      const res = await fetch("/.netlify/functions/create-deposit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nonce,
+          currency: "USD", // adjust if needed
+          depositAmount: depositAmountMinor,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        console.error("Deposit error", data);
+        const apiError =
+          data.error ||
+          data?.details?.errors?.[0]?.detail ||
+          "Unknown error from payment gateway.";
+        setStatus("Deposit payment failed: " + apiError);
+      } else {
+        setStatus(
+          `Deposit successful! A $${amount.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })} deposit has been charged. We will contact you to finalize the remaining balance and delivery.`
+        );
+      }
+    } catch (err) {
+      console.error("Unexpected error", err);
+      setStatus("Unexpected error during deposit payment.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const remaining =
+    Number.isFinite(total) && !Number.isNaN(Number(deposit))
+      ? Math.max(total - parseFloat(deposit || "0"), 0)
+      : null;
+
+  return (
+    <div className="mt-6 rounded-2xl bg-black/60 p-4 ring-1 ring-white/10">
+      <h3 className="text-sm font-medium text-white">
+        Or secure your ELEV8 kitchen with a custom deposit
+      </h3>
+      <p className="mt-1 text-xs text-white/60">
+        Your current cart total is {formatMoney(total)}. Choose your deposit
+        amount (minimum $1,000), pay it now via Square, and our team will help
+        you arrange the remaining balance and delivery schedule.
+      </p>
+
+      {/* Deposit amount input */}
+      <div className="mt-3 space-y-1">
+        <label className="block text-xs text-white/60">
+          Deposit amount (USD, min $1,000)
+        </label>
+        <input
+          type="number"
+          min="1000"
+          step="0.01"
+          value={deposit}
+          onChange={(e) => {
+            setDeposit(e.target.value);
+            setError("");
+          }}
+          className="w-full rounded-2xl border border-white/15 bg-black/70 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60"
+          placeholder="e.g. 2500"
+        />
+        {remaining !== null && (
+          <p className="text-[11px] text-white/50">
+            Approximate remaining balance after deposit:{" "}
+            <span className="font-medium">
+              {formatMoney(remaining > 0 ? remaining : 0)}
+            </span>
+          </p>
+        )}
+        {error && (
+          <p className="mt-1 text-[11px] text-red-300">{error}</p>
+        )}
+      </div>
+
+      {/* Card field */}
+      <div className="mt-3">
+        <div
+          id="square-card-container"
+          className="rounded-2xl border border-white/15 bg-black/70 px-3 py-3"
+        />
+      </div>
+
+      {/* PRIMARY DEPOSIT BUTTON – gold, more visible */}
+      <button
+        type="button"
+        onClick={handleDepositPay}
+        disabled={disabled || loading || !card}
+        className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C1A88B] px-5 py-2.5 text-sm font-medium text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        <CreditCard className="h-4 w-4" />
+        {loading ? "Processing deposit..." : "Pay Deposit via Square"}
+      </button>
+
+      {status && (
+        <p className="mt-2 text-[11px] text-white/70 leading-snug">
+          {status}
+        </p>
+      )}
+      <p className="mt-1 text-[11px] text-white/50">
+        Card details are processed securely by Square. No additional setup fees
+        or subscriptions — only standard card processing fees apply.
+      </p>
+    </div>
+  );
+}
+
+
 function SummaryRow({ label, value, bold = false, large = false }) {
   return (
     <div className="flex items-center justify-between gap-4">
       <span
-        className={`text-xs md:text-sm text-white/60 ${
-          bold ? "font-medium text-white/80" : ""
-        }`}
+        className={`text-xs md:text-sm text-white/60 ${bold ? "font-medium text-white/80" : ""
+          }`}
       >
         {label}
       </span>
       <span
-        className={`tabular-nums ${
-          large
-            ? "text-lg font-semibold text-white"
-            : "text-sm text-white/90"
-        }`}
+        className={`tabular-nums ${large ? "text-lg font-semibold text-white" : "text-sm text-white/90"
+          }`}
       >
         {value}
       </span>
@@ -628,8 +830,7 @@ function EmptyCartState() {
       </p>
       <Link
         to="/Elev8Kitchens"
-        className="mt-6 inline-flex items
--center gap-2 rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow hover:brightness-95"
+        className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow hover:brightness-95"
       >
         <ArrowLeft className="h-4 w-4" />
         Browse ELEV8 Kitchens
@@ -643,7 +844,7 @@ function EmptyCartState() {
 function MultiItemCheckoutModal({
   total,
   mode = "standard",
-  customAmount, // NEW
+  customAmount,
   onConfirm,
   onCancel,
 }) {
@@ -653,40 +854,40 @@ function MultiItemCheckoutModal({
   const amountToPay = isSplit
     ? total * 0.2
     : isCustom
-    ? customAmount || 0
-    : total;
+      ? customAmount || 0
+      : total;
 
   const amountFormatted = formatMoney(amountToPay);
 
   const label = isSplit
     ? "Split Payment (20% Deposit)"
     : isCustom
-    ? "Custom Deposit (Multi-Item Checkout)"
-    : "Multi-Item ELEV8 Checkout";
+      ? "Custom Deposit (Multi-Item Checkout)"
+      : "Multi-Item ELEV8 Checkout";
 
   const heading = isSplit
     ? "Pay 20% today to reserve your ELEV8 kitchen"
     : isCustom
-    ? "Pay your custom deposit today"
-    : "Confirm your cart total";
+      ? "Pay your custom deposit today"
+      : "Confirm your cart total";
 
   const caption = isSplit
     ? "Today’s payment (20% deposit)"
     : isCustom
-    ? "Today’s payment (custom deposit)"
-    : "Cart total";
+      ? "Today’s payment (custom deposit)"
+      : "Cart total";
 
   const bodyCopy = isSplit
     ? "This 20% deposit secures your ELEV8 configuration. Our team will follow up to confirm the remaining balance, timing, and delivery details."
     : isCustom
-    ? "This custom deposit secures your ELEV8 configuration. Our team will coordinate the remaining balance, schedule, and delivery details after payment."
-    : "This reflects your current configuration. A Habitat28 specialist can assist with delivery, access, and installation after payment.";
+      ? "This custom deposit secures your ELEV8 configuration. Our team will coordinate the remaining balance, schedule, and delivery details after payment."
+      : "This reflects your current configuration. A Habitat28 specialist can assist with delivery, access, and installation after payment.";
 
   const introCopy = isSplit
     ? "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal. For split payments, you’ll pay a 20% deposit today and arrange the remaining balance with our team before delivery."
     : isCustom
-    ? "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal to pay your chosen deposit amount. We’ll handle the remaining balance and delivery planning with you afterwards."
-    : "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal. Please review the amount below before completing your payment.";
+      ? "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal to pay your chosen deposit amount. We’ll handle the remaining balance and delivery planning with you afterwards."
+      : "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal. Please review the amount below before completing your payment.";
 
   return (
     <motion.div
@@ -727,9 +928,7 @@ function MultiItemCheckoutModal({
             {heading}
           </h2>
 
-          <p className="text-sm md:text-base text-white/70">
-            {introCopy}
-          </p>
+          <p className="text-sm md:text-base text-white/70">{introCopy}</p>
 
           <div className="rounded-2xl bg-black/60 p-4 ring-1 ring-white/10">
             <p className="text-xs uppercase tracking-[0.2em] text-white/50">
@@ -738,9 +937,7 @@ function MultiItemCheckoutModal({
             <p className="mt-2 text-3xl md:text-4xl font-semibold text-[#C1A88B]">
               {amountFormatted}
             </p>
-            <p className="mt-2 text-xs md:text-sm text-white/60">
-              {bodyCopy}
-            </p>
+            <p className="mt-2 text-xs md:text-sm text-white/60">{bodyCopy}</p>
           </div>
 
           <ul className="space-y-2 text-xs md:text-sm text-white/70">

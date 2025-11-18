@@ -1,122 +1,152 @@
 // netlify/functions/create-deposit.js
-import { SquareClient, SquareError } from "square";
-import { randomUUID } from "crypto";
+const { Client, ApiError } = require("square");
+const { randomUUID } = require("crypto");
 
-const client = new SquareClient({
-    token: process.env.SQUARE_ACCESS_TOKEN,
+// Make sure these are set in Netlify environment variables
+// SQUARE_ACCESS_TOKEN (sandbox or production)
+// SQUARE_LOCATION_ID
+
+const client = new Client({
+  accessToken: process.env.SQUARE_ACCESS_TOKEN,
+  environment: "sandbox", // change to 'production' when you go live
 });
 
-export const handler = async (event) => {
-    // CORS preflight
-    if (event.httpMethod === "OPTIONS") {
-        return {
-            statusCode: 204,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Access-Control-Allow-Methods": "POST,OPTIONS",
-            },
-            body: "",
-        };
+const MIN_DEPOSIT = 1000 * 100; // $1,000 in cents (number, not BigInt)
+
+exports.handler = async (event) => {
+  // CORS preflight
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST,OPTIONS",
+      },
+      body: "",
+    };
+  }
+
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({ success: false, error: "Method not allowed" }),
+    };
+  }
+
+  try {
+    const { nonce, customerId, currency = "USD", depositAmount } = JSON.parse(
+      event.body || "{}"
+    );
+
+    if (!nonce) {
+      return {
+        statusCode: 400,
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: JSON.stringify({ success: false, error: "Missing nonce" }),
+      };
     }
 
-    if (event.httpMethod !== "POST") {
-        return {
-            statusCode: 405,
-            headers: { "Access-Control-Allow-Origin": "*" },
-            body: JSON.stringify({ error: "Method not allowed" }),
-        };
+    // Validate deposit amount from frontend
+    let amountMinor = 0;
+    if (typeof depositAmount === "number") {
+      amountMinor = depositAmount;
+    } else if (typeof depositAmount === "string") {
+      amountMinor = parseInt(depositAmount, 10) || 0;
     }
 
-    try {
-        const { nonce, customerId, currency = "USD" } = JSON.parse(event.body || "{}");
-
-        if (!nonce) {
-            return {
-                statusCode: 400,
-                headers: { "Access-Control-Allow-Origin": "*" },
-                body: JSON.stringify({ error: "Missing nonce" }),
-            };
-        }
-
-        const locationId =
-            process.env.SQUARE_LOCATION_ID || "REPLACE_WITH_LOCATION_ID";
-
-        // 🔒 Enforce fixed deposit amount on the server
-        const DEPOSIT_AMOUNT = 100000n; // $1,000.00 in minor units (cents) as BigInt
-
-        // 1️⃣ Create the deposit payment
-        const paymentResponse = await client.payments.create({
-            sourceId: nonce,
-            idempotencyKey: randomUUID(),
-            amountMoney: {
-                amount: DEPOSIT_AMOUNT,
-                currency,
-            },
-            locationId,
-            customerId, // optional but recommended if you have one
-            autocomplete: true,
-            note: "Deposit payment",
-        });
-
-        const payment = paymentResponse.payment;
-        if (!payment) {
-            throw new Error("No payment returned from Square.");
-        }
-
-        // 2️⃣ Ensure we have a customer (you can also create one here if needed)
-        let finalCustomerId = customerId;
-        if (!finalCustomerId) {
-            const custResp = await client.customers.create({
-                idempotencyKey: randomUUID(),
-                givenName: "Deposit Customer",
-                note: "Created automatically during deposit checkout",
-            });
-            finalCustomerId = custResp.customer?.id;
-        }
-
-        // 3️⃣ Save the card on file using the payment ID as the source
-        const cardResp = await client.cards.create({
-            idempotencyKey: randomUUID(),
-            sourceId: payment.id, // payment ID as source for card-on-file
-            card: {
-                customerId: finalCustomerId,
-            },
-        });
-
-        const card = cardResp.card;
-
-        return {
-            statusCode: 200,
-            headers: { "Access-Control-Allow-Origin": "*" },
-            body: JSON.stringify({
-                success: true,
-                paymentId: payment.id,
-                customerId: finalCustomerId,
-                cardId: card?.id,
-            }),
-        };
-    } catch (err) {
-        console.error("Square error", err);
-
-        if (err instanceof SquareError) {
-            return {
-                statusCode: 400,
-                headers: { "Access-Control-Allow-Origin": "*" },
-                body: JSON.stringify({
-                    error: "SquareError",
-                    details: err.body,
-                }),
-            };
-        }
-
-        return {
-            statusCode: 500,
-            headers: { "Access-Control-Allow-Origin": "*" },
-            body: JSON.stringify({
-                error: "Internal server error",
-                message: err.message,
-            }),
-        };
+    if (!Number.isFinite(amountMinor) || amountMinor <= 0) {
+      return {
+        statusCode: 400,
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: JSON.stringify({
+          success: false,
+          error: "Invalid deposit amount.",
+        }),
+      };
     }
+
+    if (amountMinor < MIN_DEPOSIT) {
+      return {
+        statusCode: 400,
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: JSON.stringify({
+          success: false,
+          error: "Deposit must be at least $1,000.",
+        }),
+      };
+    }
+
+    const locationId =
+      process.env.SQUARE_LOCATION_ID || "REPLACE_WITH_LOCATION_ID";
+
+    const paymentsApi = client.paymentsApi;
+
+    // 1️⃣ Create the deposit payment
+    const paymentResponse = await paymentsApi.createPayment({
+      sourceId: nonce,
+      idempotencyKey: randomUUID(),
+      amountMoney: {
+        amount: amountMinor, // integer cents
+        currency,
+      },
+      locationId,
+      customerId, // can be undefined
+      autocomplete: true,
+      note: `Custom deposit (${amountMinor} cents)`,
+    });
+
+    const payment = paymentResponse.result.payment;
+    if (!payment) throw new Error("No payment returned from Square.");
+
+    // 2️⃣ Ensure we have a customer (optional)
+    let finalCustomerId = customerId;
+    if (!finalCustomerId) {
+      const customersApi = client.customersApi;
+      const custResp = await customersApi.createCustomer({
+        idempotencyKey: randomUUID(),
+        givenName: "Deposit Customer",
+        note: "Auto-created during deposit checkout",
+      });
+      finalCustomerId = custResp.result.customer?.id;
+    }
+
+    // (Optional) You can later add card-on-file here if you really need it.
+    // For now, we keep it simple: just record payment + customer.
+
+    return {
+      statusCode: 200,
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({
+        success: true,
+        paymentId: payment.id,
+        customerId: finalCustomerId,
+      }),
+    };
+  } catch (err) {
+    console.error("Square error", err);
+
+    if (err instanceof ApiError) {
+      return {
+        statusCode: 400,
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: JSON.stringify({
+          success: false,
+          error: "Square API error",
+          details: err.result,
+        }),
+      };
+    }
+
+    return {
+      statusCode: 500,
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({
+        success: false,
+        error: "Internal server error",
+        message: err.message,
+      }),
+    };
+  }
 };
