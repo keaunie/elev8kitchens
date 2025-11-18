@@ -1,18 +1,16 @@
 // netlify/functions/create-deposits.js
-import { Client, ApiError } from "square";
+import { SquareClient, SquareError } from "square";
 import { randomUUID } from "crypto";
 
-const MIN_DEPOSIT = 1000 * 100; // $1,000 in cents
-
-// 🔧 Initialize Square client in **sandbox** mode
-const client = new Client({
-  accessToken: process.env.SQUARE_ACCESS_TOKEN,
-  environment: "sandbox", // 👈 string form is supported in the Node SDK
+// Make sure these are set in Netlify / .env:
+//   SQUARE_ACCESS_TOKEN  = your Sandbox Access Token (starts with EAAA...)
+//   SQUARE_LOCATION_ID   = your Sandbox location ID (e.g. LYYKJ0GMAEG2G)
+const client = new SquareClient({
+  token: process.env.SQUARE_ACCESS_TOKEN,
 });
 
-// Optional debug logs to verify env vars are loaded
-console.log("Has SQUARE_ACCESS_TOKEN?", !!process.env.SQUARE_ACCESS_TOKEN);
-console.log("Has SQUARE_LOCATION_ID?", !!process.env.SQUARE_LOCATION_ID);
+// $1,000 minimum in cents, as BigInt
+const MIN_DEPOSIT = 1000n * 100n; // 100000n
 
 export const handler = async (event) => {
   // CORS preflight
@@ -49,19 +47,7 @@ export const handler = async (event) => {
       };
     }
 
-    const locationId = process.env.SQUARE_LOCATION_ID;
-    if (!locationId) {
-      return {
-        statusCode: 500,
-        headers: { "Access-Control-Allow-Origin": "*" },
-        body: JSON.stringify({
-          success: false,
-          error: "SQUARE_LOCATION_ID is not configured on the server.",
-        }),
-      };
-    }
-
-    // 🔢 depositAmount from frontend is in minor units (cents)
+    // depositAmount is expected in **cents** from the frontend
     let amountMinor = 0;
     if (typeof depositAmount === "number") {
       amountMinor = depositAmount;
@@ -80,7 +66,11 @@ export const handler = async (event) => {
       };
     }
 
-    if (amountMinor < MIN_DEPOSIT) {
+    // Convert to BigInt for the new SDK
+    const amountMinorBigInt = BigInt(amountMinor);
+
+    // Enforce minimum $1,000
+    if (amountMinorBigInt < MIN_DEPOSIT) {
       return {
         statusCode: 400,
         headers: { "Access-Control-Allow-Origin": "*" },
@@ -91,35 +81,35 @@ export const handler = async (event) => {
       };
     }
 
-    const paymentsApi = client.paymentsApi;
+    const locationId =
+      process.env.SQUARE_LOCATION_ID || "REPLACE_WITH_LOCATION_ID";
 
-    // 💳 1) Create the deposit payment
-    const paymentResponse = await paymentsApi.createPayment({
+    // 1️⃣ Create the deposit payment (new SDK style)
+    const paymentResponse = await client.payments.create({
       sourceId: nonce,
       idempotencyKey: randomUUID(),
       amountMoney: {
-        amount: amountMinor, // integer cents
+        amount: amountMinorBigInt, // BigInt cents
         currency,
       },
       locationId,
-      customerId, // may be undefined
+      customerId, // can be undefined
       autocomplete: true,
       note: `Custom deposit (${amountMinor} cents)`,
     });
 
-    const payment = paymentResponse.result.payment;
+    const payment = paymentResponse.payment;
     if (!payment) throw new Error("No payment returned from Square.");
 
-    // 👤 2) Ensure we have a customer (if none was passed)
+    // 2️⃣ If we don't have a customer yet, create one
     let finalCustomerId = customerId;
     if (!finalCustomerId) {
-      const customersApi = client.customersApi;
-      const custResp = await customersApi.createCustomer({
+      const customerResponse = await client.customers.create({
         idempotencyKey: randomUUID(),
         givenName: "Deposit Customer",
         note: "Auto-created during deposit checkout",
       });
-      finalCustomerId = custResp.result.customer?.id;
+      finalCustomerId = customerResponse.customer?.id;
     }
 
     return {
@@ -134,14 +124,14 @@ export const handler = async (event) => {
   } catch (err) {
     console.error("Square error", err);
 
-    if (err instanceof ApiError) {
+    if (err instanceof SquareError) {
       return {
         statusCode: 400,
         headers: { "Access-Control-Allow-Origin": "*" },
         body: JSON.stringify({
           success: false,
           error: "Square API error",
-          details: err.result,
+          details: err.body,
         }),
       };
     }
