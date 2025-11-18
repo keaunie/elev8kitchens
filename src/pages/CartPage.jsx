@@ -48,7 +48,8 @@ export default function CartPage({ onCheckout }) {
 
   // Modal state for checkout
   const [showMultiModal, setShowMultiModal] = useState(false);
-  const [checkoutMode, setCheckoutMode] = useState("standard"); // "standard" | "split"
+  const [checkoutMode, setCheckoutMode] = useState("standard"); // "standard" | "split" | "custom"
+  const [customDepositAmount, setCustomDepositAmount] = useState(null); // NEW
 
   // Hydrate each cart line with product + variant data
   const hydrated = useMemo(() => {
@@ -80,12 +81,10 @@ export default function CartPage({ onCheckout }) {
   const total = subtotal + shippingEstimate + taxEstimate;
 
   // Standard full-payment checkout (multi-item)
-  const MULTI_ITEM_CHECKOUT_URL =
-    "https://square.link/u/EKt1svLu";
+  const MULTI_ITEM_CHECKOUT_URL = "https://square.link/u/EKt1svLu";
 
   // Split payment checkout (20% deposit)
-  const SPLIT_PAYMENT_CHECKOUT_URL =
-    "https://square.link/u/4WPmgEHA";
+  const SPLIT_PAYMENT_CHECKOUT_URL = "https://square.link/u/4WPmgEHA";
 
   const handleCheckout = () => {
     if (!hydrated.length) return;
@@ -119,11 +118,27 @@ export default function CartPage({ onCheckout }) {
     setShowMultiModal(true);
   };
 
+  // NEW: Custom deposit checkout (still uses multi-item link)
+  const handleCustomDepositCheckout = (amount) => {
+    if (!hydrated.length) return;
+    if (!amount || amount <= 0) {
+      alert("Please enter a valid deposit amount greater than 0.");
+      return;
+    }
+    if (amount > total) {
+      alert("Deposit amount cannot be greater than the cart total.");
+      return;
+    }
+    setCustomDepositAmount(amount);
+    setCheckoutMode("custom");
+    setShowMultiModal(true);
+  };
+
   const handleConfirmMultiCheckout = () => {
     const targetUrl =
       checkoutMode === "split"
         ? SPLIT_PAYMENT_CHECKOUT_URL
-        : MULTI_ITEM_CHECKOUT_URL;
+        : MULTI_ITEM_CHECKOUT_URL; // "custom" also goes through multi-item checkout
 
     if (!targetUrl) {
       alert(
@@ -215,6 +230,7 @@ export default function CartPage({ onCheckout }) {
               disabled={!hasItems}
               onCheckout={handleCheckout}
               onSplitCheckout={handleSplitCheckout}
+              onCustomDepositCheckout={handleCustomDepositCheckout} // NEW
             />
           </div>
         </div>
@@ -241,12 +257,13 @@ export default function CartPage({ onCheckout }) {
         </div>
       </div>
 
-      {/* Luxurious multi-item / split checkout modal */}
+      {/* Luxurious multi-item / split / custom checkout modal */}
       <AnimatePresence>
         {showMultiModal && (
           <MultiItemCheckoutModal
             total={total}
             mode={checkoutMode}
+            customAmount={customDepositAmount} // NEW
             onConfirm={handleConfirmMultiCheckout}
             onCancel={handleCancelMultiCheckout}
           />
@@ -356,6 +373,7 @@ function CartLineItem({ entry, onIncrease, onDecrease, onRemove }) {
     </motion.div>
   );
 }
+
 function OrderSummaryCard({
   subtotal,
   shipping,
@@ -364,13 +382,17 @@ function OrderSummaryCard({
   disabled,
   onCheckout,
   onSplitCheckout,
+  onCustomDepositCheckout, // NEW
 }) {
-  const [paymentOption, setPaymentOption] = useState("full"); // "full" | "split" | "bnpl" | "group"
+  const [paymentOption, setPaymentOption] = useState("full"); // "full" | "split" | "bnpl" | "group" | "custom"
   const [open, setOpen] = useState(false);
+  const [customDeposit, setCustomDeposit] = useState(""); // NEW
+  const [customError, setCustomError] = useState(""); // NEW
 
   const paymentOptions = [
     { value: "full", label: "Pay in full today" },
     { value: "split", label: "Split Payments (20% Deposit)" },
+    { value: "custom", label: "Custom Deposit Amount" }, // NEW
     { value: "bnpl", label: "BNPL / Pay Over Time" },
     { value: "group", label: "Group Payments" },
   ];
@@ -383,24 +405,54 @@ function OrderSummaryCard({
     paymentOption === "split"
       ? "Proceed with 20% Split Payment"
       : paymentOption === "bnpl"
-        ? "Proceed with BNPL / Pay Over Time"
-        : paymentOption === "group"
-          ? "Proceed with Group Payment"
-          : "Proceed to Checkout";
+      ? "Proceed with BNPL / Pay Over Time"
+      : paymentOption === "group"
+      ? "Proceed with Group Payment"
+      : paymentOption === "custom"
+      ? "Proceed with Custom Deposit"
+      : "Proceed to Checkout";
 
   const handlePrimaryClick = () => {
     if (disabled) return;
+
     if (paymentOption === "split") {
       (onSplitCheckout || onCheckout)();
-    } else {
-      // full, bnpl, group currently all go through standard checkout
-      onCheckout();
+      return;
     }
+
+    if (paymentOption === "custom") {
+      const raw = (customDeposit || "").toString().replace(/,/g, "");
+      const amount = parseFloat(raw);
+
+      if (Number.isNaN(amount) || amount <= 0) {
+        setCustomError("Please enter a valid deposit amount.");
+        return;
+      }
+      if (amount > total) {
+        setCustomError("Deposit cannot be greater than the cart total.");
+        return;
+      }
+
+      setCustomError("");
+      if (onCustomDepositCheckout) {
+        onCustomDepositCheckout(amount);
+      } else {
+        onCheckout();
+      }
+      return;
+    }
+
+    // full, bnpl, group currently all go through standard checkout
+    onCheckout();
   };
 
   const handleSelect = (value) => {
     setPaymentOption(value);
     setOpen(false);
+    // clear error when switching options
+    if (value !== "custom") {
+      setCustomError("");
+    }
   };
 
   return (
@@ -479,11 +531,40 @@ function OrderSummaryCard({
             )}
           </AnimatePresence>
         </div>
+
+        {/* NEW: Custom deposit input */}
+        {paymentOption === "custom" && !disabled && (
+          <div className="mt-3 space-y-1">
+            <label className="block text-xs text-white/60">
+              Enter your deposit amount (in USD)
+            </label>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={customDeposit}
+              onChange={(e) => {
+                setCustomDeposit(e.target.value);
+                setCustomError("");
+              }}
+              placeholder="e.g. 1000"
+              className="w-full rounded-2xl border border-white/15 bg-black/70 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60"
+            />
+            {customError && (
+              <p className="text-[11px] text-red-300 mt-1">{customError}</p>
+            )}
+            <p className="text-[11px] text-white/50">
+              You’ll pay this custom deposit now via our multi-item Square
+              checkout, and our team will coordinate the remaining balance and
+              delivery details with you.
+            </p>
+          </div>
+        )}
       </div>
 
       <p className="mt-3 text-xs text-white/60">
-        All options are processed via our secure Square checkout. For split
-        payments, you&apos;ll pay a 20% deposit today, and a Habitat28
+        All options are processed via our secure Square checkout. For split or
+        custom payments, you&apos;ll pay a deposit today, and a Habitat28
         specialist can assist with the remaining balance and delivery details.
       </p>
 
@@ -495,21 +576,22 @@ function OrderSummaryCard({
   );
 }
 
-
 function SummaryRow({ label, value, bold = false, large = false }) {
   return (
     <div className="flex items-center justify-between gap-4">
       <span
-        className={`text-xs md:text-sm text-white/60 ${bold ? "font-medium text-white/80" : ""
-          }`}
+        className={`text-xs md:text-sm text-white/60 ${
+          bold ? "font-medium text-white/80" : ""
+        }`}
       >
         {label}
       </span>
       <span
-        className={`tabular-nums ${large
+        className={`tabular-nums ${
+          large
             ? "text-lg font-semibold text-white"
             : "text-sm text-white/90"
-          }`}
+        }`}
       >
         {value}
       </span>
@@ -546,7 +628,8 @@ function EmptyCartState() {
       </p>
       <Link
         to="/Elev8Kitchens"
-        className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow hover:brightness-95"
+        className="mt-6 inline-flex items
+-center gap-2 rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow hover:brightness-95"
       >
         <ArrowLeft className="h-4 w-4" />
         Browse ELEV8 Kitchens
@@ -555,24 +638,55 @@ function EmptyCartState() {
   );
 }
 
-/* ====== Luxurious Multi-Item / Split Modal ====== */
+/* ====== Luxurious Multi-Item / Split / Custom Modal ====== */
 
-function MultiItemCheckoutModal({ total, mode = "standard", onConfirm, onCancel }) {
+function MultiItemCheckoutModal({
+  total,
+  mode = "standard",
+  customAmount, // NEW
+  onConfirm,
+  onCancel,
+}) {
   const isSplit = mode === "split";
-  const amountToPay = isSplit ? total * 0.2 : total; // 20% deposit for split
+  const isCustom = mode === "custom";
+
+  const amountToPay = isSplit
+    ? total * 0.2
+    : isCustom
+    ? customAmount || 0
+    : total;
+
   const amountFormatted = formatMoney(amountToPay);
 
   const label = isSplit
     ? "Split Payment (20% Deposit)"
+    : isCustom
+    ? "Custom Deposit (Multi-Item Checkout)"
     : "Multi-Item ELEV8 Checkout";
 
   const heading = isSplit
     ? "Pay 20% today to reserve your ELEV8 kitchen"
+    : isCustom
+    ? "Pay your custom deposit today"
     : "Confirm your cart total";
 
   const caption = isSplit
     ? "Today’s payment (20% deposit)"
+    : isCustom
+    ? "Today’s payment (custom deposit)"
     : "Cart total";
+
+  const bodyCopy = isSplit
+    ? "This 20% deposit secures your ELEV8 configuration. Our team will follow up to confirm the remaining balance, timing, and delivery details."
+    : isCustom
+    ? "This custom deposit secures your ELEV8 configuration. Our team will coordinate the remaining balance, schedule, and delivery details after payment."
+    : "This reflects your current configuration. A Habitat28 specialist can assist with delivery, access, and installation after payment.";
+
+  const introCopy = isSplit
+    ? "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal. For split payments, you’ll pay a 20% deposit today and arrange the remaining balance with our team before delivery."
+    : isCustom
+    ? "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal to pay your chosen deposit amount. We’ll handle the remaining balance and delivery planning with you afterwards."
+    : "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal. Please review the amount below before completing your payment.";
 
   return (
     <motion.div
@@ -614,11 +728,7 @@ function MultiItemCheckoutModal({ total, mode = "standard", onConfirm, onCancel 
           </h2>
 
           <p className="text-sm md:text-base text-white/70">
-            You&apos;re checking out multiple ELEV8 items. On the next page,
-            you&apos;ll be redirected to our secure Square payment portal.
-            {isSplit
-              ? " For split payments, you’ll pay a 20% deposit today and arrange the remaining balance with our team before delivery."
-              : " Please review the amount below before completing your payment."}
+            {introCopy}
           </p>
 
           <div className="rounded-2xl bg-black/60 p-4 ring-1 ring-white/10">
@@ -629,9 +739,7 @@ function MultiItemCheckoutModal({ total, mode = "standard", onConfirm, onCancel 
               {amountFormatted}
             </p>
             <p className="mt-2 text-xs md:text-sm text-white/60">
-              {isSplit
-                ? "This 20% deposit secures your ELEV8 configuration. Our team will follow up to confirm the remaining balance, timing, and delivery details."
-                : "This reflects your current configuration. A Habitat28 specialist can assist with delivery, access, and installation after payment."}
+              {bodyCopy}
             </p>
           </div>
 
@@ -641,6 +749,12 @@ function MultiItemCheckoutModal({ total, mode = "standard", onConfirm, onCancel 
               <li>
                 • Complete the 20% deposit payment on the next page to reserve
                 your ELEV8 kitchen.
+              </li>
+            ) : isCustom ? (
+              <li>
+                • Complete your custom deposit payment on the next page to
+                secure your ELEV8 kitchen while we finalize the remaining
+                balance and logistics with you.
               </li>
             ) : (
               <li>
@@ -674,4 +788,3 @@ function MultiItemCheckoutModal({ total, mode = "standard", onConfirm, onCancel 
     </motion.div>
   );
 }
-
