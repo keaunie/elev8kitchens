@@ -50,18 +50,19 @@ export const handler = async (event) => {
         const locationId =
             process.env.SQUARE_LOCATION_ID || "REPLACE_WITH_LOCATION_ID";
 
-        const paymentResponse = await client.payments.create({
-            sourceId: cardId, // card on file
+        const paymentResponse = await paymentsApi.create({
+            sourceId: nonce,
             idempotencyKey: randomUUID(),
             amountMoney: {
-                amount: BigInt(remainingAmount),
+                amount: BigInt(amountMinor), // FIXED — must be BigInt
                 currency,
             },
-            locationId,
+            locationId: LOCATION_ID,
             customerId,
             autocomplete: true,
-            note,
+            note: `Custom deposit (${amountMinor} cents)`,
         });
+
 
         return {
             statusCode: 200,

@@ -1,21 +1,30 @@
 // netlify/functions/create-deposits.js
-import { SquareClient, SquareError } from "square";
+import Square from "square";
 import { randomUUID } from "crypto";
 
-console.log(
-    "SQUARE_ENVIRONMENT =", process.env.SQUARE_ENVIRONMENT,
-    "TOKEN_PRESENT =", !!process.env.SQUARE_ACCESS_TOKEN
-);
+// Pull the classes off the default export (CJS interop)
+const { SquareClient, SquareEnvironment, SquareError } = Square;
 
-// Make sure these are set in Netlify / .env:
-//   SQUARE_ACCESS_TOKEN  = your Sandbox Access Token (starts with EAAA...)
-//   SQUARE_LOCATION_ID   = your Sandbox location ID (e.g. LYYKJ0GMAEG2G)
-const client = new SquareClient({
-    token: process.env.SQUARE_ACCESS_TOKEN,
+const ACCESS_TOKEN = process.env.SQUARE_ACCESS_TOKEN;
+const LOCATION_ID = process.env.SQUARE_LOCATION_ID;
+
+console.log("ENV CHECK:", {
+    APP_ID: process.env.VITE_SQUARE_APP_ID,
+    LOC_ID: process.env.SQUARE_LOCATION_ID,
+    TOKEN: process.env.SQUARE_ACCESS_TOKEN ? "OK" : "MISSING",
+    ENV: process.env.SQUARE_ENVIRONMENT,
 });
 
-// $1,000 minimum in cents, as BigInt
-const MIN_DEPOSIT = 1000n * 100n; // 100000n
+
+
+// Hard-code sandbox while testing to avoid confusion
+const client = new SquareClient({
+    token: ACCESS_TOKEN,
+    environment: SquareEnvironment.Sandbox, // ← this forces sandbox host
+});
+
+// $1,000 minimum deposit (in cents)
+const MIN_DEPOSIT = 1000 * 100;
 
 export const handler = async (event) => {
     // CORS preflight
@@ -52,7 +61,18 @@ export const handler = async (event) => {
             };
         }
 
-        // depositAmount is expected in **cents** from the frontend
+        if (!LOCATION_ID) {
+            return {
+                statusCode: 500,
+                headers: { "Access-Control-Allow-Origin": "*" },
+                body: JSON.stringify({
+                    success: false,
+                    error: "SQUARE_LOCATION_ID is not configured on the server.",
+                }),
+            };
+        }
+
+        // ---- validate deposit in minor units (cents) ----
         let amountMinor = 0;
         if (typeof depositAmount === "number") {
             amountMinor = depositAmount;
@@ -71,11 +91,7 @@ export const handler = async (event) => {
             };
         }
 
-        // Convert to BigInt for the new SDK
-        const amountMinorBigInt = BigInt(amountMinor);
-
-        // Enforce minimum $1,000
-        if (amountMinorBigInt < MIN_DEPOSIT) {
+        if (amountMinor < MIN_DEPOSIT) {
             return {
                 statusCode: 400,
                 headers: { "Access-Control-Allow-Origin": "*" },
@@ -86,35 +102,37 @@ export const handler = async (event) => {
             };
         }
 
-        const locationId =
-            process.env.SQUARE_LOCATION_ID || "REPLACE_WITH_LOCATION_ID";
-
-        // 1️⃣ Create the deposit payment (new SDK style)
-        const paymentResponse = await client.payments.create({
+        // ---- Payments API call (new SDK pattern) ----
+        const paymentsApi = client.payments;
+        const paymentResponse = await paymentsApi.create({
             sourceId: nonce,
             idempotencyKey: randomUUID(),
             amountMoney: {
-                amount: amountMinorBigInt, // BigInt cents
+                amount: BigInt(amountMinor), // FIXED — must be BigInt
                 currency,
             },
-            locationId,
-            customerId, // can be undefined
+            locationId: LOCATION_ID,
+            customerId,
             autocomplete: true,
             note: `Custom deposit (${amountMinor} cents)`,
         });
 
-        const payment = paymentResponse.payment;
-        if (!payment) throw new Error("No payment returned from Square.");
 
-        // 2️⃣ If we don't have a customer yet, create one
+        const payment = paymentResponse.payment;
+        if (!payment) {
+            throw new Error("No payment returned from Square.");
+        }
+
+        // 🔄 Create a customer if we don't already have one
         let finalCustomerId = customerId;
         if (!finalCustomerId) {
-            const customerResponse = await client.customers.create({
+            const customersApi = client.customers;
+            const custResp = await customersApi.create({
                 idempotencyKey: randomUUID(),
                 givenName: "Deposit Customer",
                 note: "Auto-created during deposit checkout",
             });
-            finalCustomerId = customerResponse.customer?.id;
+            finalCustomerId = custResp.customer?.id;
         }
 
         return {
@@ -136,7 +154,7 @@ export const handler = async (event) => {
                 body: JSON.stringify({
                     success: false,
                     error: "Square API error",
-                    details: err.body,
+                    details: err.body || err,
                 }),
             };
         }

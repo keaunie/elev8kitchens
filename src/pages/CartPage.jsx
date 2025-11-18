@@ -673,10 +673,11 @@ function DepositCheckoutSection({ disabled, total }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           nonce,
-          currency: "USD", // adjust if needed
-          depositAmount: depositAmountMinor,
+          currency: "USD",
+          depositAmount: depositAmountMinor, // amount * 100
         }),
       });
+
 
       const data = await res.json();
 

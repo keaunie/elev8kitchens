@@ -94,16 +94,14 @@ export default function DepositCheckout() {
 
             const res = await fetch("/.netlify/functions/create-deposits", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     nonce,
                     currency: "USD",
-                    depositAmount: depositAmountMinor, // <-- dynamic amount
-                    // customerId: "optional-your-own-user-id",
+                    depositAmount: depositAmountMinor, // amount * 100
                 }),
             });
+
 
             const data = await res.json();
 
