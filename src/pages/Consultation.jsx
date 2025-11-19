@@ -94,7 +94,7 @@ export default function CalendlyLuxePage({
               </li>
               <li className="flex gap-3">
                 <Clock className="mt-0.5 shrink-0" color={GOLD} />
-                <span>Clear next steps: proposal, samples, or site visit.</span>
+                <span>Clear next steps: Planning, Purchase Proposal, Delivery.</span>
               </li>
               <li className="flex gap-3">
                 <ShieldCheck className="mt-0.5 shrink-0" color={GOLD} />

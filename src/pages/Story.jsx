@@ -7,14 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import TeamHero from "../components/TeamHero.jsx";
 
-
-import img0102 from "../assets/IMG_0102.jpg";
-import img0108 from "../assets/IMG_0108.jpg";
-import img0128 from "../assets/IMG_0128.jpg";
-import img0130 from "../assets/IMG_0130.jpg";
-import img0140 from "../assets/IMG_0140.jpg";
-import img0153 from "../assets/IMG_0153.jpg";
-
 /* =========================================================
    ===============  DESKTOP / TABLET VERSION  ==============
    ========================================================= */
@@ -354,8 +346,8 @@ function DesktopTablet() {
           {/* Column 1 */}
           <div className="flex flex-col gap-3">
             <img
-              src="./assets/IMG_0128.jpg"
-              className="h-full w-full object-cover rounded-xl"
+              src="https://elev8kitchen.netlify.app/assets/IMG_0128-CpWC0Xr7.jpg"
+              className="object-cover rounded-xl"
               alt="Team Image 1"
             />
           </div>
@@ -364,31 +356,34 @@ function DesktopTablet() {
           <div className="flex flex-col gap-3">
             <img
               src="https://elev8kitchen.netlify.app/assets/IMG_0108-D9c-14nd.jpg"
-              className="h-[60%] w-full object-cover rounded-xl"
+              className="h-[70%] w-full object-cover rounded-xl"
               alt="Team Image 2"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1520880867055-1e30d1cb001c?auto=format&q=80&w=2400"
-              className="h-[40%] w-full object-cover rounded-xl"
-              alt="Team Image 3"
             />
           </div>
 
           {/* Column 3 */}
           <div className="flex flex-col gap-3">
             <img
-              src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&q=80&w=2400"
-              className="h-[45%] w-full object-cover rounded-xl"
+              src="https://images.pexels.com/photos/295505/pexels-photo-295505.jpeg"
+              className="h-full w-full object-cover rounded-xl"
               alt="Team Image 4"
             />
-            <img
-              src="https://images.unsplash.com/photo-1518609571773-39b7d303a6b8?auto=format&q=80&w=2400"
-              className="h-[55%] w-full object-cover rounded-xl"
-              alt="Team Image 5"
-            />
-            <button
-              onClick={() => window.location.href = "/booking"} // <-- change link if needed
-              className="
+          </div>
+
+
+        </div>
+
+        {/* Centered overlay text */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[1px]">
+          <h2 className="text-4xl md:text-5xl font-semibold text-white drop-shadow-lg">
+            Our Team
+          </h2>
+          <p className="mt-2 text-white/85 max-w-xl text-center text-sm md:text-base">
+            The craft, the precision, the people behind ELEV8 Kitchens
+          </p>
+          <button
+            onClick={() => window.location.href = "/consultation"} // <-- change link if needed
+            className="
     mt-6
     rounded-full
     bg-[#C1A88B]
@@ -404,21 +399,9 @@ function DesktopTablet() {
     transition-all
     duration-300
   "
-            >
-              BOOK NOW
-            </button>
-
-          </div>
-        </div>
-
-        {/* Centered overlay text */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[1px]">
-          <h2 className="text-4xl md:text-5xl font-semibold text-white drop-shadow-lg">
-            Our Team
-          </h2>
-          <p className="mt-2 text-white/85 max-w-xl text-center text-sm md:text-base">
-            The craft, the precision, the people behind ELEV8 Kitchens
-          </p>
+          >
+            Book a Consultation
+          </button>
         </div>
       </div>
 
