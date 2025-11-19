@@ -88,8 +88,9 @@ export default function CartPage({ onCheckout }) {
   // Standard full-payment checkout (multi-item)
   const MULTI_ITEM_CHECKOUT_URL = "https://square.link/u/EKt1svLu";
 
-  // Split payment checkout (20% deposit)
-  const SPLIT_PAYMENT_CHECKOUT_URL = "https://square.link/u/4WPmgEHA";
+  // // Split payment checkout (20% deposit)
+  const SPLIT_PAYMENT_CHECKOUT_URL = "https://square.link/u/EKt1svLu";
+  // const SPLIT_PAYMENT_CHECKOUT_URL = "https://square.link/u/4WPmgEHA"; Monthly (Not Recommended)
 
   const handleCheckout = () => {
     if (!hydrated.length) return;
@@ -394,10 +395,10 @@ function OrderSummaryCard({
 
   const paymentOptions = [
     { value: "full", label: "Pay in full today" },
-    { value: "split", label: "Split Payments (20% Deposit)" },
-    { value: "custom", label: "Custom Deposit Amount" },
-    { value: "bnpl", label: "BNPL / Pay Over Time" },
-    { value: "group", label: "Group Payments" },
+    { value: "split", label: "Deposit Payment (20% Deposit)" },
+    // { value: "custom", label: "Custom Deposit Amount" },
+    // { value: "bnpl", label: "BNPL / Pay Over Time" },
+    // { value: "group", label: "Group Payments" },
   ];
 
   const current =
@@ -406,7 +407,7 @@ function OrderSummaryCard({
 
   const primaryLabel =
     paymentOption === "split"
-      ? "Proceed with 20% Split Payment"
+      ? "Proceed with 20% Deposit Payment"
       : paymentOption === "bnpl"
         ? "Proceed with BNPL / Pay Over Time"
         : paymentOption === "group"
@@ -556,7 +557,7 @@ function OrderSummaryCard({
               <p className="text-[11px] text-red-300 mt-1">{customError}</p>
             )}
             <p className="text-[11px] text-white/50">
-              You&apos;ll pay this custom deposit now via our multi-item Square
+              You'll pay this custom deposit now via our multi-item Square
               checkout, and our team will coordinate the remaining balance and
               delivery details with you.
             </p>
@@ -565,11 +566,11 @@ function OrderSummaryCard({
       </div>
 
       {/* 🔥 NEW: Inline $1,000 Square deposit checkout */}
-      <DepositCheckoutSection disabled={disabled} total={total} />
+      {/* <DepositCheckoutSection disabled={disabled} total={total} /> */}
 
       <p className="mt-3 text-xs text.white/60">
         All options are processed via our secure Square checkout. For split or
-        custom payments, you&apos;ll pay a deposit today, and a Habitat28
+        custom payments, you'll pay a deposit today, and a Habitat28
         specialist can assist with the remaining balance and delivery details.
       </p>
 
@@ -867,7 +868,7 @@ function MultiItemCheckoutModal({
   const amountFormatted = formatMoney(amountToPay);
 
   const label = isSplit
-    ? "Split Payment (20% Deposit)"
+    ? "Deposit Payment (20% Deposit)"
     : isCustom
       ? "Custom Deposit (Multi-Item Checkout)"
       : "Multi-Item ELEV8 Checkout";
@@ -891,10 +892,10 @@ function MultiItemCheckoutModal({
       : "This reflects your current configuration. A Habitat28 specialist can assist with delivery, access, and installation after payment.";
 
   const introCopy = isSplit
-    ? "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal. For split payments, you’ll pay a 20% deposit today and arrange the remaining balance with our team before delivery."
+    ? "You're checking out multiple ELEV8 items. On the next page, you'll be redirected to our secure Square payment portal. For split payments, you’ll pay a 20% deposit today and arrange the remaining balance with our team before delivery."
     : isCustom
-      ? "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal to pay your chosen deposit amount. We’ll handle the remaining balance and delivery planning with you afterwards."
-      : "You&apos;re checking out multiple ELEV8 items. On the next page, you&apos;ll be redirected to our secure Square payment portal. Please review the amount below before completing your payment.";
+      ? "You're checking out multiple ELEV8 items. On the next page, you'll be redirected to our secure Square payment portal to pay your chosen deposit amount. We’ll handle the remaining balance and delivery planning with you afterwards."
+      : "You're checking out multiple ELEV8 items. On the next page, you'll be redirected to our secure Square payment portal. Please review the amount below before completing your payment.";
 
   return (
     <motion.div

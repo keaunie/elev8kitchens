@@ -554,19 +554,26 @@ export default function ProductPage({
                             </div>
                         </div>
 
-                        <div className="flex items-end gap-3">
-                            <p className="text-3xl font-semibold text-white">
-                                {formatMoney(price)}
-                            </p>
-                            {compareAt && (
-                                <p className="text-lg text-white/60 line-through">
-                                    {formatMoney(compareAt)}
+                        <div className="flex items-end gap-2">
+                            <div className="flex items-baseline gap-1">
+                                <p className="text-3xl font-semibold text-white">
+                                    {formatMoney(price)}
                                 </p>
+                                <span className="text-xs text-white/60 tracking-wide">USD</span>
+                            </div>
+
+                            {compareAt && (
+                                <div className="flex items-baseline gap-1">
+                                    <p className="text-lg text-white/60 line-through">
+                                        {formatMoney(compareAt)}
+                                    </p>
+                                    <span className="text-[10px] text-white/40">USD</span>
+                                </div>
                             )}
                         </div>
-                        <p className="mt-1 text-sm text-white/70">
+                        {/* <p className="mt-1 text-sm text-white/70">
                             Installments available at checkout.
-                        </p>
+                        </p> */}
 
                         <div className="mt-6 space-y-5">
                             {/* Color */}
