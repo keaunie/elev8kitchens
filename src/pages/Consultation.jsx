@@ -21,7 +21,7 @@ function GlowDot({ className = "" }) {
 }
 
 export default function CalendlyLuxePage({
-  calendlyUrl = "https://calendly.com/kurt-oneluxstay/30min",
+  calendlyUrl = "https://calendly.com/sales-elev8-habitat28/30min",
 }) {
   const [loaded, setLoaded] = useState(false);
 
