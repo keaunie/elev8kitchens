@@ -9,9 +9,11 @@ const GOLD = "#C1A88B";
 
 // ---- LOCAL IMAGES + VIDEO ----
 // Adjust path if GalleryPage.jsx is not inside /components
+
 import img0102 from "../assets/IMG_0102.jpg";
 import img0108 from "../assets/IMG_0108.jpg";
 import img0128 from "../assets/IMG_0128.jpg";
+import img0130 from "../assets/IMG_0130.jpg";
 import img0140 from "../assets/IMG_0140.jpg";
 import img0153 from "../assets/IMG_0153.jpg";
 
@@ -51,6 +53,13 @@ const galleryMedia = [
     src: img0153,
     alt: "Elev8 Kitchens – image 0153",
     // name: "Factory View 0153",
+  },
+  {
+    id: 6,
+    type: "image",
+    src: img0130,
+    alt: "Elev8 Kitchens – image 0130",
+    // name: "Factory View 0128",
   },
   // {
   //   id: 6,

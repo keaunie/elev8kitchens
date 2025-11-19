@@ -7,6 +7,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import TeamHero from "../components/TeamHero.jsx";
 
+
+import img0102 from "../assets/IMG_0102.jpg";
+import img0108 from "../assets/IMG_0108.jpg";
+import img0128 from "../assets/IMG_0128.jpg";
+import img0130 from "../assets/IMG_0130.jpg";
+import img0140 from "../assets/IMG_0140.jpg";
+import img0153 from "../assets/IMG_0153.jpg";
+
 /* =========================================================
    ===============  DESKTOP / TABLET VERSION  ==============
    ========================================================= */
@@ -346,7 +354,7 @@ function DesktopTablet() {
           {/* Column 1 */}
           <div className="flex flex-col gap-3">
             <img
-              src=""
+              src="./assets/IMG_0128.jpg"
               className="h-full w-full object-cover rounded-xl"
               alt="Team Image 1"
             />
@@ -378,6 +386,28 @@ function DesktopTablet() {
               className="h-[55%] w-full object-cover rounded-xl"
               alt="Team Image 5"
             />
+            <button
+              onClick={() => window.location.href = "/booking"} // <-- change link if needed
+              className="
+    mt-6
+    rounded-full
+    bg-[#C1A88B]
+    px-8
+    py-3
+    text-black
+    font-medium
+    text-sm
+    leading-none
+    shadow-[0_4px_20px_rgba(0,0,0,0.4)]
+    hover:brightness-95
+    hover:shadow-[0_8px_28px_rgba(0,0,0,0.55)]
+    transition-all
+    duration-300
+  "
+            >
+              BOOK NOW
+            </button>
+
           </div>
         </div>
 
