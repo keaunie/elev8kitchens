@@ -221,7 +221,7 @@ function DesktopTablet() {
     {
       kicker: "Built For Canada & U.S.A Harsh Weather. Designed for Anywhere.",
       copy:
-        "Each ELEV8 Modular Outdoor Kitchen is designed to withstand the harsh climates of Canada and the U.S., using commercial-grade stainless steel and engineered to thrive through harsh winters, summers, and everything in between. With UL-Certification, plug-and-play installation, and luxury finishes, ELEV8 Kitchens deliver the perfect blend of durability, performance, and designer style.",
+        "Each ELEV8 Modular Outdoor Kitchen is designed to withstand the harsh climates of Canada and the U.S., using commercial-grade stainless steel and engineered to thrive through harsh winters, summers, and everything in between. With UL Certified Components, plug-and-play installation, and luxury finishes, ELEV8 Kitchens deliver the perfect blend of durability, performance, and designer style.",
     },
     {
       kicker: "More Than a BBQ",
@@ -337,13 +337,61 @@ function DesktopTablet() {
         </blockquote>
       </div>
 
-      <div className="relative left-1/2 right-1/2 my-8 w-screen -ml-[50vw] -mr-[50vw]">
-        <TeamHero
-          image="https://elev8kitchens.com/cdn/shop/files/habitat28-team-1024x674.jpg?v=1748054711&width=3840"
-          title="Our Team"
-          subtitle="The craft, the precision, the people behind ELEV8 Kitchens"
-        />
+      {/* Full-bleed masonry hero */}
+      <div className="relative left-1/2 right-1/2 my-12 w-screen -ml-[50vw] -mr-[50vw]">
+
+        {/* Masonry grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 h-[55vh] overflow-hidden">
+
+          {/* Column 1 */}
+          <div className="flex flex-col gap-3">
+            <img
+              src=""
+              className="h-full w-full object-cover rounded-xl"
+              alt="Team Image 1"
+            />
+          </div>
+
+          {/* Column 2 */}
+          <div className="flex flex-col gap-3">
+            <img
+              src="https://elev8kitchen.netlify.app/assets/IMG_0108-D9c-14nd.jpg"
+              className="h-[60%] w-full object-cover rounded-xl"
+              alt="Team Image 2"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1520880867055-1e30d1cb001c?auto=format&q=80&w=2400"
+              className="h-[40%] w-full object-cover rounded-xl"
+              alt="Team Image 3"
+            />
+          </div>
+
+          {/* Column 3 */}
+          <div className="flex flex-col gap-3">
+            <img
+              src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&q=80&w=2400"
+              className="h-[45%] w-full object-cover rounded-xl"
+              alt="Team Image 4"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1518609571773-39b7d303a6b8?auto=format&q=80&w=2400"
+              className="h-[55%] w-full object-cover rounded-xl"
+              alt="Team Image 5"
+            />
+          </div>
+        </div>
+
+        {/* Centered overlay text */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[1px]">
+          <h2 className="text-4xl md:text-5xl font-semibold text-white drop-shadow-lg">
+            Our Team
+          </h2>
+          <p className="mt-2 text-white/85 max-w-xl text-center text-sm md:text-base">
+            The craft, the precision, the people behind ELEV8 Kitchens
+          </p>
+        </div>
       </div>
+
 
       {openIndex !== null && (
         <DT_Lightbox
@@ -699,13 +747,13 @@ function Mobile() {
         </blockquote>
       </div>
 
-      <div className="relative left-1/2 right-1/2 my-8 w-screen -ml-[50vw] -mr-[50vw]">
+      {/* <div className="relative left-1/2 right-1/2 my-8 w-screen -ml-[50vw] -mr-[50vw]">
         <TeamHero
           image="https://elev8kitchens.com/cdn/shop/files/habitat28-team-1024x674.jpg?v=1748054711&width=3840"
           title="Our Team"
           subtitle="The craft, the precision, the people behind ELEV8 Kitchens"
         />
-      </div>
+      </div> */}
 
       {openIndex !== null && (
         <M_Lightbox

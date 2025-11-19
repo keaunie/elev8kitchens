@@ -28,7 +28,7 @@ export default function Footer() {
                         <img
                             src="https://elev8kitchens.com/cdn/shop/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896&width=240"
                             alt="ELEV8 Crafted Kitchens"
-                            className="h-8 w-auto"
+                            className="h-15 w-auto"
                         />
                         <h3 className="mt-5 font-serif text-[15px] text-[#C1A88B]">
                             Create Your Backyard Oasis Today!

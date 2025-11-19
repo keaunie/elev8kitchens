@@ -21,6 +21,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import catalog from "../data/products.json"; // <— path to the JSON file
 import { useCart } from "../context/CartContext";
+import Payment from "../components/Payment";
 
 const formatMoney = (dollars) =>
     `$ ${Number(dollars).toLocaleString(undefined, {
@@ -243,101 +244,126 @@ function FullBleed({ children, className = "" }) {
     );
 }
 
-function ParallaxPanel({ title, kicker, copy, image, align = "right" }) {
-    const ref = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start end", "end start"],
-    });
-    const yImg = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
-    const scaleImg = useTransform(scrollYProgress, [0, 1], [1.04, 1]);
+// function ParallaxPanel({ title, kicker, copy, image, align = "right" }) {
+//     const ref = useRef(null);
+//     const { scrollYProgress } = useScroll({
+//         target: ref,
+//         offset: ["start end", "end start"],
+//     });
+//     const yImg = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+//     const scaleImg = useTransform(scrollYProgress, [0, 1], [1.04, 1]);
 
-    const alignStyles =
-        align === "left"
-            ? "items-start text-left"
-            : align === "center"
-                ? "items-center text-center"
-                : "items-end text-right";
+//     const alignStyles =
+//         align === "left"
+//             ? "items-start text-left"
+//             : align === "center"
+//                 ? "items-center text-center"
+//                 : "items-end text-right";
 
-    const alignPad =
-        align === "left" ? "lg:pl-24" : align === "center" ? "" : "lg:pr-24";
+//     const alignPad =
+//         align === "left" ? "lg:pl-24" : align === "center" ? "" : "lg:pr-24";
 
-    return (
-        <FullBleed className="bg-black">
-            <section
-                ref={ref}
-                className="relative h-[80vh] min-h-[520px] w-screen overflow-hidden"
-            >
-                <motion.img
-                    src={image}
-                    alt={title || kicker}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    style={{ y: yImg, scale: scaleImg }}
-                    loading="lazy"
-                    decoding="async"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/35 to-black/20" />
-                <div className={`relative z-10 mx-auto flex h-full max-w-7xl px-6 ${alignPad}`}>
-                    <div className={`mt-auto mb-14 flex w-full flex-col ${alignStyles}`}>
-                        {kicker && (
-                            <p className="font-heading text-xs tracking-[0.25em] text-[#C1A88B]/90">
-                                {kicker.toUpperCase()}
-                            </p>
-                        )}
-                        <h3 className="mt-2 font-heading text-3xl md:text-4xl text-[#C1A88B]">
-                            {title}
-                        </h3>
-                        <div
-                            className={`mt-3 max-w-2xl ${align === "right"
-                                ? "ml-auto"
-                                : align === "center"
-                                    ? "mx-auto"
-                                    : ""
-                                }`}
-                        >
-                            {Array.isArray(copy) ? (
-                                copy.map((p, i) => (
-                                    <p key={i} className="text-white/90 md:text-lg leading-relaxed">
-                                        {p}
-                                    </p>
-                                ))
-                            ) : (
-                                <p className="text-white/90 md:text-lg leading-relaxed">
-                                    {copy}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_140px_rgba(0,0,0,0.55)]" />
-            </section>
-        </FullBleed>
-    );
-}
+//     return (
+//         <FullBleed className="bg-black">
+//             <section
+//                 ref={ref}
+//                 className="relative h-[80vh] min-h-[520px] w-screen overflow-hidden"
+//             >
+//                 <motion.img
+//                     src={image}
+//                     alt={title || kicker}
+//                     className="absolute inset-0 h-full w-full object-cover"
+//                     style={{ y: yImg, scale: scaleImg }}
+//                     loading="lazy"
+//                     decoding="async"
+//                 />
+//                 <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/35 to-black/20" />
+//                 <div className={`relative z-10 mx-auto flex h-full max-w-7xl px-6 ${alignPad}`}>
+//                     <div className={`mt-auto mb-14 flex w-full flex-col ${alignStyles}`}>
+//                         {kicker && (
+//                             <p className="font-heading text-xs tracking-[0.25em] text-[#C1A88B]/90">
+//                                 {kicker.toUpperCase()}
+//                             </p>
+//                         )}
+//                         <h3 className="mt-2 font-heading text-3xl md:text-4xl text-[#C1A88B]">
+//                             {title}
+//                         </h3>
+//                         <div
+//                             className={`mt-3 max-w-2xl ${align === "right"
+//                                 ? "ml-auto"
+//                                 : align === "center"
+//                                     ? "mx-auto"
+//                                     : ""
+//                                 }`}
+//                         >
+//                             {Array.isArray(copy) ? (
+//                                 copy.map((p, i) => (
+//                                     <p key={i} className="text-white/90 md:text-lg leading-relaxed">
+//                                         {p}
+//                                     </p>
+//                                 ))
+//                             ) : (
+//                                 <p className="text-white/90 md:text-lg leading-relaxed">
+//                                     {copy}
+//                                 </p>
+//                             )}
+//                         </div>
+//                     </div>
+//                 </div>
+//                 <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_140px_rgba(0,0,0,0.55)]" />
+//             </section>
+//         </FullBleed>
+//     );
+// }
 
 function ProductStoryParallax() {
-    const IMGS = {
-        weather:
-            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_15_1_copy_l9li1j.webp",
-        grilling:
-            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_20_copy_m8kfku.webp",
-        entertainment:
-            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_17_copy_vrkn4s.webp",
-        storage:
-            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp",
-        hydraulic:
-            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/NF-101_4_copy_isrpfu.webp",
-        safety:
-            "https://res.cloudinary.com/dczzibbkw/image/upload/v1762285478/hero1_pbo5gx.webp",
-    };
+    const features = [
+        {
+            title: "Weatherproof, Year-Round Durability",
+            kicker: "Built for Every Season",
+            icon: <ShieldCheck className="h-5 w-5 text-[#C1A88B]" />,
+            body: "Built from SS304 commercial-grade stainless steel, ELEV8 Outdoor Kitchens are engineered to withstand harsh Canadian winters, hot California summers, and every season in between without rust, fading, or wear.",
+        },
+        {
+            title: "High-Performance Grilling Station",
+            kicker: "Precision Cooking",
+            icon: <Zap className="h-5 w-5 text-[#C1A88B]" />,
+            body: "Cook like a pro with a 4- or 6-burner BBQ, rotisserie, rear infrared burner, vent hood, and a 50A power panel delivering unmatched grilling power and reliability.",
+        },
+        {
+            title: "Entertainment That Lasts",
+            kicker: "Screen & Sound, Built-In",
+            icon: <Sparkles className="h-5 w-5 text-[#C1A88B]" />,
+            body: "Weatherproof 26” (XL) or 42” (XXL) Smart TVs and in-wall Bluetooth speakers turn every cookout into a cinematic, music-filled experience.",
+        },
+        {
+            title: "Organized Outdoor Living",
+            kicker: "Luxury Storage & Bar",
+            icon: <Truck className="h-5 w-5 text-[#C1A88B]" />,
+            body: "Enjoy effortless organization with a built-in fridge, wine-glass rack, soft-close honeycomb drawers, upper storage, and a pull-out trash bin to keep your space clean and refined.",
+        },
+        {
+            title: "Intelligent Hydraulic Access",
+            kicker: "Lift • Light • Luxury",
+            icon: <RefreshCcw className="h-5 w-5 text-[#C1A88B]" />,
+            body: "Remote-controlled electro-hydraulic lift door with manual override combines dramatic flair with everyday practicality, enhanced by integrated LED lighting.",
+        },
+        {
+            title: "Built-In Safety & Smart Design",
+            kicker: "Confidence, Engineered",
+            icon: <ShieldCheck className="h-5 w-5 text-[#C1A88B]" />,
+            body: "Standard gas-leak detector, exhaust system, GFCI outlets, USB ports, and winter-ready plumbing ensure your outdoor kitchen is as safe and smart as it is beautiful.",
+        },
+    ];
 
     return (
         <div className="bg-black">
+            {/* Intro header */}
             <FullBleed>
                 <section className="bg-gradient-to-b from-black to-[#0b0b0b] py-20 md:py-28">
                     <div
                         className="mx-auto max-w-4xl px-6 text-center"
-                        id="why-elev8"             // ✅ no "#"
+                        id="why-elev8"
                     >
                         <motion.h2
                             initial={{ opacity: 0, y: 16 }}
@@ -356,81 +382,56 @@ function ProductStoryParallax() {
                             className="mx-auto mt-4 max-w-3xl text-white/85 md:text-lg"
                         >
                             Crafted by Habitat28, ELEV8 isn’t just a BBQ—it’s a complete
-                            outdoor living upgrade...
+                            outdoor living upgrade, blending professional performance
+                            with hotel-grade design.
                         </motion.p>
                     </div>
                 </section>
             </FullBleed>
 
+            {/* Luxury 3-column animated feature cards */}
+            <section className="bg-black pb-24 pt-15 md:pb-32">
+                <div className="mx-auto max-w-7xl px-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                        {features.map((f, i) => (
+                            <motion.article
+                                key={f.title}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.3 }}
+                                transition={{ duration: 0.5, delay: i * 0.07 }}
+                                className="group rounded-2xl bg-[#0c0c0c]/80 p-6 lg:p-7 ring-1 ring-white/10 shadow-[0_14px_40px_rgba(0,0,0,0.55)] 
+                                           hover:-translate-y-1 hover:ring-[#C1A88B]/70 hover:shadow-[0_22px_55px_rgba(0,0,0,0.75)] transition-all duration-300"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#C1A88B]/12 ring-1 ring-[#C1A88B]/40">
+                                        {f.icon}
+                                    </div>
+                                    <div className="flex flex-col">
+                                        {f.kicker && (
+                                            <span className="text-[11px] uppercase tracking-[0.18em] text-[#C1A88B]/80">
+                                                {f.kicker}
+                                            </span>
+                                        )}
+                                        <h3 className="mt-1 text-sm font-semibold text-white md:text-base">
+                                            {f.title}
+                                        </h3>
+                                    </div>
+                                </div>
 
-            <ParallaxPanel
-                title="Weatherproof, Year-Round Durability"
-                kicker="Built for Every Season"
-                image={IMGS.weather}
-                align="left"
-                copy={[
-                    "Engineered with SS304 commercial-grade stainless steel to thrive through harsh Canadian winters, hot California summers, and everything in between.",
-                    "No rust, no fading—just lasting performance and a timeless finish.",
-                ]}
-            />
-
-            <ParallaxPanel
-                title="High-Performance Grilling Station"
-                kicker="Precision Cooking"
-                image={IMGS.grilling}
-                align="right"
-                copy={[
-                    "Cook like a pro with 4- or 6-burner power up to 85,000 BTU, rotisserie with dedicated rear infrared burner, vent hood, and a 50A power panel.",
-                    "Full-width drip tray and black stainless internals simplify cleanup and maximize lifespan.",
-                ]}
-            />
-
-            <ParallaxPanel
-                title="Outdoor Entertainment, Redefined"
-                kicker="Screen & Sound — Built-In"
-                image={IMGS.entertainment}
-                align="left"
-                copy={[
-                    "Weatherproof 26” (XL) or 42” (XXL) Smart TV keeps games, shows, and recipes in view while you cook.",
-                    "Premium in-wall Bluetooth speakers deliver immersive audio for movie nights or lively socials.",
-                ]}
-            />
-
-            <ParallaxPanel
-                title="Organized Outdoor Living"
-                kicker="Luxury Storage & Bar"
-                image={IMGS.storage}
-                align="right"
-                copy={[
-                    "Built-in fridge, wine-glass rack, soft-close honeycomb drawers, upper storage, and a pull-out trash bin.",
-                    "Sintered-stone worktops balance refined design with rugged practicality.",
-                ]}
-            />
-
-            <ParallaxPanel
-                title="Intelligent Hydraulic Access"
-                kicker="Lift • Light • Luxury"
-                image={IMGS.hydraulic}
-                align="left"
-                copy={[
-                    "Remote-controlled electro-hydraulic lift door with manual override combines convenience with dramatic flair.",
-                    "Integrated LED lighting elevates visibility and ambiance after sunset.",
-                ]}
-            />
-
-            <ParallaxPanel
-                title="Built-In Safety & Smart Design"
-                kicker="Confidence, Engineered"
-                image={IMGS.safety}
-                align="right"
-                copy={[
-                    "Standard gas-leak detector, exhaust system, GFCI outlets, USB ports, and winter-ready plumbing.",
-                    "ELEV8 is as safe and smart as it is beautiful.",
-                ]}
-            />
+                                <p className="mt-4 text-sm leading-relaxed text-white/80">
+                                    {f.body}
+                                </p>
+                            </motion.article>
+                        ))}
+                    </div>
+                </div>
+            </section>
         </div>
     );
 }
+
+
 
 /* ===================== END STORY ===================== */
 
@@ -447,6 +448,7 @@ export default function ProductPage({
     const [qty, setQty] = useState(1);
     const [lightbox, setLightbox] = useState(null);
     const [toastVisible, setToastVisible] = useState(false);
+    const [showAllFeatures, setShowAllFeatures] = useState(false);
 
 
     const variant = useMemo(
@@ -553,6 +555,11 @@ export default function ProductPage({
                                 </span>
                             </div>
                         </div>
+                        {/* Marketing Banner */}
+                        <div className="mb-4 rounded-xl bg-white/10 p-4 text-center text-white/90 text-sm leading-relaxed">
+                            This isn’t just a BBQ. It’s the kitchen you’ve been dreaming about.
+                            Trusted by 100s. Built for Canada. Own yours today!
+                        </div>
 
                         <div className="flex items-end gap-2">
                             <div className="flex items-baseline gap-1">
@@ -571,6 +578,14 @@ export default function ProductPage({
                                 </div>
                             )}
                         </div>
+
+                        {compareAt && (
+                            <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#ff5b5b] px-3 py-1 text-xs font-semibold tracking-wide text-white shadow">
+                                <span className="text-sm">🔥</span>
+                                <span>ON SALE &amp; LIMITED STOCK!</span>
+                            </div>
+                        )}
+
                         {/* <p className="mt-1 text-sm text-white/70">
                             Installments available at checkout.
                         </p> */}
@@ -659,7 +674,7 @@ export default function ProductPage({
                                 </button>
                             </div>
 
-                            {/* Highlights */}
+                            {/* Highlights
                             <div className="space-y-3">
                                 <p className="text-white/90">Highlights</p>
                                 <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -681,29 +696,234 @@ export default function ProductPage({
                                         </li>
                                     ))}
                                 </ul>
+                            </div> */}
+                            {/* Key Features (clean, no boxes, collapsible) */}
+                            <div className="space-y-4">
+                                <p className="text-lg font-medium text-white/95">Key Features</p>
+
+                                {(() => {
+                                    const allFeatures = [
+                                        {
+                                            title: "Professional-Grade Grilling",
+                                            body: "Unleash your inner chef with a 4/6-burner, 85,000 BTU BBQ and rotisserie system—built for precision, performance, and perfection.",
+                                            icon: <Zap className="h-5 w-5 text-[#C1A88B]" />,
+                                        },
+                                        {
+                                            title: "All-Weather Stainless Steel",
+                                            body: "Crafted from SS304 stainless steel to endure every season with unmatched durability and timeless elegance.",
+                                            icon: <ShieldCheck className="h-5 w-5 text-[#C1A88B]" />,
+                                        },
+                                        {
+                                            title: "Smart Entertainment Hub",
+                                            body: "Integrated Smart TV (42” XXL / 26” XL) and Bluetooth speakers create the ultimate outdoor lounge experience.",
+                                            icon: <Sparkles className="h-5 w-5 text-[#C1A88B]" />,
+                                        },
+                                        {
+                                            title: "Luxury Storage & Bar Setup",
+                                            body: "Features honeycomb drawers, a wine-glass rack, upper storage, and a pull-out trash system for seamless organization.",
+                                            icon: <Truck className="h-5 w-5 text-[#C1A88B]" />,
+                                        },
+                                        {
+                                            title: "Integrated Bar Fridge",
+                                            body: "Keep beverages perfectly chilled on a sleek sintered-stone countertop—where design meets function.",
+                                            icon: <RefreshCcw className="h-5 w-5 text-[#C1A88B]" />,
+                                        },
+                                        {
+                                            title: "Hydraulic Lift Door",
+                                            body: "Effortless remote-controlled access with manual override, blending innovation and elegance.",
+                                            icon: <ChevronRight className="h-5 w-5 text-[#C1A88B]" />,
+                                        },
+                                        {
+                                            title: "Advanced Safety System",
+                                            body: "Includes gas leak detection, exhaust hood, hydraulic safety monitor, and a 50-amp plug-and-play panel.",
+                                            icon: <ShieldCheck className="h-5 w-5 text-[#C1A88B]" />,
+                                        },
+                                        {
+                                            title: "LED Ambience Lighting",
+                                            body: "Interior and exterior LED illumination set the perfect tone for night-time sophistication.",
+                                            icon: <Sparkles className="h-5 w-5 text-[#C1A88B]" />,
+                                        },
+                                    ];
+
+                                    // Show only first 4 unless expanded
+                                    const visible = showAllFeatures ? allFeatures : allFeatures.slice(0, 4);
+
+                                    return (
+                                        <>
+                                            <div className="space-y-4">
+                                                {visible.map((f, i) => (
+                                                    <div key={i} className="flex items-start gap-3">
+                                                        <span className="mt-1">{f.icon}</span>
+
+                                                        <div>
+                                                            <p className="text-sm font-semibold text-white/95">{f.title}</p>
+                                                            <p className="text-sm text-white/75 leading-relaxed mt-0.5">
+                                                                {f.body}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* Toggle button */}
+                                            {allFeatures.length > 4 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowAllFeatures(v => !v)}
+                                                    className="mt-3 text-xs sm:text-sm text-white/70 hover:text-white transition underline underline-offset-4"
+                                                >
+                                                    {showAllFeatures ? "Show less features" : "See all features"}
+                                                </button>
+                                            )}
+                                        </>
+                                    );
+                                })()}
                             </div>
+
+
+
 
                             {/* Accordion */}
                             <div className="divide-y divide-white/10 rounded-2xl ring-1 ring-white/10 bg-[#0f0f0f]/70">
                                 {[
                                     {
                                         title: "Details",
-                                        content:
-                                            "Premium materials, entertainment features, and a safety-first design.",
+                                        content: (
+                                            <div className="space-y-4 text-white/80 text-sm leading-relaxed">
+
+                                                {/* Sizes */}
+                                                <div>
+                                                    <p className="font-semibold text-white">Sizes</p>
+                                                    <ul className="mt-1 space-y-1">
+                                                        <li>• <strong className="text-white">XL:</strong> 3ft WIDE | 8.11ft LONG | 7.8ft TALL</li>
+                                                        <li>• <strong className="text-white">XXL:</strong> 3ft WIDE | 11.7ft LONG | 7.8ft TALL</li>
+                                                    </ul>
+                                                    <p className="mt-1 text-white/70 text-xs">
+                                                        The XXL comes with the upgraded Smart TV, extra storage, and a sink/faucet to complete your outdoor kitchen experience.
+                                                    </p>
+                                                </div>
+
+                                                {/* Colors */}
+                                                <div>
+                                                    <p className="font-semibold text-white">Color Options</p>
+                                                    <ul className="mt-1 space-y-1">
+                                                        <li>• <strong className="text-white">Titanium:</strong> Grey exterior, black cabinet, beige countertop</li>
+                                                        <li>• <strong className="text-white">Platinum:</strong> White exterior, beige cabinet, dark grey countertop</li>
+                                                        <li>• <strong className="text-white">Anthracite:</strong> Black exterior, black cabinet, beige countertop</li>
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+                                        ),
                                     },
+
                                     {
                                         title: "Specifications",
-                                        content:
-                                            "SS304 stainless, hydraulic lift, 4/6 burners up to 85,000 BTU.",
+                                        content: (
+                                            <div className="space-y-4 text-white/80 text-sm leading-relaxed">
+
+                                                {/* Core Build */}
+                                                <div>
+                                                    <p className="font-semibold text-white">Core Construction</p>
+                                                    <ul className="mt-1 space-y-1">
+                                                        <li>• Commercial-grade <strong className="text-white">SS304 stainless steel</strong> frame and body</li>
+                                                        <li>• Weather-resistant exterior panels and premium powder-coated finishes</li>
+                                                        <li>• Sintered-stone countertop with high heat & scratch resistance</li>
+                                                    </ul>
+                                                </div>
+
+                                                {/* Grilling System */}
+                                                <div>
+                                                    <p className="font-semibold text-white">Grilling System</p>
+                                                    <ul className="mt-1 space-y-1">
+                                                        <li>• Available in <strong className="text-white">4-burner</strong> or <strong className="text-white">6-burner</strong> configuration</li>
+                                                        <li>• Up to <strong className="text-white">85,000 BTU</strong> total output</li>
+                                                        <li>• Integrated rotisserie with dedicated rear infrared burner</li>
+                                                        <li>• Full-width drip tray for easy cleanup</li>
+                                                    </ul>
+                                                </div>
+
+                                                {/* Smart Features */}
+                                                <div>
+                                                    <p className="font-semibold text-white">Integrated Smart Features</p>
+                                                    <ul className="mt-1 space-y-1">
+                                                        <li>• Smart TV: 26” (XL) or upgraded 42” (XXL)</li>
+                                                        <li>• Built-in Bluetooth speakers</li>
+                                                        <li>• LED interior and exterior ambiance lighting</li>
+                                                    </ul>
+                                                </div>
+
+                                                {/* Hydraulic System */}
+                                                <div>
+                                                    <p className="font-semibold text-white">Hydraulic Lift System</p>
+                                                    <ul className="mt-1 space-y-1">
+                                                        <li>• Remote-controlled <strong className="text-white">electro-hydraulic lift door</strong></li>
+                                                        <li>• Manual override safety feature</li>
+                                                        <li>• Soft-close, balanced door engineering</li>
+                                                    </ul>
+                                                </div>
+
+                                                {/* Utility & Safety */}
+                                                <div>
+                                                    <p className="font-semibold text-white">Utility & Safety</p>
+                                                    <ul className="mt-1 space-y-1">
+                                                        <li>• Built-in <strong className="text-white">gas leak detection</strong> system</li>
+                                                        <li>• High-capacity ventilation/exhaust hood</li>
+                                                        <li>• 50-amp plug-and-play electrical panel</li>
+                                                        <li>• GFCI outlets & USB ports</li>
+                                                    </ul>
+                                                </div>
+
+                                                {/* Storage */}
+                                                <div>
+                                                    <p className="font-semibold text-white">Storage & Bar Setup</p>
+                                                    <ul className="mt-1 space-y-1">
+                                                        <li>• Honeycomb soft-close drawers</li>
+                                                        <li>• Wine-glass rack & upper cabinet storage</li>
+                                                        <li>• Pull-out hidden trash system</li>
+                                                        <li>• Integrated bar fridge</li>
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+                                        ),
                                     },
+
                                     {
                                         title: "Shipping & Returns",
-                                        content: `U.S. & Canada shipping. ${product.stock_note}`,
+                                        content: (
+                                            <div className="space-y-4 text-white/80 text-sm leading-relaxed">
+
+                                                <div>
+                                                    <p className="font-semibold text-white">Shipping Coverage</p>
+                                                    <p className="mt-1">
+                                                        We deliver across the U.S. and Canada. For an exact delivery cost to your address,
+                                                        please speak with one of our representatives.
+                                                    </p>
+                                                </div>
+
+                                                <div>
+                                                    <p className="font-semibold text-white">Please Note</p>
+                                                    <ul className="mt-1 space-y-2">
+                                                        <li>• From time to time, we run promotions to provide the best delivery prices.</li>
+                                                        <li>• Shipping availability and delivery timelines may vary depending on your location.</li>
+                                                    </ul>
+                                                </div>
+
+                                                {/* Your dynamic stock note, if any */}
+                                                {product.stock_note && (
+                                                    <p className="text-white/70 text-xs">
+                                                        {product.stock_note}
+                                                    </p>
+                                                )}
+
+                                            </div>
+                                        ),
                                     },
-                                    {
-                                        title: "Warranty",
-                                        content: "1-Year limited warranty.",
-                                    },
+                                    // {
+                                    //     title: "Warranty",
+                                    //     content: "1-Year limited warranty.",
+                                    // },
                                 ].map((it, idx) => (
                                     <AccordionItem key={idx} title={it.title}>
                                         <p className="text-white/80">{it.content}</p>
@@ -715,10 +935,9 @@ export default function ProductPage({
                 </div>
             </div>
 
-            {/* Full-bleed cinematic story */}
-            <div className="mt-10 md:mt-16">
-                <ProductStoryParallax />
-            </div>
+            <ProductStoryParallax />
+
+            <Payment />
 
             <StickyATC
                 visible={stuck}
