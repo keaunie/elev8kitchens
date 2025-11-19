@@ -8,7 +8,7 @@ import { CreditCard, Users } from "lucide-react";
 export default function Payment({
     title = "Flexible Payment Options",
     subtitle =
-    "Pay your way — with interest-free installments, financing, or group payments.",
+    "Pay your way — with interest-free no hidden charges, or financing.",
     options = defaultOptions,
 }) {
     return (
@@ -36,7 +36,7 @@ export default function Payment({
                         transition: { staggerChildren: 0.15, delayChildren: 0.2 },
                     },
                 }}
-                className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4"
+                className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3"
             >
                 {options.map((opt, i) => (
                     <BurnCard key={i} {...opt} />
@@ -102,16 +102,8 @@ function BurnCard({ icon, title, description, bullets = [], cta }) {
 }
 const defaultOptions = [
     {
-        // icon: (
-        //     <img
-        //         src="https://ifinancecanada.com/wp-content/uploads/2025/09/ifinance-canada-sme-winner-transp-1.png"
-        //         alt="iFinance"
-        //         className="h-12 w-12 object-contain"
-        //     />
-        // ),
         title: "BNPL",
-        description:
-            "Placeholder",
+        description: "Placeholder",
         bullets: [
             "Loans from $500 to $40,000",
             "Terms up to 84 months",
@@ -123,36 +115,24 @@ const defaultOptions = [
     },
     {
         icon: <CreditCard className="h-12 w-12 text-[#C1A88B]" />,
-        title: "Split Payment",
-        description: "Pay in easy installments with Split Payment.",
+        title: "Deposit Payment (20%)",
+        description: "Reserve your build with an upfront 20% deposit.",
         bullets: [
-            "No interest cost",
-            "Pay 20% upfront",
-            "1 remaining payment in 10 days",
-            "0% interest — simple and stress-free",
+            "20% deposit upfront",
+            "Remaining balance on delivery scheduling",
+            "No interest — simple and secure",
+            "Ideal for custom builds & phased projects",
         ],
         cta: { label: "Choose at Checkout", href: "/checkout" },
     },
     {
-        icon: <Users className="h-12 w-12 text-[#C1A88B]" />,
-        title: "Group Payment",
-        description:
-            "Share the cost with Group Payment. Ideal for family or friends.",
-        bullets: [
-            "Split the cost with family or friends",
-            "Use multiple cards or sources",
-            "Perfect for shared gifts or big orders",
-        ],
-        cta: { label: "Choose at Checkout", href: "/checkout" },
-    },
-    // ⬇️ New: Square option
-    {
+        // Square Option (unchanged)
         icon: (
             <svg class="LogoJewel svelte-1ig33mu" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 994.6 995.7" width="22" height="22"><path fill="#f2f2f2" d="M828.4,0H166.2C74.4,0,0,74.4,0,166.2v662.2c0,91.8,74.4,166.2,166.2,166.2h662.2
-    c91.8,0,166.2-74.4,166.2-166.2V166.2C994.6,74.4,920.2,0,828.4,0z M813.8,761.3c0,29-23.5,52.5-52.5,52.5h-528
-    c-29,0-52.5-23.5-52.5-52.5v-528c0-29,23.5-52.5,52.5-52.5h528c29,0,52.5,23.5,52.5,52.5V761.3z M391.8,632.3
-    c-16.7,0-30.1-13.5-30.1-30.2V391.3c0-16.7,13.4-30.3,30.1-30.3h211.1c16.6,0,30.1,13.5,30.1,30.3V602c0,16.7-13.5,30.2-30.1,30.2
-    H391.8z" class="svelte-1ig33mu"></path></svg>
+                c91.8,0,166.2-74.4,166.2-166.2V166.2C994.6,74.4,920.2,0,828.4,0z M813.8,761.3c0,29-23.5,52.5-52.5,52.5h-528
+                c-29,0-52.5-23.5-52.5-52.5v-528c0-29,23.5-52.5,52.5-52.5h528c29,0,52.5,23.5,52.5,52.5V761.3z M391.8,632.3
+                c-16.7,0-30.1-13.5-30.1-30.2V391.3c0-16.7,13.4-30.3,30.1-30.3h211.1c16.6,0,30.1,13.5,30.1,30.3V602c0,16.7-13.5,30.2-30.1,30.2
+                H391.8z"></path></svg>
         ),
         title: "Square",
         description:
@@ -166,6 +146,7 @@ const defaultOptions = [
         cta: { label: "Pay with Square", href: "/cart" },
     },
 ];
+
 
 
 // Add this to index.css or Tailwind config:

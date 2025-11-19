@@ -255,7 +255,7 @@ export default function CartPage({ onCheckout }) {
             <ReassuranceItem
               icon={<CreditCard className="h-5 w-5" />}
               title="Flexible Payments"
-              body="Pay in full or split into manageable installments at checkout, subject to approval."
+              body="Pay in full or split into manageable Deposit Payment at checkout, subject to approval."
             />
           </div>
         </div>
