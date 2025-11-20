@@ -81,14 +81,14 @@ export default function CartPage({ onCheckout }) {
     [hydrated]
   );
 
-  const shippingEstimate = 0; // show as "TBD at checkout"
+  const shippingEstimate = 0; // show as "TBD via custom quote"
   const taxEstimate = 0; // "Calculated at checkout"
   const total = subtotal + shippingEstimate + taxEstimate;
 
   // Standard full-payment checkout (multi-item)
   const MULTI_ITEM_CHECKOUT_URL = "https://square.link/u/EKt1svLu";
 
-  // // Split payment checkout (20% deposit)
+  // Split payment checkout (20% deposit)
   const SPLIT_PAYMENT_CHECKOUT_URL = "https://square.link/u/EKt1svLu";
   // const SPLIT_PAYMENT_CHECKOUT_URL = "https://square.link/u/4WPmgEHA"; Monthly (Not Recommended)
 
@@ -377,7 +377,6 @@ function CartLineItem({ entry, onIncrease, onDecrease, onRemove }) {
     </motion.div>
   );
 }
-
 function OrderSummaryCard({
   subtotal,
   shipping,
@@ -388,35 +387,36 @@ function OrderSummaryCard({
   onSplitCheckout,
   onCustomDepositCheckout,
 }) {
-  const [paymentOption, setPaymentOption] = useState("full"); // "full" | "split" | "bnpl" | "group" | "custom"
+  const [paymentOption, setPaymentOption] = useState("full"); // "full" | "split" | "custom"
   const [open, setOpen] = useState(false);
   const [customDeposit, setCustomDeposit] = useState("");
   const [customError, setCustomError] = useState("");
+  const [showShippingModal, setShowShippingModal] = useState(false);
 
   const paymentOptions = [
     { value: "full", label: "Pay in full today" },
     { value: "split", label: "Deposit Payment (20% Deposit)" },
     // { value: "custom", label: "Custom Deposit Amount" },
-    // { value: "bnpl", label: "BNPL / Pay Over Time" },
-    // { value: "group", label: "Group Payments" },
   ];
 
   const current =
     paymentOptions.find((opt) => opt.value === paymentOption) ||
     paymentOptions[0];
 
+  const isSplit = paymentOption === "split";
+  const isCustom = paymentOption === "custom";
+
+  const depositDue = isSplit ? total * 0.2 : total;
+
   const primaryLabel =
     paymentOption === "split"
-      ? "Proceed with 20% Deposit Payment"
-      : paymentOption === "bnpl"
-        ? "Proceed with BNPL / Pay Over Time"
-        : paymentOption === "group"
-          ? "Proceed with Group Payment"
-          : paymentOption === "custom"
-            ? "Proceed with Custom Deposit"
-            : "Proceed to Checkout";
+      ? `Pay 20% Deposit (${formatMoney(depositDue)})`
+      : isCustom
+        ? "Proceed with Custom Deposit"
+        : "Proceed to Checkout";
 
-  const handlePrimaryClick = () => {
+  // Checkout logic (full / split / custom)
+  const performCheckout = () => {
     if (disabled) return;
 
     if (paymentOption === "split") {
@@ -446,8 +446,14 @@ function OrderSummaryCard({
       return;
     }
 
-    // full, bnpl, group currently all go through standard checkout
+    // full goes through standard checkout
     onCheckout();
+  };
+
+  // Main button → show Shipping Quote Modal first
+  const handlePrimaryClick = () => {
+    if (disabled) return;
+    setShowShippingModal(true);
   };
 
   const handleSelect = (value) => {
@@ -466,18 +472,40 @@ function OrderSummaryCard({
         <SummaryRow label="Subtotal" value={formatMoney(subtotal)} />
         <SummaryRow
           label="Estimated Shipping"
-          value={shipping === 0 ? "TBD at checkout" : formatMoney(shipping)}
+          value={
+            shipping === 0 ? "TBD via custom quote" : formatMoney(shipping)
+          }
         />
         <SummaryRow
           label="Estimated Tax"
           value={tax === 0 ? "Calculated at checkout" : formatMoney(tax)}
         />
-        <div className="border-t border-white/10 pt-3">
-          <SummaryRow label="Total" value={formatMoney(total)} bold large />
+        <div className="border-t border-white/10 pt-3 space-y-2">
+          {isSplit ? (
+            <>
+              <SummaryRow
+                label="Cart total (excl. shipping)"
+                value={formatMoney(total)}
+              />
+              <SummaryRow
+                label="Due today (20% deposit)"
+                value={formatMoney(depositDue)}
+                bold
+                large
+              />
+            </>
+          ) : (
+            <SummaryRow
+              label="Total (excl. shipping)"
+              value={formatMoney(total)}
+              bold
+              large
+            />
+          )}
         </div>
       </div>
 
-      {/* Primary checkout button (respects selected payment option) */}
+      {/* Primary checkout button (opens shipping quote modal) */}
       <button
         onClick={handlePrimaryClick}
         disabled={disabled}
@@ -487,7 +515,7 @@ function OrderSummaryCard({
         {disabled ? "Cart is Empty" : primaryLabel}
       </button>
 
-      {/* Custom dropdown for payment options */}
+      {/* Payment options dropdown */}
       <div className="mt-4">
         <label className="mb-1 block text-xs text-white/60">
           Payment option
@@ -500,7 +528,7 @@ function OrderSummaryCard({
             className={[
               "flex w-full items-center justify-between rounded-full border border-white/15",
               "bg-black/70 px-4 py-2.5 text-xs md:text-sm text-white/80",
-              "hover:bg.white/5 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60",
+              "hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60",
               disabled ? "cursor-not-allowed opacity-50" : "",
             ].join(" ")}
           >
@@ -535,8 +563,8 @@ function OrderSummaryCard({
           </AnimatePresence>
         </div>
 
-        {/* Custom deposit input */}
-        {paymentOption === "custom" && !disabled && (
+        {/* Custom deposit UI (if you re-enable "custom") */}
+        {isCustom && !disabled && (
           <div className="mt-3 space-y-1">
             <label className="block text-xs text-white/60">
               Enter your deposit amount (in USD)
@@ -551,7 +579,7 @@ function OrderSummaryCard({
                 setCustomError("");
               }}
               placeholder="e.g. 1000"
-              className="w-full rounded-2xl border border.white/15 bg-black/70 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60"
+              className="w-full rounded-2xl border border-white/15 bg-black/70 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60"
             />
             {customError && (
               <p className="text-[11px] text-red-300 mt-1">{customError}</p>
@@ -565,28 +593,50 @@ function OrderSummaryCard({
         )}
       </div>
 
-      {/* 🔥 NEW: Inline $1,000 Square deposit checkout */}
-      {/* <DepositCheckoutSection disabled={disabled} total={total} /> */}
+      {/* 🔹 NEW: bypass ShippingQuoteModal */}
+      {!disabled && (
+        <button
+          type="button"
+          onClick={performCheckout}  // 👈 goes straight to checkout, no shipping modal
+          className="mt-3 text-[11px] text-white/60 hover:text-white/80 underline-offset-2 hover:underline"
+        >
+          I only wish to pay a deposit before I get my shipping price right now
+        </button>
+      )}
 
-      <p className="mt-3 text-xs text.white/60">
-        All options are processed via our secure Square checkout. For split or
-        custom payments, you'll pay a deposit today, and a Habitat28
-        specialist can assist with the remaining balance and delivery details.
+      <p className="mt-3 text-xs text-white/60">
+        All options are processed via our secure Square checkout. For split
+        payments, you’ll pay the 20% deposit today and a Habitat28 specialist
+        will assist with the remaining balance and delivery details.
       </p>
 
       <div className="mt-4 flex items-center gap-2 rounded-2xl bg-white/5 px-3 py-2 text-xs text-white/75 ring-1 ring-white/10">
         <CheckCircle2 className="h-4 w-4 text-[#C1A88B]" />
         <span>Secure checkout • Encrypted payments • No hidden fees</span>
       </div>
+
+      {/* Shipping Quote Modal (only opened by main button) */}
+      <AnimatePresence>
+        {showShippingModal && (
+          <ShippingQuoteModal
+            total={total}
+            dueToday={depositDue}
+            isSplit={isSplit}
+            onClose={() => setShowShippingModal(false)}
+            onContinue={() => {
+              setShowShippingModal(false);
+              performCheckout();
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-/* === NEW: Square $1,000 Deposit Section === */
 
-/* === NEW: Square variable deposit (min $1,000) Section === */
 
-/* === Square custom deposit section (min $1,000) === */
+/* === Square custom deposit section (min $1,000) — currently unused in UI but kept for future === */
 
 function DepositCheckoutSection({ disabled, total }) {
   const [card, setCard] = useState(null);
@@ -633,7 +683,6 @@ function DepositCheckoutSection({ disabled, total }) {
   const handleDepositPay = async () => {
     if (disabled || !card) return;
 
-    // validate deposit
     const raw = (deposit || "").toString().replace(/,/g, "");
     const amount = parseFloat(raw);
 
@@ -675,10 +724,9 @@ function DepositCheckoutSection({ disabled, total }) {
         body: JSON.stringify({
           nonce,
           currency: "USD",
-          depositAmount: depositAmountMinor, // amount * 100
+          depositAmount: depositAmountMinor,
         }),
       });
-
 
       const data = await res.json();
 
@@ -727,7 +775,6 @@ function DepositCheckoutSection({ disabled, total }) {
         you arrange the remaining balance and delivery schedule.
       </p>
 
-      {/* Deposit amount input */}
       <div className="mt-3 space-y-1">
         <label className="block text-xs text-white/60">
           Deposit amount (USD, min $1,000)
@@ -757,7 +804,6 @@ function DepositCheckoutSection({ disabled, total }) {
         )}
       </div>
 
-      {/* Card field */}
       <div className="mt-3">
         <div
           id="square-card-container"
@@ -765,7 +811,6 @@ function DepositCheckoutSection({ disabled, total }) {
         />
       </div>
 
-      {/* PRIMARY DEPOSIT BUTTON – gold, more visible */}
       <button
         type="button"
         onClick={handleDepositPay}
@@ -788,7 +833,6 @@ function DepositCheckoutSection({ disabled, total }) {
     </div>
   );
 }
-
 
 function SummaryRow({ label, value, bold = false, large = false }) {
   return (
@@ -986,6 +1030,146 @@ function MultiItemCheckoutModal({
             >
               <CreditCard className="h-4 w-4" />
               Continue to Secure Square Checkout
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ====== Shipping Quote Modal (uses 20% deposit when selected) ====== */
+
+function ShippingQuoteModal({ total, dueToday, isSplit, onClose, onContinue }) {
+  const mainAmount = isSplit ? dueToday : total;
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      role="dialog"
+      aria-modal="true"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.97 }}
+        className="relative w-full max-w-lg rounded-3xl bg-gradient-to-br from-[#0b0b0b] via-black to-[#151515] p-6 md:p-8 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.85)]"
+      >
+        {/* Glow accent */}
+        <div className="pointer-events-none absolute -inset-px rounded-3xl border border-white/5">
+          <div className="absolute -top-10 left-10 h-32 w-32 rounded-full bg-[#C1A88B]/15 blur-3xl" />
+        </div>
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+          aria-label="Close"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="relative space-y-5">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#C1A88B]/10 px-3 py-1 text-xs font-medium text-[#C1A88B] ring-1 ring-[#C1A88B]/30">
+            <Truck className="h-3 w-3" />
+            Shipping Quote Required
+          </div>
+
+          <h2 className="font-heading text-2xl md:text-3xl text-white">
+            Get Your ELEV8 Shipping Fee Quotation
+          </h2>
+
+          <p className="text-sm md:text-base text-white/70">
+            Our modular kitchens ship via premium freight, and shipping is
+            calculated manually based on your location and access.{" "}
+            {isSplit ? (
+              <>
+                Your{" "}
+                <span className="font-semibold text-[#C1A88B]">
+                  20% deposit due today (excluding shipping)
+                </span>{" "}
+                is{" "}
+                <span className="font-semibold text-[#C1A88B]">
+                  {formatMoney(mainAmount)}
+                </span>
+                .
+              </>
+            ) : (
+              <>
+                Your current cart total (excluding shipping) is{" "}
+                <span className="font-semibold text-[#C1A88B]">
+                  {formatMoney(mainAmount)}
+                </span>
+                .
+              </>
+            )}
+          </p>
+
+          {isSplit && (
+            <p className="text-xs text-white/60">
+              Full cart total (excluding shipping):{" "}
+              <span className="font-medium text-white">
+                {formatMoney(total)}
+              </span>
+            </p>
+          )}
+
+          <div className="rounded-2xl bg-black/60 p-4 ring-1 ring-white/10 space-y-2 text-sm text-white/75">
+            <p className="text-xs uppercase tracking-[0.2em] text-white/50">
+              To receive a precise quote, please contact:
+            </p>
+            <p>
+              <span className="font-medium text-white">Phone / WhatsApp:</span>{" "}
+              <a
+                href="tel:+1-905-693-0028"
+                className="text-[#C1A88B] hover:underline"
+              >
+                +1 (905) 693-0028
+              </a>
+            </p>
+            <p>
+              <span className="font-medium text-white">Email:</span>{" "}
+              <a
+                href="mailto:sales.elev8@habitat28.com"
+                className="text-[#C1A88B] hover:underline"
+              >
+                sales.elev8@habitat28.com
+              </a>
+            </p>
+            <p className="text-xs text-white/60 mt-2">
+              Share your{" "}
+              <span className="font-medium text-white">
+                full delivery address, access notes
+              </span>{" "}
+              and any timeline preferences. Our team will respond with a
+              detailed shipping fee quotation.
+            </p>
+          </div>
+
+          <ul className="space-y-2 text-xs md:text-sm text-white/70">
+            <li>• Contact us first to receive your shipping quotation.</li>
+            <li>
+              • After you're happy with the quote, return here and continue to
+              our secure Square checkout.
+            </li>
+          </ul>
+
+          <div className="mt-4 flex flex-col gap-3 md:flex-row md:justify-end">
+            <button
+              onClick={onClose}
+              className="inline-flex items-center justify-center rounded-full bg-white/5 px-5 py-2.5 text-sm font-medium text-white/80 ring-1 ring-white/10 hover:bg-white/10"
+            >
+              Close
+            </button>
+            <button
+              onClick={onContinue}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#C1A88B] px-6 py-2.5 text-sm font-medium text-black shadow hover:brightness-95"
+            >
+              <CreditCard className="h-4 w-4" />
+              I Understand — Continue to Checkout
             </button>
           </div>
         </div>

@@ -346,7 +346,7 @@ function DesktopTablet() {
           {/* Column 1 */}
           <div className="flex flex-col gap-3">
             <img
-              src="https://elev8kitchen.netlify.app/assets/IMG_0128-CpWC0Xr7.jpg"
+              src="https://elev8kitchens.netlify.app/assets/IMG_0128-CpWC0Xr7.jpg"
               className="object-cover rounded-xl"
               alt="Team Image 1"
             />
@@ -355,7 +355,7 @@ function DesktopTablet() {
           {/* Column 2 */}
           <div className="flex flex-col gap-3">
             <img
-              src="https://elev8kitchen.netlify.app/assets/IMG_0108-D9c-14nd.jpg"
+              src="https://elev8kitchens.netlify.app/assets/IMG_0108-D9c-14nd.jpg"
               className="h-[70%] w-full object-cover rounded-xl"
               alt="Team Image 2"
             />
