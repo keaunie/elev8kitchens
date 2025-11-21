@@ -377,6 +377,8 @@ function CartLineItem({ entry, onIncrease, onDecrease, onRemove }) {
     </motion.div>
   );
 }
+
+
 function OrderSummaryCard({
   subtotal,
   shipping,
@@ -450,7 +452,7 @@ function OrderSummaryCard({
     onCheckout();
   };
 
-  // Main button → show Shipping Quote Modal first
+  // Main button → show ShippingQuoteModal first
   const handlePrimaryClick = () => {
     if (disabled) return;
     setShowShippingModal(true);
@@ -461,6 +463,24 @@ function OrderSummaryCard({
     setOpen(false);
     if (value !== "custom") {
       setCustomError("");
+    }
+  };
+
+  // 🔹 NEW: force 20% deposit modal + checkout (no shipping modal)
+  const handleDepositBypass = () => {
+    if (disabled) return;
+
+    // Conceptually switch to split option for UI consistency
+    if (paymentOption !== "split") {
+      setPaymentOption("split");
+    }
+
+    // Call the parent’s split checkout handler → opens MultiItemCheckoutModal in "split" mode
+    if (onSplitCheckout) {
+      onSplitCheckout();
+    } else {
+      // Fallback: behave like split inside this component
+      performCheckout();
     }
   };
 
@@ -528,7 +548,7 @@ function OrderSummaryCard({
             className={[
               "flex w-full items-center justify-between rounded-full border border-white/15",
               "bg-black/70 px-4 py-2.5 text-xs md:text-sm text-white/80",
-              "hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60",
+              "hover:bg:white/5 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60",
               disabled ? "cursor-not-allowed opacity-50" : "",
             ].join(" ")}
           >
@@ -593,11 +613,11 @@ function OrderSummaryCard({
         )}
       </div>
 
-      {/* 🔹 NEW: bypass ShippingQuoteModal */}
+      {/* 🔹 UPDATED: this now goes straight to 20% deposit modal + checkout */}
       {!disabled && (
         <button
           type="button"
-          onClick={performCheckout}  // 👈 goes straight to checkout, no shipping modal
+          onClick={handleDepositBypass}
           className="mt-3 text-[11px] text-white/60 hover:text-white/80 underline-offset-2 hover:underline"
         >
           I only wish to pay a deposit before I get my shipping price right now
@@ -633,6 +653,7 @@ function OrderSummaryCard({
     </div>
   );
 }
+
 
 
 
