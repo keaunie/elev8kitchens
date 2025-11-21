@@ -603,7 +603,6 @@ export default function ProductPage({
                                     </span>
                                 </p>
 
-
                                 {(() => {
                                     const allFeatures = [
                                         {
