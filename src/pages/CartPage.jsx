@@ -86,10 +86,10 @@ export default function CartPage({ onCheckout }) {
   const total = subtotal + shippingEstimate + taxEstimate;
 
   // Standard full-payment checkout (multi-item)
-  const MULTI_ITEM_CHECKOUT_URL = "https://square.link/u/EKt1svLu";
+  const MULTI_ITEM_CHECKOUT_URL = "https://square.link/u/DTrYbe4Y";
 
   // Split payment checkout (20% deposit)
-  const SPLIT_PAYMENT_CHECKOUT_URL = "https://square.link/u/EKt1svLu";
+  const SPLIT_PAYMENT_CHECKOUT_URL = "https://square.link/u/DTrYbe4Y";
   // const SPLIT_PAYMENT_CHECKOUT_URL = "https://square.link/u/4WPmgEHA"; Monthly (Not Recommended)
 
   const handleCheckout = () => {

@@ -55,7 +55,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286600/IMG-20250228-WA0013_copy_myskc5.webp"
                     ],
                     "available": true,
-                    "payment_link": "https://square.link/u/8y8kb2OE"
+                    "payment_link": "https://square.link/u/Fda4ww6k"
                 },
                 {
                     "sku": "ELEV8-XL-PLATINUM",
@@ -72,7 +72,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286599/IMG-20250228-WA0011_copy_isgkzj.webp"
                     ],
                     "available": true,
-                    "payment_link": "https://square.link/u/IkrDtxqv"
+                    "payment_link": "https://square.link/u/iCTjJUI0"
                 },
                 {
                     "sku": "ELEV8-XL-ANTHRACITE",
@@ -80,14 +80,14 @@
                         "Size": "XL",
                         "Color": "ANTHRACITE"
                     },
-                    "price": 10, 
+                    "price": 10,
                     "compare_at_price": 19900,
                     "images": [
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-anthracite-canada_2_pij6nh.png",
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp"
                     ],
                     "available": true,
-                    "payment_link": "https://square.link/u/fHjwonOa"
+                    "payment_link": "https://square.link/u/EeqrIlXY"
                 },
                 {
                     "sku": "ELEV8-XXL-TITANIUM",
@@ -106,7 +106,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp"
                     ],
                     "available": true,
-                    "payment_link": "https://square.link/u/BSj8OmHb"
+                    "payment_link": "https://square.link/u/tQ3Gghyz"
                 },
                 {
                     "sku": "ELEV8-XXL-PLATINUM",
@@ -126,7 +126,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/k1_copy_ij8xt4.webp"
                     ],
                     "available": true,
-                    "payment_link": "https://square.link/u/JsQsklna"
+                    "payment_link": "https://square.link/u/VG67nN6W"
                 },
                 {
                     "sku": "ELEV8-XXL-ANTHRACITE",
@@ -148,7 +148,7 @@
                         "https://res.cloudinary.com/dczzibbkw/image/upload/v1761439478/Elev8_Front_Facing_1200_X_1200_-_Xxl_an_wqnmrg.webp"
                     ],
                     "available": true,
-                    "payment_link": "https://square.link/u/QBqDfAIa"
+                    "payment_link": "https://square.link/u/InhkLZzA"
                 }
             ],
             "swatches": {
