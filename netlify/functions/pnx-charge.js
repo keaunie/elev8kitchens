@@ -1,11 +1,28 @@
 // netlify/functions/pnx-charge.js
 
-import fetch from "node-fetch";
+// NOTE: On Netlify (Node 18+), fetch is built-in – no need for node-fetch
+
+const corsHeaders = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*", // or lock to your Hostinger domain
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
 
 export const handler = async (event, context) => {
+    // Handle CORS preflight
+    if (event.httpMethod === "OPTIONS") {
+        return {
+            statusCode: 204,
+            headers: corsHeaders,
+            body: "",
+        };
+    }
+
     if (event.httpMethod !== "POST") {
         return {
             statusCode: 405,
+            headers: corsHeaders,
             body: JSON.stringify({ error: "Method not allowed" }),
         };
     }
@@ -18,7 +35,10 @@ export const handler = async (event, context) => {
         console.error("PNX_API_KEY missing");
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: "Server config error: PNX_API_KEY missing" }),
+            headers: corsHeaders,
+            body: JSON.stringify({
+                error: "Server config error: PNX_API_KEY missing",
+            }),
         };
     }
 
@@ -28,17 +48,27 @@ export const handler = async (event, context) => {
     } catch (e) {
         return {
             statusCode: 400,
+            headers: corsHeaders,
             body: JSON.stringify({ error: "Invalid JSON body" }),
         };
     }
 
-    const { tokenId, amount, currency = "USD", orderId, items = [], customer = {} } =
-        body;
+    const {
+        tokenId,
+        amount,
+        currency = "USD",
+        orderId,
+        items = [],
+        customer = {},
+    } = body;
 
     if (!tokenId || !amount) {
         return {
             statusCode: 400,
-            body: JSON.stringify({ error: "tokenId and amount are required" }),
+            headers: corsHeaders,
+            body: JSON.stringify({
+                error: "tokenId and amount are required",
+            }),
         };
     }
 
@@ -46,7 +76,7 @@ export const handler = async (event, context) => {
         const payload = {
             Amount: {
                 Total: String(Number(amount).toFixed(2)), // "12499.00"
-                Currency: currency, // "USD", "CAD", etc.
+                Currency: currency,
             },
             PaymentMethod: {
                 Token: {
@@ -100,13 +130,14 @@ export const handler = async (event, context) => {
             }
         );
 
-        const data = await resp.json();
+        const data = await resp.json().catch(() => ({}));
 
-        // Adjust based on Paynetworx response fields – most gateways return something like Approved/ResultCode etc.
+        // Adjust based on Paynetworx response fields
         if (!resp.ok || data.Approved === false) {
             console.error("PNX charge declined:", data);
             return {
                 statusCode: 400,
+                headers: corsHeaders,
                 body: JSON.stringify({
                     error: "Payment not approved",
                     pnx: data,
@@ -116,6 +147,7 @@ export const handler = async (event, context) => {
 
         return {
             statusCode: 200,
+            headers: corsHeaders,
             body: JSON.stringify({
                 success: true,
                 transactionId: data.TransactionID,
@@ -126,6 +158,7 @@ export const handler = async (event, context) => {
         console.error("PNX charge exception:", err);
         return {
             statusCode: 500,
+            headers: corsHeaders,
             body: JSON.stringify({ error: "Server error charging card" }),
         };
     }
