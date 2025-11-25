@@ -1,12 +1,21 @@
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 [build]
   command = "npm run build"
-  publish = "dist" # or "build" if you're using CRA
+  publish = "dist"
+  functions = "netlify/functions"
 
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
+[dev]
+  command = "npm run dev"
+  targetPort = 5173
+  port = 8888
+  functions = "netlify/functions"
+
+# Optional: redirect API paths to functions style you prefer
+[[redirects]]
+  from = "/api/pnx/session"
+  to = "/.netlify/functions/pnx-session"
+  status = 200
+
+[[redirects]]
+  from = "/api/pnx/charge"
+  to = "/.netlify/functions/pnx-charge"
+  status = 200
