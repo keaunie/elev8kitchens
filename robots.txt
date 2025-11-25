@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Optional: block internal / admin paths if you have them
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /cgi-bin/
+
+# Point crawlers to your sitemap if you have one
+Sitemap: https://elev8kitchens.com/sitemap.xml

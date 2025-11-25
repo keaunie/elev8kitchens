@@ -11,7 +11,6 @@ import {
   ShieldCheck,
   CreditCard,
   CheckCircle2,
-  X,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -22,6 +21,10 @@ const SQUARE_APP_ID =
   import.meta.env.VITE_SQUARE_APP_ID || "REPLACE_WITH_APP_ID";
 const SQUARE_LOCATION_ID =
   import.meta.env.VITE_SQUARE_LOCATION_ID || "REPLACE_WITH_LOCATION_ID";
+
+// 🔹 Base URL for Netlify backend (Paynetworx + Square functions)
+const PNX_API_BASE =
+  import.meta.env.VITE_PNX_API_BASE || "https://elev8kitchens.netlify.app";
 
 const formatMoney = (dollars) =>
   `$ ${Number(dollars || 0).toLocaleString(undefined, {
@@ -598,7 +601,7 @@ function OrderSummaryCard({
             className={[
               "flex w-full items-center justify-between rounded-full border border-white/15",
               "bg-black/70 px-4 py-2.5 text-xs md:text-sm text-white/80",
-              "hover:bg:white/5 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60",
+              "hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#C1A88B]/60",
               disabled ? "cursor-not-allowed opacity-50" : "",
             ].join(" ")}
           >
@@ -786,15 +789,19 @@ function DepositCheckoutSection({ disabled, total }) {
       const nonce = result.token;
       const depositAmountMinor = Math.round(amount * 100); // cents
 
-      const res = await fetch("/.netlify/functions/create-deposits", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nonce,
-          currency: "USD",
-          depositAmount: depositAmountMinor,
-        }),
-      });
+      // 🔹 UPDATED: call Netlify function on elev8kitchens.netlify.app
+      const res = await fetch(
+        `${PNX_API_BASE}/.netlify/functions/create-deposits`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            nonce,
+            currency: "USD",
+            depositAmount: depositAmountMinor,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -833,7 +840,7 @@ function DepositCheckoutSection({ disabled, total }) {
       : null;
 
   return (
-    <div className="mt-6 rounded-2xl bg.black/60 p-4 ring-1 ring-white/10">
+    <div className="mt-6 rounded-2xl bg-black/60 p-4 ring-1 ring-white/10">
       {/* ... unchanged content ... */}
     </div>
   );
@@ -849,9 +856,7 @@ function SummaryRow({ label, value, bold = false, large = false }) {
         {label}
       </span>
       <span
-        className={`tabular-nums ${large
-          ? "text-lg font-semibold text-white"
-          : "text-sm text-white/90"
+        className={`tabular-nums ${large ? "text-lg font-semibold text-white" : "text-sm text-white/90"
           }`}
       >
         {value}
@@ -867,7 +872,7 @@ function ReassuranceItem({ icon, title, body }) {
         {icon}
       </div>
       <div>
-        <h3 className="text-sm font-medium text.white">{title}</h3>
+        <h3 className="text-sm font-medium text-white">{title}</h3>
         <p className="mt-1 text-xs text-white/70">{body}</p>
       </div>
     </div>
@@ -957,15 +962,14 @@ function MultiItemCheckoutModal({
       role="dialog"
       aria-modal="true"
     >
-      {/* ... unchanged content ... */}
+      {/* ... your existing modal content would go here ... */}
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.97 }}
         className="relative w-full max-w-lg rounded-3xl bg-gradient-to-br from-[#0b0b0b] via-black to-[#151515] p-6 md:p-8 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.85)]"
       >
-        {/* existing modal content here, unchanged except references */}
-        {/* ...for brevity, your original JSX stays the same... */}
+        {/* existing modal inner JSX (title, copy, buttons) */}
       </motion.div>
     </motion.div>
   );
@@ -1016,10 +1020,16 @@ function PaynetworxModal({
       setLoading(true);
       setError("");
       try {
-        const resp = await fetch("/api/pnx/session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
+        // 🔴 Call Netlify function on elev8kitchens.netlify.app
+        const resp = await fetch(
+          `${PNX_API_BASE}/.netlify/functions/pnx-session`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            // body: JSON.stringify({ amount, currency, items, customer }) // optional
+          }
+        );
+
         const data = await resp.json();
 
         if (!resp.ok || !data.payment_session_url) {
@@ -1076,18 +1086,21 @@ function PaynetworxModal({
           try {
             setCharging(true);
             setError("");
-            const resp = await fetch("/api/pnx/charge", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                tokenId,
-                amount,
-                currency,
-                orderId: `ELEV8-${Date.now()}`,
-                items,
-                customer,
-              }),
-            });
+            const resp = await fetch(
+              `${PNX_API_BASE}/.netlify/functions/pnx-charge`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  tokenId,
+                  amount,
+                  currency,
+                  orderId: `ELEV8-${Date.now()}`,
+                  items,
+                  customer,
+                }),
+              }
+            );
 
             const result = await resp.json();
 
@@ -1137,7 +1150,7 @@ function PaynetworxModal({
           </div>
           <button
             onClick={onClose}
-            className="text-white/60 hover:text.white text-sm"
+            className="text-white/60 hover:text-white text-sm"
           >
             ✕
           </button>
@@ -1173,7 +1186,7 @@ function PaynetworxModal({
           <button
             onClick={handleTokenizeClick}
             disabled={loading || charging}
-            className="px-4 py-2 rounded-full text-sm font.medium bg-emerald-500 hover:bg-emerald-400 disabled:opacity-60"
+            className="px-4 py-2 rounded-full text-sm font-medium bg-emerald-500 hover:bg-emerald-400 disabled:opacity-60"
           >
             {charging ? "Processing…" : "Pay Now"}
           </button>
