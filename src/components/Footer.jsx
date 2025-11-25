@@ -42,7 +42,7 @@ export default function Footer() {
 
                             {/* Facebook */}
                             <a
-                                href="https://www.facebook.com/profile.php?id=61582925968352 "
+                                href="https://www.facebook.com/profile.php?id=100090269387662"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Facebook"
@@ -208,7 +208,7 @@ export default function Footer() {
                 {/* Bottom bar */}
                 <div className="mt-6 flex flex-col items-center justify-between gap-6 sm:flex-row">
                     <p className="text-[12px] text-white/70">
-                        © {new Date().getFullYear()}, ELEV8 CRAFTED KITCHENS
+                        © {new Date().getFullYear()}, ELEV8KITCHENS
                     </p>
 
                     {/* Payment rail */}

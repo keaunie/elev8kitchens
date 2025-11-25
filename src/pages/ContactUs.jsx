@@ -120,7 +120,7 @@ export default function ContactPage() {
                 <div className="mt-6 w-full flex items-center justify-center gap-5">
                   {/* Facebook */}
                   <a
-                    href="https://www.facebook.com/profile.php?id=61582925968352"
+                    href="https://www.facebook.com/profile.php?id=100090269387662"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Facebook"
