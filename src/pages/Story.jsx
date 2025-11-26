@@ -229,7 +229,7 @@ function DesktopTablet() {
         "This isn’t your average grill setup — it’s a complete outdoor culinary system. Every ELEV8 kitchen can include integrated fridges, LED lighting, Bluetooth speakers, Smart TVs, ample storage, sinks, and even hydraulic doors, transforming your patio or backyard into a high-end entertainment space built for every season.",
     },
     {
-      kicker: "Why ELEV8?",
+      kicker: "WHY ELEV8 CRAFTED KITCHENS?",
       copy:
         "Because cooking outdoors should never mean compromising on convenience, aesthetics, or quality. Our team at ELEV8 obsesses over craftsmanship, functionality, and design flow, ensuring every outdoor kitchen is as stunning as it is smart.",
     },
@@ -379,7 +379,7 @@ function DesktopTablet() {
             Our Team
           </h2>
           <p className="mt-2 text-white/85 max-w-xl text-center text-sm md:text-base">
-            The craft, the precision, the people behind ELEV8 Kitchens
+            The ELEV8 Crafted Kitchens team is a dynamic crew of creators, builders, and problem-solvers who love transforming backyards into unforgettable hangout spots. Fueled by innovation, craftsmanship, and big ideas, we bring high energy, creativity, and passion to every project designing outdoor kitchens that spark joy, connection, and seriously fun living.
           </p>
           <button
             onClick={() => window.location.href = "/consultation"} // <-- change link if needed

@@ -20,7 +20,7 @@ export default function Process() {
     },
     {
       id: 3,
-      title: "Build & Install",
+      title: "Delivery and Install",
       desc: "Our team delivers, and installation is a fast plug-and-play process.",
       animation: buildAnim,
     },

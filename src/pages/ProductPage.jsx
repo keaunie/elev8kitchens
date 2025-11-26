@@ -820,8 +820,8 @@ export default function ProductPage({
                                                             system
                                                         </li>
                                                         <li>• High-capacity ventilation/exhaust hood</li>
-                                                        <li>• 50-amp plug-and-play electrical panel</li>
-                                                        <li>• GFCI outlets & USB ports</li>
+                                                        <li>• 15 amp input socket for plug and play</li>
+                                                        <li>• GFCI outlets</li>
                                                     </ul>
                                                 </div>
 

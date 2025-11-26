@@ -73,7 +73,7 @@ const defaultFeatures = [
     {
         title: "Safety & Innovation",
         description:
-            "Hydraulic doors, gas‑leak detection, and a dedicated 60‑amp safety panel for worry‑free outdoor cooking.",
+            "Hydraulic doors, gas‑leak detection, and an innovative 15 amp plug and play input socket that can be powered by a simple outdoor extension cord to power the whole unit.",
         image:
             "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286603/NF-101_12_copy_on3yzt.webp",
         alt: "Outdoor kitchen with hydraulic doors",
@@ -97,7 +97,7 @@ const defaultFeatures = [
     {
         title: "Storage & Style",
         description:
-            "Fridge, soft‑close drawers, wine rack, and hidden trash keep the space organized and refined.",
+            "Fridge, soft‑close drawers, wine rack, and hidden trash can keep the space organized and refined.",
         image:
             "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp",
         alt: "Cabinetry with premium finishes",

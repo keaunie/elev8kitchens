@@ -34,8 +34,7 @@ export default function Footer() {
                             Create Your Backyard Oasis Today!
                         </h3>
                         <p className="mt-2 max-w-md text-white/85 text-[12px] leading-snug">
-                            Enjoy premium materials, cutting-edge safety tech, and sleek design — all in
-                            one modular setup.
+                            ELEV8 Kitchens transforms backyards into lively, stylish hangouts with sleek modular designs built for fun cooking, effortless entertaining, and unforgettable outdoor living.
                         </p>
                         {/* Social Icons — SVG + Gold Accents */}
                         <div className="mt-5 flex items-center gap-4">

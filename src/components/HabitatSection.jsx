@@ -29,7 +29,7 @@ export default function HabitatSection() {
                             alt="Habitat28 logo"
                             className="
                                 w-auto
-                                h-12 sm:h-14 md:h-16 lg:h-20
+                                h-12 sm:h-14 md:h-16 lg:h-16
                                 object-contain
                                 transition-transform duration-300 hover:scale-105
                             "
@@ -45,8 +45,7 @@ export default function HabitatSection() {
                         </h2>
 
                         <p className="mt-2 max-w-2xl text-sm sm:text-base md:text-lg text-neutral-700 leading-relaxed md:mt-3">
-                            At <span className="font-semibold text-black">Habitat28</span>, we blend modern design,
-                            smart home technology, and eco-friendly materials to create sustainable living spaces.
+                            <span className="font-semibold text-black">Habitat28</span>, is our parent company. It is a pioneer in the factory built prefabricated Additional Dwelling Units design and build.  Together with our designers and engineers we bring innovation and functionality to your backyard through modular structures.
                         </p>
                     </div>
                 </div>
