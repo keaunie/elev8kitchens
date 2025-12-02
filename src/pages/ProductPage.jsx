@@ -10,6 +10,8 @@ import {
     Zap,
     Sparkles,
     Check,
+    Mail,
+    Send,
     Plus,
     Minus,
     X,
@@ -232,6 +234,234 @@ function StickyATC({ visible, title, price, onClick }) {
     );
 }
 
+export function NewsletterModal({ open, onClose }) {
+    const collectionOptions = ["XL", "XXL", "Titanium collection"];
+    const methodOptions = ["Expo show", "Factory visit", "Virtual showroom", "Private backyard demo"];
+
+    const [form, setForm] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        city: "",
+        collection: "XL",
+        method: "Expo show",
+    });
+    const [submitted, setSubmitted] = useState(false);
+
+    useEffect(() => {
+        if (open) {
+            setForm({
+                name: "",
+                email: "",
+                phone: "",
+                city: "",
+                collection: "XL",
+                method: "Expo show",
+            });
+            setSubmitted(false);
+        }
+    }, [open]);
+
+    useEffect(() => {
+        if (!open) return undefined;
+        const handleKey = (e) => {
+            if (e.key === "Escape") onClose?.();
+        };
+        window.addEventListener("keydown", handleKey);
+        return () => window.removeEventListener("keydown", handleKey);
+    }, [open, onClose]);
+
+    const handleChange = (field, value) => {
+        setForm((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!form.email.trim()) return;
+        setSubmitted(true);
+    };
+
+    return (
+        <AnimatePresence>
+            {open && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur"
+                    onClick={onClose}
+                >
+                    <motion.div
+                        initial={{ y: 18, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 18, opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 180, damping: 20 }}
+                        className="relative w-full max-w-xl overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f0f0f] via-[#111] to-[#0a0806] p-8 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <button
+                            aria-label="Close newsletter"
+                            onClick={onClose}
+                            className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/15"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+
+                        <div className="mb-4 flex items-center gap-3">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#C1A88B]/15 ring-1 ring-[#C1A88B]/40">
+                                <Mail className="h-5 w-5 text-[#C1A88B]" />
+                            </div>
+                            <div>
+                                <p className="text-xs uppercase tracking-[0.22em] text-[#C1A88B]/80">
+                                    Private + Live Viewings
+                                </p>
+                                <h3 className="font-heading text-xl text-white">
+                                    Want to see our kitchens in person?
+                                </h3>
+                            </div>
+                        </div>
+
+                        <p className="text-sm text-white/80 leading-relaxed">
+                            Register to get show schedules and private viewing options. Tell us your city and we&apos;ll send the nearest showroom or event.
+                        </p>
+
+                        {submitted ? (
+                            <div className="mt-6 space-y-5">
+                                <div className="flex items-start gap-3 rounded-2xl bg-white/5 p-4 ring-1 ring-[#C1A88B]/25">
+                                    <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-full bg-[#C1A88B]/15">
+                                        <Check className="h-5 w-5 text-[#C1A88B]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-semibold text-white">You&apos;re on the list.</p>
+                                        <p className="text-sm text-white/70">
+                                            We&apos;ll follow up with the nearest showroom or event shortly.
+                                        </p>
+                                    </div>
+                                </div>
+                                <button
+                                    className="w-full rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95"
+                                    onClick={onClose}
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        ) : (
+                            <form onSubmit={handleSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
+                                <label className="text-sm text-white/80 space-y-1">
+                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                        Name
+                                    </span>
+                                    <input
+                                        value={form.name}
+                                        onChange={(e) => handleChange("name", e.target.value)}
+                                        placeholder="Alex Morgan"
+                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
+                                    />
+                                </label>
+                                <label className="text-sm text-white/80 space-y-1">
+                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                        Email
+                                    </span>
+                                    <input
+                                        type="email"
+                                        required
+                                        value={form.email}
+                                        onChange={(e) => handleChange("email", e.target.value)}
+                                        placeholder="you@example.com"
+                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
+                                    />
+                                </label>
+                                <label className="text-sm text-white/80 space-y-1">
+                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                        Phone
+                                    </span>
+                                    <input
+                                        value={form.phone}
+                                        onChange={(e) => handleChange("phone", e.target.value)}
+                                        placeholder="+1 999 555 0101"
+                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
+                                    />
+                                </label>
+                                <label className="text-sm text-white/80 space-y-1">
+                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                        City / Country
+                                    </span>
+                                    <input
+                                        value={form.city}
+                                        onChange={(e) => handleChange("city", e.target.value)}
+                                        placeholder="Austin, USA"
+                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
+                                    />
+                                </label>
+                                <label className="text-sm text-white/80 space-y-1">
+                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                        Interested in (XL / XXL / Titanium)
+                                    </span>
+                                    <select
+                                        value={form.collection}
+                                        onChange={(e) => handleChange("collection", e.target.value)}
+                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white focus:border-[#C1A88B]/60 focus:outline-none"
+                                        style={{ color: "#0f0f0f", backgroundColor: "#f8f8f8" }}
+                                    >
+                                        {collectionOptions.map((opt) => (
+                                            <option
+                                                key={opt}
+                                                value={opt}
+                                                style={{ color: "#0f0f0f", backgroundColor: "#f8f8f8" }}
+                                            >
+                                                {opt}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <label className="text-sm text-white/80 space-y-1">
+                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                        Preferred viewing method
+                                    </span>
+                                    <select
+                                        value={form.method}
+                                        onChange={(e) => handleChange("method", e.target.value)}
+                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white focus:border-[#C1A88B]/60 focus:outline-none"
+                                        style={{ color: "#0f0f0f", backgroundColor: "#f8f8f8" }}
+                                    >
+                                        {methodOptions.map((opt) => (
+                                            <option
+                                                key={opt}
+                                                value={opt}
+                                                style={{ color: "#0f0f0f", backgroundColor: "#f8f8f8" }}
+                                            >
+                                                {opt}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <div className="sm:col-span-2 flex flex-col gap-3">
+                                    <div className="flex items-center justify-between rounded-2xl bg-white/5 p-3 text-xs text-white/70 ring-1 ring-white/10">
+                                        <div className="flex items-center gap-2">
+                                            <Sparkles className="h-4 w-4 text-[#C1A88B]" />
+                                            <span>We respond within 1 business day with the closest showroom or event.</span>
+                                        </div>
+                                        <span className="rounded-full bg-black/40 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-[#C1A88B]">
+                                            Concierge
+                                        </span>
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95 transition"
+                                    >
+                                        Register for a viewing
+                                        <Send className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            </form>
+                        )}
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+}
+
 /* ===================== FULL-BLEED STORY (PARALLAX) ===================== */
 
 function FullBleed({ children, className = "" }) {
@@ -375,6 +605,7 @@ export default function ProductPage({
     const [lightbox, setLightbox] = useState(null);
     const [toastVisible, setToastVisible] = useState(false);
     const [showAllFeatures, setShowAllFeatures] = useState(false);
+    const [newsletterOpen, setNewsletterOpen] = useState(false);
 
     const variant = useMemo(
         () => getVariant(product, size, color),
@@ -435,6 +666,8 @@ export default function ProductPage({
 
     return (
         <section className="relative bg-black text-white">
+            <NewsletterModal open={newsletterOpen} onClose={() => setNewsletterOpen(false)} />
+
             {/* Ambient gold glows */}
             <div className="pointer-events-none absolute inset-0 -z-10">
                 <div className="absolute left-10 top-10 h-64 w-64 rounded-full bg-[#C1A88B]/10 blur-3xl" />

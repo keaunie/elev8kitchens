@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import Navbar from "./components/Navbar.jsx";
 import HeroCarousel from "./components/HeroCarousel.jsx";
@@ -26,6 +27,7 @@ import PrivacyPolicyPage from "./policies/PrivacyPolicy.jsx";
 import GalleryPage from "./pages/GalleryPage.jsx";
 import ScrollToHash from "./components/ScrollToHash.jsx";
 import OrderComplete from "./pages/OrderComplete.jsx";
+import { NewsletterModal } from "./pages/ProductPage.jsx";
 
 
 const slides = [
@@ -73,8 +75,17 @@ function Layout() {
 
 // -------- Home page content (what you already had) --------
 function Home() {
+  const [newsletterOpen, setNewsletterOpen] = useState(true);
+  useEffect(() => {
+    setNewsletterOpen(true);
+  }, []);
+
   return (
     <>
+      <NewsletterModal
+        open={newsletterOpen}
+        onClose={() => setNewsletterOpen(false)}
+      />
       <HeroCarousel slides={slides} interval={6000} />
       <FeaturesSection
         kicker="What we offer"
