@@ -87,11 +87,6 @@ function Home() {
         onClose={() => setNewsletterOpen(false)}
       />
       <HeroCarousel slides={slides} interval={6000} />
-      <section className="bg-black px-4 pb-8 pt-6">
-        <div className="mx-auto max-w-4xl">
-          <div className="klaviyo-form-V5dsse" />
-        </div>
-      </section>
       <FeaturesSection
         kicker="What we offer"
         title="Next-Level Outdoor Kitchen Features"
