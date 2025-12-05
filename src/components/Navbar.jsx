@@ -131,15 +131,15 @@ export default function Navbar() {
               </ul>
             </nav>
             <div className="mt-3 flex items-center gap-5 border-t border-[#C1A88B]/20 pt-3 text-[#C1A88B]">
-              <a href="#" className="inline-flex items-center gap-2">
+              {/* <a href="#" className="inline-flex items-center gap-2">
                 <Search size={20} />
                 Search
-              </a>
-              <a href="#" className="inline-flex items-center gap-2">
+              </a> */}
+              {/* <a href="#" className="inline-flex items-center gap-2">
                 <User size={20} />
                 Account
-              </a>
-              <a href="#" className="inline-flex items-center gap-2">
+              </a> */}
+              <a href="cart" className="inline-flex items-center gap-2">
                 <ShoppingBag size={20} />
                 Cart
               </a>

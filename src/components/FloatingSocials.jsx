@@ -15,7 +15,9 @@ export default function FloatingSocials() {
   return (
     <div
       className={[
-        "fixed bottom-6 right-6 z-50 flex flex-col gap-3",
+        "fixed z-50 flex flex-col gap-3",
+        // Move up/left on mobile to avoid overlapping sticky CTA, restore closer on desktop
+        "bottom-32 right-4 sm:bottom-32 sm:right-4 md:bottom-10 md:right-6",
         "transition-all duration-500 ease-out",
         visible
           ? "opacity-100 translate-y-0 pointer-events-auto"
@@ -29,7 +31,7 @@ export default function FloatingSocials() {
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
         className="
-          w-14 h-14 md:w-16 md:h-16
+          w-12 h-12 md:w-16 md:h-16
           flex items-center justify-center
           rounded-full
           bg-[#25D366]

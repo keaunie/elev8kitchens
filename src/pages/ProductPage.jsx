@@ -1,7 +1,7 @@
 // ProductPage.jsx (imports catalog JSON + variant-aware UI)
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
     Star,
     ShieldCheck,
@@ -12,6 +12,8 @@ import {
     Check,
     Mail,
     Send,
+    PhoneCall,
+    MessageCircle,
     Plus,
     Minus,
     X,
@@ -72,6 +74,7 @@ function Lightbox({ images, index, onClose }) {
     const [i, setI] = useState(index ?? 0);
     const prev = () => setI((x) => (x === 0 ? images.length - 1 : x - 1));
     const next = () => setI((x) => (x === images.length - 1 ? 0 : x + 1));
+
     useEffect(() => {
         const onKey = (e) => {
             if (e.key === "Escape") onClose?.();
@@ -80,7 +83,10 @@ function Lightbox({ images, index, onClose }) {
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, []);
+    }, [onClose]);
+
+    if (!images?.length) return null;
+
     return (
         <AnimatePresence>
             <motion.div
@@ -124,8 +130,10 @@ function Lightbox({ images, index, onClose }) {
     );
 }
 
-function MediaGallery({ images, onOpen }) {
+function MediaGallery({ images = [], onOpen }) {
     const [active, setActive] = useState(0);
+    if (!images.length) return null;
+
     return (
         <div className="w-full">
             <div className="relative overflow-hidden rounded-[28px] bg-[#121212] ring-1 ring-white/10">
@@ -138,7 +146,7 @@ function MediaGallery({ images, onOpen }) {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
                 />
-                <div className="absolute inset-0 pointer-events-none rounded-[28px] shadow-[inset_0_0_80px_rgba(0,0,0,0.35)]" />
+                <div className="pointer-events-none absolute inset-0 rounded-[28px] shadow-[inset_0_0_80px_rgba(0,0,0,0.35)]" />
                 <button
                     onClick={() => onOpen?.(active)}
                     className="absolute right-3 top-3 rounded-full bg-black/45 px-3 py-1 text-xs text-white backdrop-blur hover:bg-black/60"
@@ -155,7 +163,11 @@ function MediaGallery({ images, onOpen }) {
                         className={`overflow-hidden rounded-xl ring-1 ring-white/10 ${active === i ? "outline outline-2 outline-[#C1A88B]" : ""
                             }`}
                     >
-                        <img src={src} alt="thumb" className="aspect-square w-full object-cover" />
+                        <img
+                            src={src}
+                            alt={`Thumbnail ${i + 1}`}
+                            className="aspect-square w-full object-cover"
+                        />
                     </button>
                 ))}
             </div>
@@ -202,7 +214,7 @@ function StickyATC({ visible, title, price, onClick }) {
                     exit={{ y: 80, opacity: 0 }}
                     className="fixed inset-x-0 bottom-0 z-40"
                 >
-                    <div className="mx-auto max-w-7xl rounded-t-2xl bg-[#111]/80 backdrop-blur p-4 ring-1 ring-white/10">
+                    <div className="mx-auto max-w-7xl rounded-t-2xl bg-[#111]/80 p-4 ring-1 ring-white/10 backdrop-blur">
                         <div className="flex items-center justify-between gap-4">
                             <div>
                                 <p className="text-sm text-white/70">{title}</p>
@@ -217,9 +229,8 @@ function StickyATC({ visible, title, price, onClick }) {
                             <button
                                 onClick={onClick}
                                 className="
-                  rounded-full bg-[#C1A88B] font-medium text-black shadow 
-                  hover:brightness-95 transition-all
-                  px-5 py-3 text-sm 
+                  rounded-full bg-[#C1A88B] px-5 py-3 text-sm font-medium text-black shadow
+                  transition-all hover:brightness-95
                   sm:px-6 sm:py-3 sm:text-base
                   md:px-8 md:py-4 md:text-lg
                 "
@@ -234,31 +245,29 @@ function StickyATC({ visible, title, price, onClick }) {
     );
 }
 
-export function NewsletterModal({ open, onClose }) {
-    const collectionOptions = ["XL", "XXL", "Titanium collection"];
-    const methodOptions = ["Expo show", "Factory visit", "Virtual showroom", "Private backyard demo"];
+/** ===================== NEWSLETTER MODAL (IMPROVED) ===================== **/
 
+const NEWSLETTER_STATUS = {
+    DISMISSED: "dismissed",
+    SUBSCRIBED: "subscribed",
+};
+
+export function NewsletterModal({ open, onClose, onSubscribed }) {
     const [form, setForm] = useState({
         name: "",
         email: "",
-        phone: "",
         city: "",
-        collection: "XL",
-        method: "Expo show",
     });
+    const [consent, setConsent] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [status, setStatus] = useState("idle"); // idle | loading | error
 
     useEffect(() => {
         if (open) {
-            setForm({
-                name: "",
-                email: "",
-                phone: "",
-                city: "",
-                collection: "XL",
-                method: "Expo show",
-            });
+            setForm({ name: "", email: "", city: "" });
+            setConsent(false);
             setSubmitted(false);
+            setStatus("idle");
         }
     }, [open]);
 
@@ -275,10 +284,27 @@ export function NewsletterModal({ open, onClose }) {
         setForm((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!form.email.trim()) return;
-        setSubmitted(true);
+        if (!form.email.trim() || !consent) return;
+        setStatus("loading");
+
+        try {
+            // TODO: Replace with your real integration (Mailchimp, Klaviyo, custom API, etc.)
+            // Example:
+            // await fetch("/api/newsletter", {
+            //   method: "POST",
+            //   headers: { "Content-Type": "application/json" },
+            //   body: JSON.stringify(form),
+            // });
+
+            setSubmitted(true);
+            setStatus("idle");
+            onSubscribed?.(form); // lets parent mark "subscribed" in localStorage
+        } catch (err) {
+            console.error("Newsletter subscription failed:", err);
+            setStatus("error");
+        }
     };
 
     return (
@@ -290,13 +316,16 @@ export function NewsletterModal({ open, onClose }) {
                     exit={{ opacity: 0 }}
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur"
                     onClick={onClose}
+                    aria-labelledby="newsletter-title"
+                    aria-modal="true"
+                    role="dialog"
                 >
                     <motion.div
                         initial={{ y: 18, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: 18, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 180, damping: 20 }}
-                        className="relative w-full max-w-xl overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f0f0f] via-[#111] to-[#0a0806] p-8 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
+                        className="relative w-full max-w-4xl overflow-hidden rounded-3xl bg-gradient-to-r from-[#0b0b0b] via-[#0f0f0f] to-[#0b0b0b] ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
@@ -307,154 +336,193 @@ export function NewsletterModal({ open, onClose }) {
                             <X className="h-5 w-5" />
                         </button>
 
-                        <div className="mb-4 flex items-center gap-3">
-                            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#C1A88B]/15 ring-1 ring-[#C1A88B]/40">
-                                <Mail className="h-5 w-5 text-[#C1A88B]" />
+                        <div className="grid md:grid-cols-5">
+                            {/* Side image – hidden on mobile */}
+                            <div className="relative hidden md:col-span-2 md:block">
+                                <img
+                                    src="https://res.cloudinary.com/dczzibbkw/image/upload/v1762286603/NF-101_12_copy_on3yzt.webp"
+                                    alt="ELEV8 outdoor kitchen showcase"
+                                    className="h-full w-full object-cover"
+                                />
+                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
                             </div>
-                            <div>
-                                <p className="text-xs uppercase tracking-[0.22em] text-[#C1A88B]/80">
-                                    Private + Live Viewings
-                                </p>
-                                <h3 className="font-heading text-xl text-white">
-                                    Want to see our kitchens in person?
-                                </h3>
-                            </div>
-                        </div>
 
-                        <p className="text-sm text-white/80 leading-relaxed">
-                            Register to get show schedules and private viewing options. Tell us your city and we&apos;ll send the nearest showroom or event.
-                        </p>
-
-                        {submitted ? (
-                            <div className="mt-6 space-y-5">
-                                <div className="flex items-start gap-3 rounded-2xl bg-white/5 p-4 ring-1 ring-[#C1A88B]/25">
-                                    <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-full bg-[#C1A88B]/15">
-                                        <Check className="h-5 w-5 text-[#C1A88B]" />
+                            {/* Content */}
+                            <div className="md:col-span-3 p-6 sm:p-8">
+                                <div className="mb-4 flex items-center gap-3">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#C1A88B]/15 ring-1 ring-[#C1A88B]/40">
+                                        <Mail className="h-5 w-5 text-[#C1A88B]" />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-semibold text-white">You&apos;re on the list.</p>
-                                        <p className="text-sm text-white/70">
-                                            We&apos;ll follow up with the nearest showroom or event shortly.
+                                        <p className="text-xs uppercase tracking-[0.22em] text-[#C1A88B]/80">
+                                            FutureScape USA
                                         </p>
+                                        <h3
+                                            id="newsletter-title"
+                                            className="font-heading text-xl text-white"
+                                        >
+                                            Meet ELEV8 & stay updated
+                                        </h3>
                                     </div>
                                 </div>
-                                <button
-                                    className="w-full rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95"
-                                    onClick={onClose}
-                                >
-                                    Close
-                                </button>
-                            </div>
-                        ) : (
-                            <form onSubmit={handleSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
-                                <label className="text-sm text-white/80 space-y-1">
-                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                        Name
-                                    </span>
-                                    <input
-                                        value={form.name}
-                                        onChange={(e) => handleChange("name", e.target.value)}
-                                        placeholder="Alex Morgan"
-                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
-                                    />
-                                </label>
-                                <label className="text-sm text-white/80 space-y-1">
-                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                        Email
-                                    </span>
-                                    <input
-                                        type="email"
-                                        required
-                                        value={form.email}
-                                        onChange={(e) => handleChange("email", e.target.value)}
-                                        placeholder="you@example.com"
-                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
-                                    />
-                                </label>
-                                <label className="text-sm text-white/80 space-y-1">
-                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                        Phone
-                                    </span>
-                                    <input
-                                        value={form.phone}
-                                        onChange={(e) => handleChange("phone", e.target.value)}
-                                        placeholder="+1 999 555 0101"
-                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
-                                    />
-                                </label>
-                                <label className="text-sm text-white/80 space-y-1">
-                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                        City / Country
-                                    </span>
-                                    <input
-                                        value={form.city}
-                                        onChange={(e) => handleChange("city", e.target.value)}
-                                        placeholder="Austin, USA"
-                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
-                                    />
-                                </label>
-                                <label className="text-sm text-white/80 space-y-1">
-                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                        Interested in (XL / XXL / Titanium)
-                                    </span>
-                                    <select
-                                        value={form.collection}
-                                        onChange={(e) => handleChange("collection", e.target.value)}
-                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white focus:border-[#C1A88B]/60 focus:outline-none"
-                                        style={{ color: "#0f0f0f", backgroundColor: "#f8f8f8" }}
+
+                                <p className="text-sm leading-relaxed text-white/80">
+                                    The future of landscape begins with Elev8 Kitchens. Discover it now at Futurescape USA. Drop your details for booth updates, kitchen news, and your nearest showroom. Need anything now? Call, email, or WhatsApp us.
+                                </p>
+
+                                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                                    <a
+                                        href="tel:+19056930028"
+                                        className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3 text-sm text-white ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
                                     >
-                                        {collectionOptions.map((opt) => (
-                                            <option
-                                                key={opt}
-                                                value={opt}
-                                                style={{ color: "#0f0f0f", backgroundColor: "#f8f8f8" }}
-                                            >
-                                                {opt}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </label>
-                                <label className="text-sm text-white/80 space-y-1">
-                                    <span className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                        Preferred viewing method
-                                    </span>
-                                    <select
-                                        value={form.method}
-                                        onChange={(e) => handleChange("method", e.target.value)}
-                                        className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white focus:border-[#C1A88B]/60 focus:outline-none"
-                                        style={{ color: "#0f0f0f", backgroundColor: "#f8f8f8" }}
+                                        <PhoneCall className="h-4 w-4 text-[#C1A88B]" />
+                                        <span>+1 (905) 693-0028</span>
+                                    </a>
+                                    <a
+                                        href="mailto:sales.elev8@habitat28.com"
+                                        className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3 text-sm text-white ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
                                     >
-                                        {methodOptions.map((opt) => (
-                                            <option
-                                                key={opt}
-                                                value={opt}
-                                                style={{ color: "#0f0f0f", backgroundColor: "#f8f8f8" }}
-                                            >
-                                                {opt}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </label>
-                                <div className="sm:col-span-2 flex flex-col gap-3">
-                                    <div className="flex items-center justify-between rounded-2xl bg-white/5 p-3 text-xs text-white/70 ring-1 ring-white/10">
-                                        <div className="flex items-center gap-2">
-                                            <Sparkles className="h-4 w-4 text-[#C1A88B]" />
-                                            <span>We respond within 1 business day with the closest showroom or event.</span>
+                                        <Mail className="h-4 w-4 text-[#C1A88B]" />
+                                        <span>sales.elev8@habitat28.com</span>
+                                    </a>
+                                    <a
+                                        href="https://wa.me/19056930028?text=Hello%2C%20I%27d%20like%20info%20on%20FutureScape%20USA%20and%20ELEV8%20Kitchens"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center gap-3 rounded-2xl bg-[#25D366]/15 px-4 py-3 text-sm text-white ring-1 ring-[#25D366]/40 hover:ring-[#C1A88B]/50"
+                                    >
+                                        <MessageCircle className="h-4 w-4 text-[#25D366]" />
+                                        <span>WhatsApp</span>
+                                    </a>
+                                    <div className="flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-xs text-white/75 ring-1 ring-white/10">
+                                        <Sparkles className="h-4 w-4 text-[#C1A88B]" />
+                                        <span>Ask for booth hours or book a walkthrough.</span>
+                                    </div>
+                                </div>
+
+                                {submitted ? (
+                                    <div className="mt-6 space-y-5">
+                                        <div className="flex items-start gap-3 rounded-2xl bg-white/5 p-4 ring-1 ring-[#C1A88B]/25">
+                                            <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-full bg-[#C1A88B]/15">
+                                                <Check className="h-5 w-5 text-[#C1A88B]" />
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-semibold text-white">
+                                                    You&apos;re on the list.
+                                                </p>
+                                                <p className="text-sm text-white/70">
+                                                    We&apos;ll share kitchen launches, show appearances,
+                                                    and showroom details tailored to your city.
+                                                </p>
+                                            </div>
                                         </div>
-                                        <span className="rounded-full bg-black/40 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-[#C1A88B]">
-                                            Concierge
-                                        </span>
+                                        <button
+                                            className="w-full rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95"
+                                            onClick={onClose}
+                                        >
+                                            Close
+                                        </button>
                                     </div>
-                                    <button
-                                        type="submit"
-                                        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95 transition"
-                                    >
-                                        Register for a viewing
-                                        <Send className="h-4 w-4" />
-                                    </button>
-                                </div>
-                            </form>
-                        )}
+                                ) : (
+                                    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                                        <div className="grid gap-4 sm:grid-cols-2">
+                                            <label className="space-y-1 text-sm text-white/80">
+                                                <span className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                                    Name
+                                                </span>
+                                                <input
+                                                    value={form.name}
+                                                    onChange={(e) =>
+                                                        handleChange("name", e.target.value)
+                                                    }
+                                                    placeholder="Alex Morgan"
+                                                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
+                                                />
+                                            </label>
+                                            <label className="space-y-1 text-sm text-white/80">
+                                                <span className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                                    Email
+                                                </span>
+                                                <input
+                                                    type="email"
+                                                    required
+                                                    value={form.email}
+                                                    onChange={(e) =>
+                                                        handleChange("email", e.target.value)
+                                                    }
+                                                    placeholder="you@example.com"
+                                                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
+                                                />
+                                            </label>
+                                        </div>
+                                        <label className="space-y-1 text-sm text-white/80">
+                                            <span className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                                City / Country
+                                            </span>
+                                            <input
+                                                value={form.city}
+                                                onChange={(e) => handleChange("city", e.target.value)}
+                                                placeholder="Austin, USA"
+                                                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
+                                            />
+                                        </label>
+
+                                        {/* GDPR-ish consent + promise of value */}
+                                        <div className="space-y-2 rounded-2xl bg-white/5 p-3 text-xs text-white/70 ring-1 ring-white/10">
+                                            <div className="flex items-center gap-2">
+                                                <Sparkles className="h-4 w-4 text-[#C1A88B]" />
+                                                <span>
+                                                    We send kitchen news, launch announcements, and the
+                                                    nearest showroom or event based on your location.
+                                                </span>
+                                            </div>
+                                            <label className="flex items-start gap-2 text-[11px] leading-relaxed">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={consent}
+                                                    onChange={(e) => setConsent(e.target.checked)}
+                                                    className="mt-0.5 h-3.5 w-3.5 rounded border-white/30 bg-transparent"
+                                                    required
+                                                />
+                                                <span>
+                                                    I agree to receive email updates from Habitat28 /
+                                                    ELEV8 Kitchens. I understand I can unsubscribe at any
+                                                    time. Please see our{" "}
+                                                    <a
+                                                        href="/privacy-policy"
+                                                        className="underline underline-offset-2"
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                    >
+                                                        Privacy Policy
+                                                    </a>
+                                                    .
+                                                </span>
+                                            </label>
+                                        </div>
+
+                                        {status === "error" && (
+                                            <p className="text-xs text-red-400">
+                                                Something went wrong. Please try again in a moment.
+                                            </p>
+                                        )}
+
+                                        <button
+                                            type="submit"
+                                            disabled={status === "loading"}
+                                            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-70"
+                                        >
+                                            {status === "loading"
+                                                ? "Submitting..."
+                                                : "Get FutureScape updates"}
+                                            {status !== "loading" && (
+                                                <Send className="h-4 w-4" aria-hidden="true" />
+                                            )}
+                                        </button>
+                                    </form>
+                                )}
+                            </div>
+                        </div>
                     </motion.div>
                 </motion.div>
             )}
@@ -528,7 +596,7 @@ function ProductStoryParallax() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6 }}
-                            className="font-heading text-4xl md:text-5xl text-[#C1A88B]"
+                            className="font-heading text-4xl text-[#C1A88B] md:text-5xl"
                         >
                             Why North Americans Call ELEV8 Their Backyard’s Crown Jewel
                         </motion.h2>
@@ -540,8 +608,8 @@ function ProductStoryParallax() {
                             className="mx-auto mt-4 max-w-3xl text-white/85 md:text-lg"
                         >
                             Crafted by Habitat28, ELEV8 isn’t just a BBQ—it’s a complete
-                            outdoor living upgrade, blending professional performance
-                            with hotel-grade design.
+                            outdoor living upgrade, blending professional performance with
+                            hotel-grade design.
                         </motion.p>
                     </div>
                 </section>
@@ -550,7 +618,7 @@ function ProductStoryParallax() {
             {/* Luxury 3-column animated feature cards */}
             <section className="bg-black pb-24 pt-15 md:pb-32">
                 <div className="mx-auto max-w-7xl px-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                    <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
                         {features.map((f, i) => (
                             <motion.article
                                 key={f.title}
@@ -558,8 +626,7 @@ function ProductStoryParallax() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, amount: 0.3 }}
                                 transition={{ duration: 0.5, delay: i * 0.07 }}
-                                className="group rounded-2xl bg-[#0c0c0c]/80 p-6 lg:p-7 ring-1 ring-white/10 shadow-[0_14px_40px_rgba(0,0,0,0.55)] 
-                                           hover:-translate-y-1 hover:ring-[#C1A88B]/70 hover:shadow-[0_22px_55px_rgba(0,0,0,0.75)] transition-all duration-300"
+                                className="group rounded-2xl bg-[#0c0c0c]/80 p-6 ring-1 ring-white/10 shadow-[0_14px_40px_rgba(0,0,0,0.55)] transition-all duration-300 hover:-translate-y-1 hover:ring-[#C1A88B]/70 hover:shadow-[0_22px_55px_rgba(0,0,0,0.75)] lg:p-7"
                             >
                                 <div className="flex items-center gap-3">
                                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#C1A88B]/12 ring-1 ring-[#C1A88B]/40">
@@ -590,6 +657,8 @@ function ProductStoryParallax() {
 }
 
 /* ===================== END STORY ===================== */
+
+const NEWSLETTER_STORAGE_KEY = "elev8_newsletter_status";
 
 export default function ProductPage({
     handle = "elev8-modular-outdoor-bbq-kitchen",
@@ -632,6 +701,75 @@ export default function ProductPage({
     const { addItem } = useCart();
     const navigate = useNavigate();
 
+    const markNewsletterDismissed = () => {
+        if (typeof window === "undefined") return;
+        window.localStorage.setItem(
+            NEWSLETTER_STORAGE_KEY,
+            NEWSLETTER_STATUS.DISMISSED
+        );
+    };
+
+    const markNewsletterSubscribed = () => {
+        if (typeof window === "undefined") return;
+        window.localStorage.setItem(
+            NEWSLETTER_STORAGE_KEY,
+            NEWSLETTER_STATUS.SUBSCRIBED
+        );
+    };
+
+    // Smart newsletter triggers: delay + scroll-depth + exit-intent
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+
+        const status = window.localStorage.getItem(NEWSLETTER_STORAGE_KEY);
+        if (status === NEWSLETTER_STATUS.DISMISSED ||
+            status === NEWSLETTER_STATUS.SUBSCRIBED) {
+            return;
+        }
+
+        let hasOpened = false;
+
+        const openModal = () => {
+            if (hasOpened || newsletterOpen) return;
+            hasOpened = true;
+            setNewsletterOpen(true);
+        };
+
+        // Time delay (e.g., 15s)
+        const timerId = window.setTimeout(openModal, 15000);
+
+        // Scroll trigger (50% of page)
+        const handleScroll = () => {
+            if (hasOpened || newsletterOpen) return;
+            const scrollHeight =
+                document.documentElement.scrollHeight - window.innerHeight;
+            if (scrollHeight <= 0) return;
+            const depth = window.scrollY / scrollHeight;
+            if (depth > 0.5) {
+                openModal();
+                window.removeEventListener("scroll", handleScroll);
+            }
+        };
+
+        // Exit intent (desktop)
+        const handleMouseLeave = (e) => {
+            if (hasOpened || newsletterOpen) return;
+            if (e.clientY <= 0) {
+                openModal();
+                window.removeEventListener("mouseleave", handleMouseLeave);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("mouseleave", handleMouseLeave);
+
+        return () => {
+            window.clearTimeout(timerId);
+            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("mouseleave", handleMouseLeave);
+        };
+    }, [newsletterOpen]);
+
     const handleAddToCart = () => {
         if (!variant) return;
 
@@ -644,7 +782,6 @@ export default function ProductPage({
             qty,
         });
 
-        // Show a quick toast
         setToastVisible(true);
         setTimeout(() => {
             setToastVisible(false);
@@ -664,9 +801,18 @@ export default function ProductPage({
         navigate("/cart");
     };
 
+    const closeNewsletter = () => {
+        markNewsletterDismissed();
+        setNewsletterOpen(false);
+    };
+
     return (
         <section className="relative bg-black text-white">
-            <NewsletterModal open={newsletterOpen} onClose={() => setNewsletterOpen(false)} />
+            <NewsletterModal
+                open={newsletterOpen}
+                onClose={closeNewsletter}
+                onSubscribed={() => markNewsletterSubscribed()}
+            />
 
             {/* Ambient gold glows */}
             <div className="pointer-events-none absolute inset-0 -z-10">
@@ -680,7 +826,7 @@ export default function ProductPage({
                 className="mx-auto grid max-w-7xl gap-10 px-6 pb-28 pt-20 lg:grid-cols-12 lg:gap-12 lg:pt-28"
             >
                 {/* Left: Sticky Gallery */}
-                <div className="lg:col-span-7 lg:sticky lg:top-24 lg:self-start">
+                <div className="lg:sticky lg:top-24 lg:col-span-7 lg:self-start">
                     <MediaGallery
                         images={gallery}
                         onOpen={(i) => setLightbox({ index: i })}
@@ -691,7 +837,7 @@ export default function ProductPage({
                                 key={b}
                                 className="flex items-center gap-2 rounded-xl bg-white/5 p-3 ring-1 ring-white/10"
                             >
-                                <Check className="h-4 w-4 text-[#C1A88B]" />{" "}
+                                <Check className="h-4 w-4 text-[#C1A88B]" />
                                 <span className="text-sm">{b}</span>
                             </div>
                         ))}
@@ -702,7 +848,7 @@ export default function ProductPage({
                 <div className="lg:col-span-5">
                     <div className="rounded-[28px] bg-[#0f0f0f]/70 p-6 ring-1 ring-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
                         <div className="mb-3">
-                            <h1 className="font-heading text-3xl md:text-4xl text-[#C1A88B]">
+                            <h1 className="font-heading text-3xl text-[#C1A88B] md:text-4xl">
                                 {product.title}
                             </h1>
                             <div className="mt-2 flex items-center gap-3">
@@ -712,10 +858,11 @@ export default function ProductPage({
                                 </span>
                             </div>
                         </div>
+
                         {/* Marketing Banner */}
-                        <div className="mb-4 rounded-xl bg-white/10 p-4 text-center text-white/90 text-sm leading-relaxed">
-                            This isn’t just a BBQ. It’s the kitchen you’ve been dreaming about.
-                            Trusted by 100s. Own yours today!
+                        <div className="mb-4 rounded-xl bg-white/10 p-4 text-center text-sm leading-relaxed text-white/90">
+                            This isn’t just a BBQ. It’s the kitchen you’ve been dreaming
+                            about. Trusted by 100s. Own yours today!
                         </div>
 
                         <div className="flex items-end gap-2">
@@ -723,7 +870,7 @@ export default function ProductPage({
                                 <p className="text-3xl font-semibold text-white">
                                     {formatMoney(price)}
                                 </p>
-                                <span className="text-xs text-white/60 tracking-wide">USD</span>
+                                <span className="text-xs tracking-wide text-white/60">USD</span>
                             </div>
 
                             {compareAt && (
@@ -812,14 +959,14 @@ export default function ProductPage({
                             {/* CTAs */}
                             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                 <button
-                                    className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:opacity-60 disabled:cursor-not-allowed"
+                                    className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
                                     disabled={!variant}
                                     onClick={handleAddToCart}
                                 >
                                     Add to Cart
                                 </button>
                                 <button
-                                    className="rounded-full border border-[#C1A88B]/30 px-6 py-4 font-medium text-white hover:bg-white/5 disabled:opacity-60 disabled:cursor-not-allowed"
+                                    className="rounded-full border border-[#C1A88B]/30 px-6 py-4 font-medium text-white hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-60"
                                     disabled={!variant}
                                     onClick={handleBuyNow}
                                 >
@@ -890,12 +1037,11 @@ export default function ProductPage({
                                                 {visible.map((f, i) => (
                                                     <div key={i} className="flex items-start gap-3">
                                                         <span className="mt-1">{f.icon}</span>
-
                                                         <div>
                                                             <p className="text-sm font-semibold text-white/95">
                                                                 {f.title}
                                                             </p>
-                                                            <p className="text-sm text-white/75 leading-relaxed mt-0.5">
+                                                            <p className="mt-0.5 text-sm leading-relaxed text-white/75">
                                                                 {f.body}
                                                             </p>
                                                         </div>
@@ -907,9 +1053,11 @@ export default function ProductPage({
                                                 <button
                                                     type="button"
                                                     onClick={() => setShowAllFeatures((v) => !v)}
-                                                    className="mt-3 text-xs sm:text-sm text-white/70 hover:text-white transition underline underline-offset-4"
+                                                    className="mt-3 text-xs text-white/70 underline underline-offset-4 transition hover:text-white sm:text-sm"
                                                 >
-                                                    {showAllFeatures ? "Show less features" : "See all features"}
+                                                    {showAllFeatures
+                                                        ? "Show less features"
+                                                        : "See all features"}
                                                 </button>
                                             )}
                                         </>
@@ -918,46 +1066,52 @@ export default function ProductPage({
                             </div>
 
                             {/* Accordion */}
-                            <div className="divide-y divide-white/10 rounded-2xl ring-1 ring-white/10 bg-[#0f0f0f]/70">
+                            <div className="divide-y divide-white/10 rounded-2xl bg-[#0f0f0f]/70 ring-1 ring-white/10">
                                 {[
                                     {
                                         title: "Details",
                                         content: (
-                                            <div className="space-y-4 text-white/80 text-sm leading-relaxed">
+                                            <div className="space-y-4 text-sm leading-relaxed text-white/80">
                                                 {/* Sizes */}
                                                 <div>
                                                     <p className="font-semibold text-white">Sizes</p>
                                                     <ul className="mt-1 space-y-1">
                                                         <li>
-                                                            • <strong className="text-white">XL:</strong> 3ft WIDE | 8.11ft
-                                                            LONG | 7.8ft TALL
+                                                            • <strong className="text-white">XL:</strong> 3ft
+                                                            WIDE | 8.11ft LONG | 7.8ft TALL
                                                         </li>
                                                         <li>
-                                                            • <strong className="text-white">XXL:</strong> 3ft WIDE |
-                                                            11.7ft LONG | 7.8ft TALL
+                                                            • <strong className="text-white">XXL:</strong> 3ft
+                                                            WIDE | 11.7ft LONG | 7.8ft TALL
                                                         </li>
                                                     </ul>
-                                                    <p className="mt-1 text-white/70 text-xs">
-                                                        The XXL comes with the upgraded Smart TV, extra storage, and a
-                                                        sink/faucet to complete your outdoor kitchen experience.
+                                                    <p className="mt-1 text-xs text-white/70">
+                                                        The XXL comes with the upgraded Smart TV, extra
+                                                        storage, and a sink/faucet to complete your outdoor
+                                                        kitchen experience.
                                                     </p>
                                                 </div>
 
                                                 {/* Colors */}
                                                 <div>
-                                                    <p className="font-semibold text-white">Color Options</p>
+                                                    <p className="font-semibold text-white">
+                                                        Color Options
+                                                    </p>
                                                     <ul className="mt-1 space-y-1">
                                                         <li>
-                                                            • <strong className="text-white">Titanium:</strong> Grey
-                                                            exterior, black cabinet, beige countertop
+                                                            • <strong className="text-white">Titanium:</strong>{" "}
+                                                            Grey exterior, black cabinet, beige countertop
                                                         </li>
                                                         <li>
-                                                            • <strong className="text-white">Platinum:</strong> White
-                                                            exterior, beige cabinet, dark grey countertop
+                                                            • <strong className="text-white">Platinum:</strong>{" "}
+                                                            White exterior, beige cabinet, dark grey
+                                                            countertop
                                                         </li>
                                                         <li>
-                                                            • <strong className="text-white">Anthracite:</strong> Black
-                                                            exterior, black cabinet, beige countertop
+                                                            • <strong className="text-white">
+                                                                Anthracite:
+                                                            </strong>{" "}
+                                                            Black exterior, black cabinet, beige countertop
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -968,7 +1122,7 @@ export default function ProductPage({
                                     {
                                         title: "Specifications",
                                         content: (
-                                            <div className="space-y-4 text-white/80 text-sm leading-relaxed">
+                                            <div className="space-y-4 text-sm leading-relaxed text-white/80">
                                                 {/* Core Build */}
                                                 <div>
                                                     <p className="font-semibold text-white">
@@ -977,7 +1131,9 @@ export default function ProductPage({
                                                     <ul className="mt-1 space-y-1">
                                                         <li>
                                                             • Commercial-grade{" "}
-                                                            <strong className="text-white">SS304 stainless steel</strong>{" "}
+                                                            <strong className="text-white">
+                                                                SS304 stainless steel
+                                                            </strong>{" "}
                                                             frame and body
                                                         </li>
                                                         <li>
@@ -985,27 +1141,34 @@ export default function ProductPage({
                                                             powder-coated finishes
                                                         </li>
                                                         <li>
-                                                            • Sintered-stone countertop with high heat & scratch
-                                                            resistance
+                                                            • Sintered-stone countertop with high heat &
+                                                            scratch resistance
                                                         </li>
                                                     </ul>
                                                 </div>
 
                                                 {/* Grilling System */}
                                                 <div>
-                                                    <p className="font-semibold text-white">Grilling System</p>
+                                                    <p className="font-semibold text-white">
+                                                        Grilling System
+                                                    </p>
                                                     <ul className="mt-1 space-y-1">
                                                         <li>
                                                             • Available in{" "}
-                                                            <strong className="text-white">4-burner</strong> or{" "}
+                                                            <strong className="text-white">4-burner</strong>{" "}
+                                                            or{" "}
                                                             <strong className="text-white">6-burner</strong>{" "}
                                                             configuration
                                                         </li>
                                                         <li>
-                                                            • Up to <strong className="text-white">85,000 BTU</strong>{" "}
+                                                            • Up to{" "}
+                                                            <strong className="text-white">85,000 BTU</strong>{" "}
                                                             total output
                                                         </li>
-                                                        <li>• Integrated rotisserie with dedicated rear infrared burner</li>
+                                                        <li>
+                                                            • Integrated rotisserie with dedicated rear
+                                                            infrared burner
+                                                        </li>
                                                         <li>• Full-width drip tray for easy cleanup</li>
                                                     </ul>
                                                 </div>
@@ -1053,7 +1216,7 @@ export default function ProductPage({
                                                             system
                                                         </li>
                                                         <li>• High-capacity ventilation/exhaust hood</li>
-                                                        <li>• 15 amp input socket for plug and play</li>
+                                                        <li>• 15 amp input socket for plug and play</li>
                                                         <li>• GFCI outlets</li>
                                                     </ul>
                                                 </div>
@@ -1077,15 +1240,15 @@ export default function ProductPage({
                                     {
                                         title: "Shipping & Returns",
                                         content: (
-                                            <div className="space-y-4 text-white/80 text-sm leading-relaxed">
+                                            <div className="space-y-4 text-sm leading-relaxed text-white/80">
                                                 <div>
                                                     <p className="font-semibold text-white">
                                                         Shipping Coverage
                                                     </p>
                                                     <p className="mt-1">
                                                         We deliver across the U.S. and Canada. For an exact
-                                                        delivery cost to your address, please speak with one of our
-                                                        representatives.
+                                                        delivery cost to your address, please speak with one
+                                                        of our representatives.
                                                     </p>
                                                 </div>
 
@@ -1093,18 +1256,18 @@ export default function ProductPage({
                                                     <p className="font-semibold text-white">Please Note</p>
                                                     <ul className="mt-1 space-y-2">
                                                         <li>
-                                                            • From time to time, we run promotions to provide the best
-                                                            delivery prices.
+                                                            • From time to time, we run promotions to provide
+                                                            the best delivery prices.
                                                         </li>
                                                         <li>
-                                                            • Shipping availability and delivery timelines may vary
-                                                            depending on your location.
+                                                            • Shipping availability and delivery timelines may
+                                                            vary depending on your location.
                                                         </li>
                                                     </ul>
                                                 </div>
 
                                                 {product.stock_note && (
-                                                    <p className="text-white/70 text-xs">
+                                                    <p className="text-xs text-white/70">
                                                         {product.stock_note}
                                                     </p>
                                                 )}
@@ -1113,7 +1276,7 @@ export default function ProductPage({
                                     },
                                 ].map((it, idx) => (
                                     <AccordionItem key={idx} title={it.title}>
-                                        <p className="text-white/80">{it.content}</p>
+                                        <div>{it.content}</div>
                                     </AccordionItem>
                                 ))}
                             </div>
@@ -1122,67 +1285,71 @@ export default function ProductPage({
                 </div>
             </div>
 
-
             <ProductStoryParallax />
 
             <Payment />
 
-            {/* NEW: Info + Image section directly below hero */}
+            {/* Info + Image section */}
             <section className="border-t border-white/10 bg-[#050505] py-16 md:py-20">
                 <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 md:grid md:grid-cols-2 md:items-center">
-
                     {/* Left: Text */}
                     <div className="space-y-4 md:pr-10">
                         <p className="text-[11px] uppercase tracking-[0.24em] text-[#C1A88B]/80">
                             Precision • Power • Performance
                         </p>
 
-                        <h2 className="font-heading text-2xl md:text-3xl text-[#C1A88B]">
+                        <h2 className="font-heading text-2xl text-[#C1A88B] md:text-3xl">
                             Precision Grilling at Its Finest
                         </h2>
 
-                        <p className="text-sm md:text-base text-white/80 leading-relaxed">
-                            Delivering up to <strong className="text-white">85,000 BTU</strong> across six stainless steel burners,
-                            the ELEV8 grilling system is engineered for unmatched heat performance and consistency.
+                        <p className="text-sm leading-relaxed text-white/80 md:text-base">
+                            Delivering up to{" "}
+                            <strong className="text-white">85,000 BTU</strong> across six
+                            stainless steel burners, the ELEV8 grilling system is engineered
+                            for unmatched heat performance and consistency.
                         </p>
 
                         <ul className="space-y-2 text-sm text-white/75">
                             <li className="flex items-start gap-2">
                                 <Zap className="mt-0.5 h-4 w-4 text-[#C1A88B]" />
                                 <span>
-                                    Integrated rotisserie kit with a dedicated rear infrared burner for slow-roasted perfection.
+                                    Integrated rotisserie kit with a dedicated rear infrared
+                                    burner for slow-roasted perfection.
                                 </span>
                             </li>
 
                             <li className="flex items-start gap-2">
                                 <ShieldCheck className="mt-0.5 h-4 w-4 text-[#C1A88B]" />
                                 <span>
-                                    Built entirely from <strong className="text-white">Black Stainless Steel</strong> —
-                                    including grates, racks, and flame tamers — for superior durability and corrosion resistance.
+                                    Built entirely from{" "}
+                                    <strong className="text-white">Black Stainless Steel</strong>{" "}
+                                    — including grates, racks, and flame tamers — for superior
+                                    durability and corrosion resistance.
                                 </span>
                             </li>
 
                             <li className="flex items-start gap-2">
                                 <RefreshCcw className="mt-0.5 h-4 w-4 text-[#C1A88B]" />
                                 <span>
-                                    Full-width drip tray design ensures fast, effortless cleanup, keeping your kitchen ready
-                                    for the next gathering.
+                                    Full-width drip tray design ensures fast, effortless cleanup,
+                                    keeping your kitchen ready for the next gathering.
                                 </span>
                             </li>
                         </ul>
 
                         <p className="text-xs text-white/60">
-                            Engineered for precision and longevity — crafted to elevate every backyard culinary moment.
+                            Engineered for precision and longevity — crafted to elevate every
+                            backyard culinary moment.
                         </p>
                     </div>
 
                     {/* Right: Full Image */}
                     <div className="md:pl-4">
-                        <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)] p-4">
+                        <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] p-4 ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)]">
                             <motion.img
                                 src="https://elev8kitchens.com/cdn/shop/files/elev8-grill-station-rotisserie-burners.png?v=1748400731&width=750"
                                 alt="ELEV8 outdoor kitchen grilling system"
-                                className="w-full h-full object-contain"
+                                className="h-full w-full object-contain"
                                 initial={{ scale: 1.03, opacity: 0 }}
                                 whileInView={{ scale: 1, opacity: 1 }}
                                 viewport={{ once: true, amount: 0.4 }}
@@ -1196,22 +1363,19 @@ export default function ProductPage({
                             </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
-
-            {/* NEW: Smart Design + Night-Time Vibe section */}
+            {/* Smart Design + Night-Time Vibe */}
             <section className="border-t border-white/10 bg-[#050505] py-16 md:py-20">
                 <div className="mx-auto flex max-w-7xl flex-col-reverse gap-10 px-6 md:grid md:grid-cols-2 md:items-center md:flex-row">
-
                     {/* Left: Image */}
                     <div className="md:pr-4">
-                        <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)] p-4">
+                        <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] p-4 ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)]">
                             <motion.img
                                 src="https://elev8kitchens.com/cdn/shop/files/elev8-outdoor-kitchen-hydraulic-door-ambient-lighting.png?v=1748400659&width=900"
                                 alt="Hydraulic Lift Door & Ambient Lighting"
-                                className="w-full h-full object-contain"
+                                className="h-full w-full object-contain"
                                 initial={{ scale: 1.03, opacity: 0 }}
                                 whileInView={{ scale: 1, opacity: 1 }}
                                 viewport={{ once: true, amount: 0.4 }}
@@ -1232,36 +1396,34 @@ export default function ProductPage({
                             Intelligent • Elegant • Effortless
                         </p>
 
-                        <h2 className="font-heading text-2xl md:text-3xl text-[#C1A88B]">
+                        <h2 className="font-heading text-2xl text-[#C1A88B] md:text-3xl">
                             Smart Design Meets Night-Time Vibe
                         </h2>
 
-                        <p className="text-sm md:text-base text-white/80 leading-relaxed">
-                            Effortlessly open your outdoor kitchen with a touch, thanks to the powerful
-                            electro-hydraulic lift system designed for modern living.
+                        <p className="text-sm leading-relaxed text-white/80 md:text-base">
+                            Effortlessly open your outdoor kitchen with a touch, thanks to the
+                            powerful electro-hydraulic lift system designed for modern living.
                         </p>
 
-                        <p className="text-sm md:text-base text-white/80 leading-relaxed">
-                            Set the perfect mood with sleek, built-in LED lights that enhance both aesthetics
-                            and functionality after sunset.
+                        <p className="text-sm leading-relaxed text-white/80 md:text-base">
+                            Set the perfect mood with sleek, built-in LED lights that enhance
+                            both aesthetics and functionality after sunset.
                         </p>
 
                         {/* CTA button */}
                         <button
-                            className="mt-4 inline-flex items-center rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow hover:brightness-95 transition"
-                            onClick={() => window.location.href = "/consultation"}
+                            className="mt-4 inline-flex items-center rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow transition hover:brightness-95"
+                            onClick={() => (window.location.href = "/consultation")}
                         >
                             Book an Appointment
                         </button>
                     </div>
-
                 </div>
             </section>
 
             {/* FULL-BLEED VIDEO SECTION */}
             <section className="relative left-1/2 right-1/2 w-screen -ml-[50vw] -mr-[50vw] bg-black py-0">
                 <div className="relative w-full overflow-hidden bg-black">
-
                     {/* Ambient luxury glow */}
                     <div className="pointer-events-none absolute inset-0 -z-10">
                         <div className="absolute left-10 top-10 h-72 w-72 rounded-full bg-[#C1A88B]/10 blur-3xl" />
@@ -1281,41 +1443,40 @@ export default function ProductPage({
                 </div>
             </section>
 
-            {/* NEW: Outdoor Entertainment Redefined Section */}
+            {/* Outdoor Entertainment Redefined */}
             <section className="border-t border-white/10 bg-[#050505] py-16 md:py-20">
                 <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 md:grid md:grid-cols-2 md:items-center">
-
                     {/* Left: Text */}
                     <div className="space-y-4 md:pr-10">
                         <p className="text-[11px] uppercase tracking-[0.24em] text-[#C1A88B]/80">
                             Entertainment • Immersion • Lifestyle
                         </p>
 
-                        <h2 className="font-heading text-2xl md:text-3xl text-[#C1A88B]">
+                        <h2 className="font-heading text-2xl text-[#C1A88B] md:text-3xl">
                             Outdoor Entertainment Redefined
                         </h2>
 
-                        <p className="text-sm md:text-base text-white/80 leading-relaxed">
+                        <p className="text-sm leading-relaxed text-white/80 md:text-base">
                             Take your gatherings to the next level with a built-in
                             <strong className="text-white"> 42” / 26” Smart TV</strong>.
                             Seamlessly stream your favorite shows, sports, or cooking videos
                             right from your outdoor kitchen.
                         </p>
 
-                        <p className="text-sm md:text-base text-white/80 leading-relaxed">
-                            Integrated premium in-wall Bluetooth speakers deliver rich, immersive sound—
-                            perfect for ambient music, movie nights, or lively social moments.
+                        <p className="text-sm leading-relaxed text-white/80 md:text-base">
+                            Integrated premium in-wall Bluetooth speakers deliver rich,
+                            immersive sound—perfect for ambient music, movie nights, or lively
+                            social moments.
                         </p>
-
                     </div>
 
                     {/* Right: Image */}
                     <div className="md:pl-4">
-                        <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)] p-4">
+                        <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] p-4 ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)]">
                             <motion.img
                                 src="https://elev8kitchens.com/cdn/shop/files/elev8-bbq-kitchen-smart-tv-bluetooth-speakers.png?v=1748400701&width=750"
                                 alt="Outdoor Smart TV & Bluetooth Speakers"
-                                className="w-full h-full object-contain"
+                                className="h-full w-full object-contain"
                                 initial={{ scale: 1.03, opacity: 0 }}
                                 whileInView={{ scale: 1, opacity: 1 }}
                                 viewport={{ once: true, amount: 0.4 }}
@@ -1329,23 +1490,19 @@ export default function ProductPage({
                             </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
-            {/* NEW: Performance / Capacity / Durability Section */}
+            {/* Performance / Capacity / Durability */}
             <section className="border-t border-white/10 bg-[#050505] py-16 md:py-20">
                 <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 md:grid md:grid-cols-2 md:items-center">
-
                     {/* Left: Image */}
                     <div className="md:pr-4">
-                        <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)] p-4">
-
-                            {/* Replace src="" with your chosen image */}
+                        <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] p-4 ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)]">
                             <motion.img
                                 src="https://elev8kitchens.com/cdn/shop/files/elev8-outdoor-bar-fridge-3-layer-storage.png?v=1748400762&width=750"
                                 alt="Outdoor fridge performance and storage"
-                                className="w-full h-full object-contain"
+                                className="h-full w-full object-contain"
                                 initial={{ scale: 1.03, opacity: 0 }}
                                 whileInView={{ scale: 1, opacity: 1 }}
                                 viewport={{ once: true, amount: 0.4 }}
@@ -1366,26 +1523,37 @@ export default function ProductPage({
                             Performance • Capacity • Durability
                         </p>
 
-                        <h2 className="font-heading text-2xl md:text-3xl text-[#C1A88B]">
+                        <h2 className="font-heading text-2xl text-[#C1A88B] md:text-3xl">
                             Performance. Capacity. Built to Endure.
                         </h2>
 
-                        <ul className="space-y-3 text-sm md:text-base text-white/80 leading-relaxed">
+                        <ul className="space-y-3 text-sm leading-relaxed text-white/80 md:text-base">
                             <li>Corrosion-resistant build designed for long-term outdoor use.</li>
-                            <li>Spacious <strong className="text-white">5.3 cu. ft.</strong> storage holds up to <strong className="text-white">180 cans effortlessly</strong>.</li>
-                            <li>Engineered to operate reliably in temperatures exceeding <strong className="text-white">100°F</strong>.</li>
+                            <li>
+                                Spacious <strong className="text-white">5.3 cu. ft.</strong>{" "}
+                                storage holds up to{" "}
+                                <strong className="text-white">180 cans effortlessly</strong>.
+                            </li>
+                            <li>
+                                Engineered to operate reliably in temperatures exceeding{" "}
+                                <strong className="text-white">100°F</strong>.
+                            </li>
                             <li>Optimized shelving ensures even cooling and organized access.</li>
                         </ul>
 
                         {/* WhatsApp CTA Button */}
                         <button
-                            className="mt-4 inline-flex items-center rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow hover:brightness-95 transition"
-                            onClick={() => window.open('https://wa.me/19056930028?text=Hello%2C%20I%27m%20interested%20in%20your%20products', '_blank')}
+                            className="mt-4 inline-flex items-center rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow transition hover:brightness-95"
+                            onClick={() =>
+                                window.open(
+                                    "https://wa.me/19056930028?text=Hello%2C%20I%27m%20interested%20in%20your%20products",
+                                    "_blank"
+                                )
+                            }
                         >
                             Talk With A Specialist On WhatsApp
                         </button>
                     </div>
-
                 </div>
             </section>
 
@@ -1397,12 +1565,13 @@ export default function ProductPage({
                         <p className="text-[11px] uppercase tracking-[0.24em] text-[#C1A88B]/80">
                             Install • Setup • Enjoy
                         </p>
-                        <h2 className="mt-3 font-heading text-3xl md:text-4xl text-[#C1A88B]">
+                        <h2 className="mt-3 font-heading text-3xl text-[#C1A88B] md:text-4xl">
                             Prepare to Install Your ELEV8 Outdoor Kitchen
                         </h2>
-                        <p className="mx-auto mt-3 max-w-2xl text-sm md:text-base text-white/75">
-                            A few simple steps ensure your ELEV8 kitchen arrives, installs, and performs
-                            exactly the way it was designed—flawless from day one.
+                        <p className="mx-auto mt-3 max-w-2xl text-sm text-white/75 md:text-base">
+                            A few simple steps ensure your ELEV8 kitchen arrives, installs,
+                            and performs exactly the way it was designed—flawless from day
+                            one.
                         </p>
                     </div>
 
@@ -1418,25 +1587,25 @@ export default function ProductPage({
                             {
                                 step: "Step 2",
                                 title: "Confirm Delivery",
-                                body: "Our customer Service will in touch to confirm a convenient delivery date.",
+                                body: "Our customer service will be in touch to confirm a convenient delivery date.",
                                 icon: <Truck className="h-7 w-7" />,
                             },
                             {
                                 step: "Step 3",
-                                title: "Prep Electrical Hook up",
+                                title: "Prep Electrical Hook Up",
                                 body: "Check if you already have the necessary electrical connection or get one installed.",
                                 icon: <Zap className="h-7 w-7" />,
                             },
                             {
                                 step: "Step 4",
                                 title: "Delivery Day",
-                                body: "Get and sign for your delivery, make sure you check the unit's condition.",
+                                body: "Sign for your delivery and check the unit's condition carefully.",
                                 icon: <ShieldCheck className="h-7 w-7" />,
                             },
                             {
                                 step: "Step 5",
                                 title: "Connect and Enjoy",
-                                body: "Place your BBQ on previously prepped site and enjoy your modular outdoor BBQ kitchen.",
+                                body: "Place your BBQ on the prepared site and enjoy your modular outdoor BBQ kitchen.",
                                 icon: <RefreshCcw className="h-7 w-7" />,
                             },
                         ].map((item) => (
@@ -1455,8 +1624,10 @@ export default function ProductPage({
                                 </div>
 
                                 {/* Text */}
-                                <h3 className="text-sm font-semibold text-white">{item.title}</h3>
-                                <p className="mt-2 max-w-xs text-xs md:text-sm text-white/70 leading-relaxed">
+                                <h3 className="text-sm font-semibold text-white">
+                                    {item.title}
+                                </h3>
+                                <p className="mt-2 max-w-xs text-xs leading-relaxed text-white/70 md:text-sm">
                                     {item.body}
                                 </p>
                             </div>
@@ -1473,83 +1644,86 @@ export default function ProductPage({
                         <p className="text-[11px] uppercase tracking-[0.24em] text-[#C1A88B]/80">
                             Real Homes • Real Evenings
                         </p>
-                        <h2 className="mt-3 font-heading text-3xl md:text-4xl text-white">
+                        <h2 className="mt-3 font-heading text-3xl text-white md:text-4xl">
                             More Stories From ELEV8 Owners
                         </h2>
-                        <p className="mx-auto mt-3 max-w-2xl text-sm md:text-base text-white/70">
-                            From quiet weeknights to big celebrations, these are the moments our customers
-                            built their ELEV8 kitchens for.
+                        <p className="mx-auto mt-3 max-w-2xl text-sm text-white/70 md:text-base">
+                            From quiet weeknights to big celebrations, these are the moments
+                            our customers built their ELEV8 kitchens for.
                         </p>
                     </div>
 
                     {/* Grid wrapper with subtle dividers */}
                     <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
-                        <div className="grid gap-px md:grid-cols-2 bg-white/5">
+                        <div className="grid bg-white/5 gap-px md:grid-cols-2">
                             {/* Card 1 */}
                             <div className="bg-black px-6 py-10 text-center md:px-10">
-                                <p className="text-sm md:text-base text-white italic mb-4">
+                                <p className="mb-4 text-sm text-white italic md:text-base">
                                     “The heart of every gathering.”
                                 </p>
-                                <p className="text-sm md:text-base text-white/80 leading-relaxed">
-                                    Friends don’t ask to sit inside anymore. The ELEV8 has become the natural
-                                    place to gather—TV on, music low, and dinner on the grill. It changed how
-                                    we use our home.
+                                <p className="text-sm leading-relaxed text-white/80 md:text-base">
+                                    Friends don’t ask to sit inside anymore. The ELEV8 has become
+                                    the natural place to gather—TV on, music low, and dinner on
+                                    the grill. It changed how we use our home.
                                 </p>
                                 <p className="mt-5 text-sm font-semibold text-white">
                                     – Lauren M.
                                 </p>
-                                <p className="text-xs text-white/65 tracking-wide uppercase">
+                                <p className="text-xs uppercase tracking-wide text-white/65">
                                     Verified Buyer
                                 </p>
                             </div>
 
                             {/* Card 2 */}
                             <div className="bg-black px-6 py-10 text-center md:px-10">
-                                <p className="text-sm md:text-base text-white italic mb-4">
+                                <p className="mb-4 text-sm text-white italic md:text-base">
                                     “Hotel feel, at home.”
                                 </p>
-                                <p className="text-sm md:text-base text-white/80 leading-relaxed">
-                                    The finishes, lighting, and layout feel like something from a boutique hotel.
-                                    We use it for morning coffee, Sunday brunch, and late-night cocktails.
+                                <p className="text-sm leading-relaxed text-white/80 md:text-base">
+                                    The finishes, lighting, and layout feel like something from a
+                                    boutique hotel. We use it for morning coffee, Sunday brunch,
+                                    and late-night cocktails.
                                 </p>
                                 <p className="mt-5 text-sm font-semibold text-white">
-                                    – Michael & Dana S.
+                                    – Michael &amp; Dana S.
                                 </p>
-                                <p className="text-xs text-white/65 tracking-wide uppercase">
+                                <p className="text-xs uppercase tracking-wide text-white/65">
                                     Verified Buyers
                                 </p>
                             </div>
 
                             {/* Card 3 */}
                             <div className="bg-black px-6 py-10 text-center md:px-10">
-                                <p className="text-sm md:text-base text-white italic mb-4">
+                                <p className="mb-4 text-sm text-white italic md:text-base">
                                     “Winter? We still use it.”
                                 </p>
-                                <p className="text-sm md:text-base text-white/80 leading-relaxed">
-                                    We live where winters are harsh, and I worried about durability. The ELEV8
-                                    hasn’t missed a beat—no rust, no issues. It’s as solid as the day it arrived.
+                                <p className="text-sm leading-relaxed text-white/80 md:text-base">
+                                    We live where winters are harsh, and I worried about
+                                    durability. The ELEV8 hasn’t missed a beat—no rust, no issues.
+                                    It’s as solid as the day it arrived.
                                 </p>
                                 <p className="mt-5 text-sm font-semibold text-white">
                                     – Chris T.
                                 </p>
-                                <p className="text-xs text-white/65 tracking-wide uppercase">
+                                <p className="text-xs uppercase tracking-wide text-white/65">
                                     Verified Buyer
                                 </p>
                             </div>
 
                             {/* Card 4 */}
                             <div className="bg-black px-6 py-10 text-center md:px-10">
-                                <p className="text-sm md:text-base text-white italic mb-4">
+                                <p className="mb-4 text-sm text-white italic md:text-base">
                                     “The upgrade our backyard needed.”
                                 </p>
-                                <p className="text-sm md:text-base text-white/80 leading-relaxed">
-                                    Between the sound system, the TV, and the grill setup, our backyard finally
-                                    matches the rest of the house. Guests always ask where we got it.
+                                <p className="text-sm leading-relaxed text-white/80 md:text-base">
+                                    Between the sound system, the TV, and the grill setup, our
+                                    backyard finally matches the rest of the house. Guests always
+                                    ask where we got it.
                                 </p>
                                 <p className="mt-5 text-sm font-semibold text-white">
                                     – Priya K.
                                 </p>
-                                <p className="text-xs text-white/65 tracking-wide uppercase">
+                                <p className="text-xs uppercase tracking-wide text-white/65">
                                     Verified Buyer
                                 </p>
                             </div>
@@ -1580,10 +1754,10 @@ export default function ProductPage({
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 16 }}
-                        className="fixed right-4 bottom-24 z-50 rounded-2xl bg-[#111]/90 px-4 py-3 text-sm text-white shadow-lg ring-1 ring-white/15"
+                        className="fixed bottom-24 right-4 z-50 rounded-2xl bg-[#111]/90 px-4 py-3 text-sm text-white shadow-lg ring-1 ring-white/15"
                     >
                         <div className="flex items-center gap-2">
-                            <div className="h-6 w-6 rounded-full bg-[#C1A88B]/15 flex items-center justify-center">
+                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#C1A88B]/15">
                                 <Check className="h-4 w-4 text-[#C1A88B]" />
                             </div>
                             <div>
