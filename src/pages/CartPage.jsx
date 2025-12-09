@@ -34,7 +34,9 @@ function findVariant(product, { sku, size, color }) {
 export default function CartPage({ onCheckout }) {
   const { items, updateQuantity, removeItem } = useCart();
   const [checkingOut, setCheckingOut] = useState(false);
+  const [checkingOutDeposit, setCheckingOutDeposit] = useState(false);
   const [error, setError] = useState("");
+  const [depositError, setDepositError] = useState("");
 
   // Hydrate each cart line with product + variant data
   const hydrated = useMemo(() => {
@@ -73,6 +75,10 @@ export default function CartPage({ onCheckout }) {
         title: item.title,
         price: item.price,
         quantity: item.line.qty,
+        size: item.line.size,
+        color: item.line.color,
+        type: item.product?.type || "Full",
+        isDeposit: false,
       }));
 
       const resp = await fetch("/.netlify/functions/create-checkout-session", {
@@ -91,6 +97,48 @@ export default function CartPage({ onCheckout }) {
       setError(err.message || "Stripe checkout failed. Please try again.");
     } finally {
       setCheckingOut(false);
+    }
+  };
+
+  const handleDepositCheckout = async () => {
+    if (!hasItems || checkingOutDeposit) return;
+    setDepositError("");
+    setCheckingOutDeposit(true);
+    try {
+      const MIN_DEPOSIT = 100; // enforce meaningful minimum deposit
+      const raw = total * 0.2;
+      const rounded = Math.round(raw * 100) / 100;
+      const capped = Math.min(rounded, total);
+      const depositAmount = Math.max(capped, Math.min(MIN_DEPOSIT, total));
+
+      const lineItems = [
+        {
+          title: "ELEV8 Kitchen 20% Deposit",
+          price: depositAmount,
+          quantity: 1,
+          size: "Deposit",
+          color: "",
+          type: "Deposit",
+          isDeposit: true,
+        },
+      ];
+
+      const resp = await fetch("/.netlify/functions/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lineItems }),
+      });
+
+      const data = await resp.json();
+      if (!resp.ok || !data.url) {
+        throw new Error(data.error || "Unable to start deposit checkout.");
+      }
+      window.location.href = data.url;
+    } catch (err) {
+      console.error(err);
+      setDepositError(err.message || "Stripe deposit checkout failed. Please try again.");
+    } finally {
+      setCheckingOutDeposit(false);
     }
   };
 
@@ -159,8 +207,11 @@ export default function CartPage({ onCheckout }) {
               total={total}
               disabled={!hasItems}
               onCheckout={handleCheckout}
+              onDepositCheckout={handleDepositCheckout}
               checkingOut={checkingOut}
+              checkingOutDeposit={checkingOutDeposit}
               error={error}
+              depositError={depositError}
             />
           </div>
         </div>
@@ -271,7 +322,19 @@ function CartLineItem({ entry, onIncrease, onDecrease, onRemove }) {
   );
 }
 
-function OrderSummaryCard({ subtotal, shipping, tax, total, disabled, onCheckout, checkingOut, error }) {
+function OrderSummaryCard({
+  subtotal,
+  shipping,
+  tax,
+  total,
+  disabled,
+  onCheckout,
+  onDepositCheckout,
+  checkingOut,
+  checkingOutDeposit,
+  error,
+  depositError,
+}) {
   return (
     <div className="rounded-3xl bg-[#0f0f0f]/80 p-6 ring-1 ring-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
       <h3 className="text-lg font-semibold text-white">Order Summary</h3>
@@ -292,6 +355,16 @@ function OrderSummaryCard({ subtotal, shipping, tax, total, disabled, onCheckout
         {checkingOut ? "Redirecting to Stripe…" : "Proceed to Checkout (Stripe)"}
       </button>
       {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
+
+      <button
+        onClick={onDepositCheckout}
+        disabled={disabled || checkingOutDeposit}
+        className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-[#C1A88B]/50 px-6 py-3 text-sm font-semibold text-[#C1A88B] shadow hover:bg-[#C1A88B]/10 disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {checkingOutDeposit ? "Redirecting for Deposit…" : `Pay 20% Deposit (${formatMoney(total * 0.2)})`}
+      </button>
+      {depositError && <p className="mt-2 text-xs text-red-400">{depositError}</p>}
+
       <p className="mt-2 text-xs text-white/60">
         Secure payments will be handled via Stripe. A specialist will confirm delivery, scheduling, and any remaining details.
       </p>
