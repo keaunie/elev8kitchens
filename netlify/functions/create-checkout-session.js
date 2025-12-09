@@ -1,8 +1,11 @@
 import Stripe from "stripe";
 
 const stripeSecret = process.env.STRIPE_SECRET_KEY;
-const successUrl = process.env.STRIPE_SUCCESS_URL || "http://localhost:5173/order-complete";
-const cancelUrl = process.env.STRIPE_CANCEL_URL || "http://localhost:5173/cart";
+const successUrl =
+  process.env.STRIPE_SUCCESS_URL ||
+  "https://elev8kitchens.netlify.app/order-complete";
+const cancelUrl =
+  process.env.STRIPE_CANCEL_URL || "https://elev8kitchens.netlify.app/cart";
 
 export async function handler(event) {
   if (event.httpMethod !== "POST") {
