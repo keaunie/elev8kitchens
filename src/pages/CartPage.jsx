@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Minus, Plus, Trash2, ArrowLeft, Truck, ShieldCheck, CreditCard } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft, Truck, ShieldCheck, CreditCard, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { useCart } from "../context/CartContext";
@@ -37,6 +37,7 @@ export default function CartPage({ onCheckout }) {
   const [checkingOutDeposit, setCheckingOutDeposit] = useState(false);
   const [error, setError] = useState("");
   const [depositError, setDepositError] = useState("");
+  const [confirmModal, setConfirmModal] = useState(null); // "full" | "deposit" | null
 
   // Hydrate each cart line with product + variant data
   const hydrated = useMemo(() => {
@@ -66,7 +67,7 @@ export default function CartPage({ onCheckout }) {
   const taxEstimate = 0;
   const total = subtotal + shippingEstimate + taxEstimate;
 
-  const handleCheckout = async () => {
+  const proceedFullCheckout = async () => {
     if (!hasItems || checkingOut) return;
     setError("");
     setCheckingOut(true);
@@ -100,11 +101,15 @@ export default function CartPage({ onCheckout }) {
     }
   };
 
-  const handleDepositCheckout = async () => {
+  const proceedDepositCheckout = async () => {
     if (!hasItems || checkingOutDeposit) return;
     setDepositError("");
     setCheckingOutDeposit(true);
     try {
+      const firstItem = hydrated[0];
+      const sizeLabel = firstItem?.line?.size || "XL";
+      const typeLabel = firstItem?.product?.type || "Deposit";
+
       const MIN_DEPOSIT = 100; // enforce meaningful minimum deposit
       const raw = total * 0.2;
       const rounded = Math.round(raw * 100) / 100;
@@ -116,9 +121,9 @@ export default function CartPage({ onCheckout }) {
           title: "ELEV8 Kitchen 20% Deposit",
           price: depositAmount,
           quantity: 1,
-          size: "Deposit",
-          color: "",
-          type: "Deposit",
+          size: sizeLabel,
+          color: firstItem?.line?.color || "",
+          type: typeLabel,
           isDeposit: true,
         },
       ];
@@ -141,6 +146,10 @@ export default function CartPage({ onCheckout }) {
       setCheckingOutDeposit(false);
     }
   };
+
+  const handleCheckout = () => setConfirmModal("full");
+  const handleDepositCheckout = () => setConfirmModal("deposit");
+  const closeConfirm = () => setConfirmModal(null);
 
   return (
     <section className="relative min-h-screen bg-black text-white pb-24">
@@ -237,6 +246,23 @@ export default function CartPage({ onCheckout }) {
           </div>
         </div>
       </div>
+
+      <ShippingConfirmModal
+        open={!!confirmModal}
+        mode={confirmModal}
+        onClose={closeConfirm}
+        onContinue={() => {
+          if (confirmModal === "deposit") {
+            closeConfirm();
+            proceedDepositCheckout();
+          } else {
+            closeConfirm();
+            proceedFullCheckout();
+          }
+        }}
+        total={total}
+        depositAmount={Math.max(Math.round(total * 0.2 * 100) / 100, 1)}
+      />
     </section>
   );
 }
@@ -319,6 +345,82 @@ function CartLineItem({ entry, onIncrease, onDecrease, onRemove }) {
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function ShippingConfirmModal({ open, mode, onClose, onContinue, total, depositAmount }) {
+  if (!open) return null;
+  const isDeposit = mode === "deposit";
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0, y: 10 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.95, opacity: 0, y: 10 }}
+          className="w-full max-w-lg rounded-3xl bg-gradient-to-br from-[#0f0f0f] via-[#0b0b0b] to-[#0f0f0f] p-6 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.22em] text-[#C1A88B]/80">Shipping & Invoicing</p>
+              <h3 className="mt-1 text-xl font-semibold text-white">
+                Contact us for shipping before you pay
+              </h3>
+            </div>
+            <button
+              onClick={onClose}
+              className="rounded-full bg-white/10 p-2 text-white hover:bg-white/15"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+
+          <p className="mt-3 text-sm text-white/80 leading-relaxed">
+            Shipping is quoted separately. Please contact us to confirm delivery access and costs. After payment,
+            we will email you an invoice reflecting your payment ({isDeposit ? "20% deposit" : "full amount"}) and any remaining balance.
+          </p>
+
+          <div className="mt-4 space-y-2 rounded-2xl bg-white/5 p-4 text-sm text-white/80 ring-1 ring-white/10">
+            <div className="flex items-center justify-between">
+              <span>Payment type</span>
+              <span className="font-semibold text-[#C1A88B]">
+                {isDeposit ? "20% Deposit" : "Pay in Full"}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span>Amount</span>
+              <span className="font-semibold text-white">
+                {isDeposit ? formatMoney(depositAmount) : formatMoney(total)}
+              </span>
+            </div>
+            <div className="text-xs text-white/60">
+              Need a shipping quote or have delivery questions? Call us at +1 (905) 693-0028 or email hello@elev8kitchens.com.
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <button
+              onClick={onClose}
+              className="inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white hover:bg-white/5"
+            >
+              Contact us first
+            </button>
+            <button
+              onClick={onContinue}
+              className="inline-flex items-center justify-center rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95"
+            >
+              Continue to Stripe
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
