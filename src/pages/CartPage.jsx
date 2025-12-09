@@ -351,6 +351,13 @@ function CartLineItem({ entry, onIncrease, onDecrease, onRemove }) {
 function ShippingConfirmModal({ open, mode, onClose, onContinue, total, depositAmount }) {
   if (!open) return null;
   const isDeposit = mode === "deposit";
+  const [contacted, setContacted] = useState(false);
+
+  const handleCall = () => {
+    setContacted(true);
+    window.location.href = "tel:+19056930028";
+  };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -386,11 +393,11 @@ function ShippingConfirmModal({ open, mode, onClose, onContinue, total, depositA
             {isDeposit ? " the 20% deposit" : " in full"} via Stripe, we&apos;ll email your shipping invoice with any remaining balance.
           </p>
 
-          <div className="mt-4 space-y-2 rounded-2xl bg-white/5 p-4 text-sm text-white/80 ring-1 ring-white/10">
-            <div className="flex items-center justify-between">
-              <span>Payment type</span>
-              <span className="font-semibold text-[#C1A88B]">
-                {isDeposit ? "20% Deposit" : "Pay in Full"}
+            <div className="mt-4 space-y-2 rounded-2xl bg-white/5 p-4 text-sm text-white/80 ring-1 ring-white/10">
+              <div className="flex items-center justify-between">
+                <span>Payment type</span>
+                <span className="font-semibold text-[#C1A88B]">
+                  {isDeposit ? "20% Deposit" : "Pay in Full"}
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -406,16 +413,17 @@ function ShippingConfirmModal({ open, mode, onClose, onContinue, total, depositA
 
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-end">
             <button
-              onClick={onClose}
-              className="inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-white hover:bg-white/5"
+              onClick={handleCall}
+              className="inline-flex items-center justify-center rounded-full border border-[#C1A88B]/60 px-5 py-3 text-sm font-semibold text-[#C1A88B] hover:bg-[#C1A88B]/10"
             >
-              Contact us first
+              Call +1 (905) 693-0028
             </button>
             <button
               onClick={onContinue}
-              className="inline-flex items-center justify-center rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95"
+              disabled={!contacted}
+              className="inline-flex items-center justify-center rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Continue to Stripe
+              {contacted ? "Continue to Stripe" : "Call us to enable checkout"}
             </button>
           </div>
         </motion.div>

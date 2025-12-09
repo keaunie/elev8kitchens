@@ -1,7 +1,7 @@
 // Payment.jsx — simplified for Stripe-focused messaging
 import React from "react";
 import { motion } from "framer-motion";
-import { CreditCard, ShieldCheck } from "lucide-react";
+import { CreditCard, ShieldCheck, BadgeDollarSign } from "lucide-react";
 
 export default function Payment({
   title = "Secure Payment Options",
@@ -111,5 +111,17 @@ const defaultOptions = [
       "Concierge support for next steps",
     ],
     cta: { label: "Talk to a Specialist", href: "/contact" },
+  },
+  {
+    icon: <BadgeDollarSign className="h-12 w-12 text-[#C1A88B]" />,
+    title: "Buy Now, Pay Later (Coming Soon)",
+    description: "Spread payments over time with BNPL. Placeholder until link is ready.",
+    bullets: [
+      "Pay in 4 or monthly installments",
+      "Instant decision and transparent fees",
+      "Keep your cash flow flexible",
+      "Integrates with our checkout soon",
+    ],
+    cta: { label: "Coming Soon", href: "#" },
   },
 ];
