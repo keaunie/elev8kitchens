@@ -369,7 +369,7 @@ function ShippingConfirmModal({ open, mode, onClose, onContinue, total, depositA
             <div>
               <p className="text-[11px] uppercase tracking-[0.22em] text-[#C1A88B]/80">Shipping & Invoicing</p>
               <h3 className="mt-1 text-xl font-semibold text-white">
-                Contact us for shipping before you pay
+                Shipping is invoiced separately
               </h3>
             </div>
             <button
@@ -382,8 +382,8 @@ function ShippingConfirmModal({ open, mode, onClose, onContinue, total, depositA
           </div>
 
           <p className="mt-3 text-sm text-white/80 leading-relaxed">
-            Shipping is quoted separately. Please contact us to confirm delivery access and costs. After payment,
-            we will email you an invoice reflecting your payment ({isDeposit ? "20% deposit" : "full amount"}) and any remaining balance.
+            Shipping is billed separately. Please contact us to confirm delivery access and costs. After you pay
+            {isDeposit ? " the 20% deposit" : " in full"} via Stripe, we&apos;ll email your shipping invoice with any remaining balance.
           </p>
 
           <div className="mt-4 space-y-2 rounded-2xl bg-white/5 p-4 text-sm text-white/80 ring-1 ring-white/10">
