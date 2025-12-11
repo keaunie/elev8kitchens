@@ -765,8 +765,7 @@ export default function ProductPage({
 
                         {compareAt && (
                             <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#ff5b5b] px-3 py-1 text-xs font-semibold tracking-wide text-white shadow">
-                                <span className="text-sm">ðŸ”¥</span>
-                                <span>ON SALE &amp; LIMITED STOCK!</span>
+                                <span>LAUNCH PRICING IN EFFECT NOW!</span>
                             </div>
                         )}
 
