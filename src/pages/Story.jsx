@@ -2,7 +2,7 @@
 // Renders Desktop/Tablet on md+ and Mobile on smaller screens.
 // Uses your two implementations verbatim, namespaced to avoid conflicts.
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import TeamHero from "../components/TeamHero.jsx";
@@ -374,12 +374,12 @@ function DesktopTablet() {
         </div>
 
         {/* Centered overlay text */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[1px]">
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[1px] px-4">
           <h2 className="text-4xl md:text-5xl font-semibold text-white drop-shadow-lg">
             Our Team
           </h2>
-          <p className="mt-2 text-white/85 max-w-xl text-center text-sm md:text-base">
-            The ELEV8 Crafted Kitchens team is a dynamic crew of creators, builders, and problem-solvers who love transforming backyards into unforgettable hangout spots. Fueled by innovation, craftsmanship, and big ideas, we bring high energy, creativity, and passion to every project designing outdoor kitchens that spark joy, connection, and seriously fun living.
+          <p className="mt-3 w-full max-w-5xl text-center text-white/85 text-sm md:text-base leading-relaxed px-4 md:px-10 lg:px-16">
+            The ELEV8 Crafted Kitchens team is a dynamic crew of creators, builders, and problem-solvers who love transforming backyards into unforgettable hangout spots. Fueled by innovation, craftsmanship, and big ideas, we bring high energy, creativity, and passion to every project designing outdoor kitchens that spark joy, connection, and seriously fun living.
           </p>
           <button
             onClick={() => window.location.href = "/consultation"} // <-- change link if needed
@@ -692,6 +692,31 @@ function Mobile() {
   );
   const indexBySrc = (src) => lightboxImages.findIndex((x) => x.src === src);
   const [openIndex, setOpenIndex] = useState(null);
+  const teamSlides = [
+    {
+      src: "https://elev8kitchens.netlify.app/assets/IMG_0128-CpWC0Xr7.jpg",
+      alt: "Team Image 1",
+    },
+    {
+      src: "https://elev8kitchens.netlify.app/assets/IMG_0108-D9c-14nd.jpg",
+      alt: "Team Image 2",
+    },
+    {
+      src: "https://images.pexels.com/photos/295505/pexels-photo-295505.jpeg",
+      alt: "Team Image 3",
+    },
+  ];
+  const [teamIndex, setTeamIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTeamIndex((i) => (i + 1) % teamSlides.length);
+    }, 5000);
+    return () => clearInterval(id);
+  }, [teamSlides.length]);
+
+  const prevTeam = () => setTeamIndex((i) => (i === 0 ? teamSlides.length - 1 : i - 1));
+  const nextTeam = () => setTeamIndex((i) => (i === teamSlides.length - 1 ? 0 : i + 1));
 
   return (
     <section className="bg-black text-white">
@@ -749,6 +774,62 @@ function Mobile() {
             </div>
           </div>
         ))}
+
+        {/* Mobile Our Team slideshow (uses desktop images) */}
+        <div className="relative w-screen -ml-6 sm:ml-0 sm:w-full overflow-hidden">
+          <div className="relative h-[340px] w-full">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={teamSlides[teamIndex].src}
+                src={teamSlides[teamIndex].src}
+                alt={teamSlides[teamIndex].alt}
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
+                initial={{ opacity: 0, scale: 1.02 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+              />
+            </AnimatePresence>
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/45 px-4 text-center">
+              <h2 className="text-3xl font-semibold text-white drop-shadow-lg">Our Team</h2>
+              <p className="mt-2 max-w-2xl text-white/85 text-sm leading-relaxed">
+                The ELEV8 Crafted Kitchens team is a dynamic crew of creators, builders, and problem-solvers who love
+                transforming backyards into unforgettable hangout spots. Fueled by innovation and craftsmanship, we design
+                outdoor kitchens that spark joy, connection, and seriously fun living.
+              </p>
+              <button
+                onClick={() => (window.location.href = "/consultation")}
+                className="mt-4 rounded-full bg-[#C1A88B] px-6 py-2 text-sm font-semibold text-black shadow hover:brightness-95"
+              >
+                Book a Consultation
+              </button>
+            </div>
+            <button
+              onClick={prevTeam}
+              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white ring-1 ring-white/20 hover:bg-black/60"
+              aria-label="Previous slide"
+            >
+              ‹
+            </button>
+            <button
+              onClick={nextTeam}
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 p-2 text-white ring-1 ring-white/20 hover:bg-black/60"
+              aria-label="Next slide"
+            >
+              ›
+            </button>
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
+              {teamSlides.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`h-2 w-2 rounded-full ${idx === teamIndex ? "bg-[#C1A88B]" : "bg-white/40"}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
 
         <blockquote className="rounded-2xl bg-[#111]/60 p-8 ring-1 ring-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
           <p className="font-heading text-2xl text-[#C1A88B]">Join the Outdoor Revolution</p>

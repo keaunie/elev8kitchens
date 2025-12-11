@@ -423,7 +423,7 @@ function ShippingConfirmModal({ open, mode, onClose, onContinue, total, depositA
               disabled={!contacted}
               className="inline-flex items-center justify-center rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {contacted ? "Continue to Stripe" : "Call us to enable checkout"}
+              {contacted ? "Continue to Stripe" : "Call us to get shipping quotation"}
             </button>
           </div>
         </motion.div>

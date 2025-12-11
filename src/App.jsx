@@ -80,12 +80,64 @@ function Home() {
     setNewsletterOpen(true);
   }, []);
 
+  // Ensure Klaviyo onsite script loads, then open the new form (RwT5WS)
+  useEffect(() => {
+    const formId = "RwT5WS";
+    let retries = 0;
+
+    const loadScriptIfNeeded = () => {
+      const existing = document.querySelector("script[data-klaviyo-onsite]");
+      if (existing) return;
+      const s = document.createElement("script");
+      s.setAttribute("data-klaviyo-onsite", "true");
+      s.async = true;
+      s.src = "https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=Twa6qJ";
+      document.head.appendChild(s);
+    };
+
+    const openForm = () => {
+      if (window?._klOnsite) {
+        window._klOnsite.push(["openForm", formId]);
+      } else if (retries < 12) {
+        retries += 1;
+        setTimeout(openForm, 400);
+      }
+    };
+
+    loadScriptIfNeeded();
+    openForm();
+  }, []);
+
+  // Remove any Klaviyo teaser bars/buttons that still render
+  useEffect(() => {
+    const nukeTeasers = () => {
+      const selectors = [
+        '[data-testid*="teaser"]',
+        '[id*="teaser"]',
+        '[class*="teaser"]',
+        ".klaviyo-form-trigger",
+        ".kl-floating-trigger",
+      ];
+      document.querySelectorAll(selectors.join(",")).forEach((el) => {
+        const text = (el.innerText || "").toLowerCase();
+        if (text.includes("the future is here") || text.includes("future") || text.includes("teaser")) {
+          el.remove();
+        }
+      });
+    };
+
+    nukeTeasers();
+    const observer = new MutationObserver(nukeTeasers);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
-      <NewsletterModal
+      {/* <NewsletterModal
         open={newsletterOpen}
         onClose={() => setNewsletterOpen(false)}
-      />
+      /> */}
       <HeroCarousel slides={slides} interval={6000} />
       <FeaturesSection
         kicker="What we offer"
@@ -98,7 +150,6 @@ function Home() {
       <Process />
       <HabitatSection />
       <CTABanner />
-
     </>
   );
 }

@@ -80,3 +80,30 @@ h6 {
   padding: 0 !important;
   margin: 0 !important;
 }
+
+/* Hide Klaviyo teaser bubbles (we only want the modal) */
+.klaviyo-form-teaser,
+.kl-private-reset-css-Xuajs1 .kl-cta-button-teaser {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Extra sweep for any Klaviyo teaser/trigger containers */
+.klaviyo-form-trigger,
+.kl-private-reset-css-Xuajs1 .klaviyo-form-trigger,
+.kl-private-reset-css-Xuajs1 .kl-floating-trigger,
+.kl-private-reset-css-Xuajs1 [class*="teaser"],
+[class*="klaviyo-form"][class*="teaser"],
+[class*="klaviyo"] [class*="teaser"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+}

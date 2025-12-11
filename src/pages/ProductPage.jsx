@@ -325,7 +325,7 @@ export function NewsletterModal({ open, onClose, onSubscribed }) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: 18, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 180, damping: 20 }}
-                        className="relative w-full max-w-4xl overflow-hidden rounded-3xl bg-gradient-to-r from-[#0b0b0b] via-[#0f0f0f] to-[#0b0b0b] ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
+                        className="relative w-full max-w-5xl overflow-hidden rounded-3xl bg-[#0a0a0a] ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button
@@ -336,192 +336,64 @@ export function NewsletterModal({ open, onClose, onSubscribed }) {
                             <X className="h-5 w-5" />
                         </button>
 
-                        <div className="grid md:grid-cols-5">
-                            {/* Side image – hidden on mobile */}
-                            <div className="relative hidden md:col-span-2 md:block">
+                        <div className="grid md:grid-cols-2">
+                            <div className="flex flex-col justify-center space-y-5 bg-black px-6 py-8 sm:px-10 sm:py-10">
                                 <img
-                                    src="https://res.cloudinary.com/dczzibbkw/image/upload/v1762286603/NF-101_12_copy_on3yzt.webp"
-                                    alt="ELEV8 outdoor kitchen showcase"
-                                    className="h-full w-full object-cover"
+                                    src="https://elev8kitchens.com/cdn/shop/files/elev8-logo-gold-on-black.png?v=1748400885&width=320"
+                                    alt="Elev8 Kitchens logo"
+                                    className="h-12 w-auto"
                                 />
-                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent" />
-                            </div>
-
-                            {/* Content */}
-                            <div className="md:col-span-3 p-6 sm:p-8">
-                                <div className="mb-4 flex items-center gap-3">
-                                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#C1A88B]/15 ring-1 ring-[#C1A88B]/40">
-                                        <Mail className="h-5 w-5 text-[#C1A88B]" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs uppercase tracking-[0.22em] text-[#C1A88B]/80">
-                                            FutureScape USA
-                                        </p>
-                                        <h3
-                                            id="newsletter-title"
-                                            className="font-heading text-xl text-white"
-                                        >
-                                            Meet ELEV8 & stay updated
-                                        </h3>
-                                    </div>
-                                </div>
-
-                                <p className="text-sm leading-relaxed text-white/80">
-                                    The future of landscape begins with Elev8 Kitchens. Discover it now at Futurescape USA. Drop your details for booth updates, kitchen news, and your nearest showroom. Need anything now? Call, email, or WhatsApp us.
+                                <p className="text-sm text-white/75">FutureScape USA</p>
+                                <h3
+                                    id="newsletter-title"
+                                    className="font-heading text-3xl md:text-4xl text-[#C1A88B]"
+                                >
+                                    FutureScape USA
+                                </h3>
+                                <p className="text-base text-[#C1A88B]/90">
+                                    Los Angeles Convention Center
                                 </p>
-
-                                <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                                    <a
-                                        href="tel:+19056930028"
-                                        className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3 text-sm text-white ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
-                                    >
-                                        <PhoneCall className="h-4 w-4 text-[#C1A88B]" />
-                                        <span>+1 (905) 693-0028</span>
-                                    </a>
-                                    <a
-                                        href="mailto:sales.elev8@habitat28.com"
-                                        className="flex items-center gap-3 rounded-2xl bg-white/5 px-4 py-3 text-sm text-white ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
-                                    >
-                                        <Mail className="h-4 w-4 text-[#C1A88B]" />
-                                        <span>sales.elev8@habitat28.com</span>
-                                    </a>
+                                <div className="text-2xl md:text-3xl font-semibold text-white leading-snug">
+                                    The future of landscape with Elev8 Kitchens
+                                </div>
+                                <p className="text-sm leading-relaxed text-white/85">
+                                    Discover it now at Futurescape USA. Need anything now? Call,
+                                    email, or WhatsApp us.
+                                </p>
+                                <div className="space-y-3">
                                     <a
                                         href="https://wa.me/19056930028?text=Hello%2C%20I%27d%20like%20info%20on%20FutureScape%20USA%20and%20ELEV8%20Kitchens"
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="flex items-center gap-3 rounded-2xl bg-[#25D366]/15 px-4 py-3 text-sm text-white ring-1 ring-[#25D366]/40 hover:ring-[#C1A88B]/50"
+                                        className="block w-full rounded-md bg-[#111] px-5 py-3 text-center text-base font-semibold text-white ring-1 ring-white/10 transition hover:ring-[#C1A88B]/50"
                                     >
-                                        <MessageCircle className="h-4 w-4 text-[#25D366]" />
-                                        <span>WhatsApp</span>
+                                        Whatsapp
                                     </a>
-                                    <div className="flex items-center gap-2 rounded-2xl bg-white/5 px-4 py-3 text-xs text-white/75 ring-1 ring-white/10">
-                                        <Sparkles className="h-4 w-4 text-[#C1A88B]" />
-                                        <span>Ask for booth hours or book a walkthrough.</span>
-                                    </div>
+                                    <a
+                                        href="mailto:sales.elev8@habitat28.com"
+                                        className="block w-full rounded-md bg-[#111] px-5 py-3 text-center text-base font-semibold text-white ring-1 ring-white/10 transition hover:ring-[#C1A88B]/50"
+                                    >
+                                        Email
+                                    </a>
+                                    <a
+                                        href="tel:+19056930028"
+                                        className="block w-full rounded-md bg-[#111] px-5 py-3 text-center text-base font-semibold text-white ring-1 ring-white/10 transition hover:ring-[#C1A88B]/50"
+                                    >
+                                        Phone No.
+                                    </a>
                                 </div>
-
-                                {submitted ? (
-                                    <div className="mt-6 space-y-5">
-                                        <div className="flex items-start gap-3 rounded-2xl bg-white/5 p-4 ring-1 ring-[#C1A88B]/25">
-                                            <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-full bg-[#C1A88B]/15">
-                                                <Check className="h-5 w-5 text-[#C1A88B]" />
-                                            </div>
-                                            <div>
-                                                <p className="text-sm font-semibold text-white">
-                                                    You&apos;re on the list.
-                                                </p>
-                                                <p className="text-sm text-white/70">
-                                                    We&apos;ll share kitchen launches, show appearances,
-                                                    and showroom details tailored to your city.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <button
-                                            className="w-full rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow hover:brightness-95"
-                                            onClick={onClose}
-                                        >
-                                            Close
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                                        <div className="grid gap-4 sm:grid-cols-2">
-                                            <label className="space-y-1 text-sm text-white/80">
-                                                <span className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                                    Name
-                                                </span>
-                                                <input
-                                                    value={form.name}
-                                                    onChange={(e) =>
-                                                        handleChange("name", e.target.value)
-                                                    }
-                                                    placeholder="Alex Morgan"
-                                                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
-                                                />
-                                            </label>
-                                            <label className="space-y-1 text-sm text-white/80">
-                                                <span className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                                    Email
-                                                </span>
-                                                <input
-                                                    type="email"
-                                                    required
-                                                    value={form.email}
-                                                    onChange={(e) =>
-                                                        handleChange("email", e.target.value)
-                                                    }
-                                                    placeholder="you@example.com"
-                                                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
-                                                />
-                                            </label>
-                                        </div>
-                                        <label className="space-y-1 text-sm text-white/80">
-                                            <span className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                                City / Country
-                                            </span>
-                                            <input
-                                                value={form.city}
-                                                onChange={(e) => handleChange("city", e.target.value)}
-                                                placeholder="Austin, USA"
-                                                className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 focus:border-[#C1A88B]/60 focus:outline-none"
-                                            />
-                                        </label>
-
-                                        {/* GDPR-ish consent + promise of value */}
-                                        <div className="space-y-2 rounded-2xl bg-white/5 p-3 text-xs text-white/70 ring-1 ring-white/10">
-                                            <div className="flex items-center gap-2">
-                                                <Sparkles className="h-4 w-4 text-[#C1A88B]" />
-                                                <span>
-                                                    We send kitchen news, launch announcements, and the
-                                                    nearest showroom or event based on your location.
-                                                </span>
-                                            </div>
-                                            <label className="flex items-start gap-2 text-[11px] leading-relaxed">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={consent}
-                                                    onChange={(e) => setConsent(e.target.checked)}
-                                                    className="mt-0.5 h-3.5 w-3.5 rounded border-white/30 bg-transparent"
-                                                    required
-                                                />
-                                                <span>
-                                                    I agree to receive email updates from Habitat28 /
-                                                    ELEV8 Kitchens. I understand I can unsubscribe at any
-                                                    time. Please see our{" "}
-                                                    <a
-                                                        href="/privacy-policy"
-                                                        className="underline underline-offset-2"
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                    >
-                                                        Privacy Policy
-                                                    </a>
-                                                    .
-                                                </span>
-                                            </label>
-                                        </div>
-
-                                        {status === "error" && (
-                                            <p className="text-xs text-red-400">
-                                                Something went wrong. Please try again in a moment.
-                                            </p>
-                                        )}
-
-                                        <button
-                                            type="submit"
-                                            disabled={status === "loading"}
-                                            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-semibold text-black shadow transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-70"
-                                        >
-                                            {status === "loading"
-                                                ? "Submitting..."
-                                                : "Get FutureScape updates"}
-                                            {status !== "loading" && (
-                                                <Send className="h-4 w-4" aria-hidden="true" />
-                                            )}
-                                        </button>
-                                    </form>
-                                )}
                             </div>
+
+                            <div className="relative h-full w-full">
+                                <img
+                                    src="https://res.cloudinary.com/dczzibbkw/image/upload/v1762286603/NF-101_12_copy_on3yzt.webp"
+                                    alt="Elev8 Outdoor Kitchen at FutureScape USA"
+                                    className="h-full w-full object-cover"
+                                />
+                            </div>
+                        </div>
+                        <div className="border-t border-white/10 bg-black/60 px-4 py-2 text-center text-xs text-white/60">
+                            Created with Klaviyo
                         </div>
                     </motion.div>
                 </motion.div>
@@ -831,7 +703,7 @@ export default function ProductPage({
                         images={gallery}
                         onOpen={(i) => setLightbox({ index: i })}
                     />
-                    <div className="mt-6 grid grid-cols-3 gap-3 text-white/80">
+                    <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-white/80">
                         {badges.map((b) => (
                             <div
                                 key={b}
@@ -865,17 +737,17 @@ export default function ProductPage({
                             about. Trusted by 100s. Own yours today!
                         </div>
 
-                        <div className="flex items-end gap-2">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:gap-3">
                             <div className="flex items-baseline gap-1">
-                                <p className="text-3xl font-semibold text-white">
+                                <p className="text-4xl sm:text-3xl font-semibold text-white leading-tight">
                                     {formatMoney(price)}
                                 </p>
                                 <span className="text-xs tracking-wide text-white/60">USD</span>
                             </div>
 
                             {compareAt && (
-                                <div className="flex items-baseline gap-1">
-                                    <p className="text-lg text-white/60 line-through">
+                                <div className="flex items-baseline gap-1 sm:mt-0">
+                                    <p className="text-base sm:text-lg text-white/60 line-through">
                                         {formatMoney(compareAt)}
                                     </p>
                                     <span className="text-[10px] text-white/40">USD</span>
@@ -932,8 +804,8 @@ export default function ProductPage({
                             </div>
 
                             {/* Qty + Warranty note */}
-                            <div className="flex items-center justify-between">
-                                <div className="inline-flex items-center rounded-full bg-white/5 ring-1 ring-white/10">
+                            <div className="flex flex-wrap items-center gap-3 justify-between">
+                                <div className="inline-flex items-center rounded-full bg-white/5 ring-1 ring-white/10 px-2">
                                     <button
                                         className="p-2"
                                         aria-label="Decrease"
@@ -941,7 +813,7 @@ export default function ProductPage({
                                     >
                                         <Minus />
                                     </button>
-                                    <span className="px-4 tabular-nums">{qty}</span>
+                                    <span className="px-4 tabular-nums text-base">{qty}</span>
                                     <button
                                         className="p-2"
                                         aria-label="Increase"
@@ -950,9 +822,9 @@ export default function ProductPage({
                                         <Plus />
                                     </button>
                                 </div>
-                                <div className="flex items-center gap-3 text-sm text-white/70">
-                                    <ShieldCheck className="h-4 w-4 text-[#C1A88B]" /> 1-Year
-                                    warranty included
+                                <div className="flex items-center gap-2 text-sm text-white/75">
+                                    <ShieldCheck className="h-4 w-4 text-[#C1A88B]" />
+                                    <span className="leading-none">1-Year warranty included</span>
                                 </div>
                             </div>
 
@@ -1773,3 +1645,4 @@ export default function ProductPage({
         </section>
     );
 }
+
