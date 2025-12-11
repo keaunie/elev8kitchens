@@ -16,7 +16,7 @@ export default function Navbar() {
   const navItems = [
     { label: "Home", href: "/" },
     { label: "About Us", href: "/story" },
-    { label: "Shop", href: "/Elev8Kitchens" },
+    { label: "Products", href: "/Elev8Kitchens" },
     { label: "Book a Consultation", href: "/consultation" },
   ];
 
@@ -87,9 +87,9 @@ export default function Navbar() {
               scrolled ? "gap-4" : "gap-6",
             ].join(" ")}
           >
-            <IconButton ariaLabel="Cart" compact={scrolled}>
+            {/* <IconButton ariaLabel="Cart" compact={scrolled}>
               <CartButton />
-            </IconButton>
+            </IconButton> */}
           </div>
 
           {/* Mobile menu button */}
@@ -140,10 +140,10 @@ export default function Navbar() {
                 <User size={20} />
                 Account
               </a> */}
-              <a href="cart" className="inline-flex items-center gap-2">
+              {/* <a href="cart" className="inline-flex items-center gap-2">
                 <ShoppingBag size={20} />
                 Cart
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

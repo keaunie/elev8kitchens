@@ -1,4 +1,4 @@
-// ProductPage.jsx (imports catalog JSON + variant-aware UI)
+﻿// ProductPage.jsx (imports catalog JSON + variant-aware UI)
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
-import catalog from "../data/products.json"; // <— path to the JSON file
+import catalog from "../data/products.json"; // <- path to the JSON file
 import { useCart } from "../context/CartContext";
 import Payment from "../components/Payment";
 
@@ -226,7 +226,7 @@ function StickyATC({ visible, title, price, onClick }) {
                             </div>
 
                             {/* Responsive button size */}
-                            <button
+                            {/* <button
                                 onClick={onClick}
                                 className="
                   rounded-full bg-[#C1A88B] px-5 py-3 text-sm font-medium text-black shadow
@@ -236,6 +236,13 @@ function StickyATC({ visible, title, price, onClick }) {
                 "
                             >
                                 Add to cart
+                            </button> */}
+
+                            <button
+                                onClick={onClick}
+                                className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                                Talk to Specialist
                             </button>
                         </div>
                     </div>
@@ -432,7 +439,7 @@ function ProductStoryParallax() {
             title: "Entertainment That Lasts",
             kicker: "Screen & Sound, Built-In",
             icon: <Sparkles className="h-5 w-5 text-[#C1A88B]" />,
-            body: "Weatherproof 26” (XL) or 42” (XXL) Smart TVs and in-wall Bluetooth speakers turn every cookout into a cinematic, music-filled experience.",
+            body: "Weatherproof 26' (XL) or 42' (XXL) Smart TVs and in-wall Bluetooth speakers turn every cookout into a cinematic, music-filled experience.",
         },
         {
             title: "Organized Outdoor Living",
@@ -470,7 +477,7 @@ function ProductStoryParallax() {
                             transition={{ duration: 0.6 }}
                             className="font-heading text-4xl text-[#C1A88B] md:text-5xl"
                         >
-                            Why North Americans Call ELEV8 Their Backyard’s Crown Jewel
+                            Why North Americans Call ELEV8 Their Backyard's Crown Jewel
                         </motion.h2>
                         <motion.p
                             initial={{ opacity: 0 }}
@@ -479,7 +486,7 @@ function ProductStoryParallax() {
                             transition={{ delay: 0.15, duration: 0.6 }}
                             className="mx-auto mt-4 max-w-3xl text-white/85 md:text-lg"
                         >
-                            Crafted by Habitat28, ELEV8 isn’t just a BBQ—it’s a complete
+                            Crafted by Habitat28, ELEV8 isn't just a BBQ-it's a complete
                             outdoor living upgrade, blending professional performance with
                             hotel-grade design.
                         </motion.p>
@@ -547,6 +554,7 @@ export default function ProductPage({
     const [toastVisible, setToastVisible] = useState(false);
     const [showAllFeatures, setShowAllFeatures] = useState(false);
     const [newsletterOpen, setNewsletterOpen] = useState(false);
+    const [showContactModal, setShowContactModal] = useState(false);
 
     const variant = useMemo(
         () => getVariant(product, size, color),
@@ -733,7 +741,7 @@ export default function ProductPage({
 
                         {/* Marketing Banner */}
                         <div className="mb-4 rounded-xl bg-white/10 p-4 text-center text-sm leading-relaxed text-white/90">
-                            This isn’t just a BBQ. It’s the kitchen you’ve been dreaming
+                            This isn't just a BBQ. It's the kitchen you've been dreaming
                             about. Trusted by 100s. Own yours today!
                         </div>
 
@@ -757,7 +765,7 @@ export default function ProductPage({
 
                         {compareAt && (
                             <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#ff5b5b] px-3 py-1 text-xs font-semibold tracking-wide text-white shadow">
-                                <span className="text-sm">🔥</span>
+                                <span className="text-sm">ðŸ”¥</span>
                                 <span>ON SALE &amp; LIMITED STOCK!</span>
                             </div>
                         )}
@@ -829,8 +837,8 @@ export default function ProductPage({
                             </div>
 
                             {/* CTAs */}
-                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                <button
+                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-1">
+                                {/* <button
                                     className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
                                     disabled={!variant}
                                     onClick={handleAddToCart}
@@ -843,6 +851,14 @@ export default function ProductPage({
                                     onClick={handleBuyNow}
                                 >
                                     Buy Now
+                                </button> */}
+
+                                <button
+                                    className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
+                                    disabled={!variant}
+                                    onClick={() => setShowContactModal(true)}
+                                >
+                                    Talk to Specialist
                                 </button>
                             </div>
 
@@ -859,7 +875,7 @@ export default function ProductPage({
                                     const allFeatures = [
                                         {
                                             title: "Professional-Grade Grilling",
-                                            body: "Unleash your inner chef with a 4/6-burner, Up to 85,000 BTU BBQ and rotisserie system—built for precision, performance, and perfection.",
+                                            body: "Unleash your inner chef with a 4/6-burner, Up to 85,000 BTU BBQ and rotisserie system-built for precision, performance, and perfection.",
                                             icon: <Zap className="h-5 w-5 text-[#C1A88B]" />,
                                         },
                                         {
@@ -869,7 +885,7 @@ export default function ProductPage({
                                         },
                                         {
                                             title: "Smart Entertainment Hub",
-                                            body: "Integrated Smart TV (42” XXL / 26” XL) and Bluetooth speakers create the ultimate outdoor lounge experience.",
+                                            body: "Integrated Smart TV (42' XXL / 26' XL) and Bluetooth speakers create the ultimate outdoor lounge experience.",
                                             icon: <Sparkles className="h-5 w-5 text-[#C1A88B]" />,
                                         },
                                         {
@@ -879,7 +895,7 @@ export default function ProductPage({
                                         },
                                         {
                                             title: "Integrated Bar Fridge",
-                                            body: "Keep beverages perfectly chilled on a sleek sintered-stone countertop—where design meets function.",
+                                            body: "Keep beverages perfectly chilled on a sleek sintered-stone countertop-where design meets function.",
                                             icon: <RefreshCcw className="h-5 w-5 text-[#C1A88B]" />,
                                         },
                                         {
@@ -1051,7 +1067,7 @@ export default function ProductPage({
                                                         Integrated Smart Features
                                                     </p>
                                                     <ul className="mt-1 space-y-1">
-                                                        <li>• Smart TV: 26” (XL) or upgraded 42” (XXL)</li>
+                                                        <li>• Smart TV: 26' (XL) or upgraded 42' (XXL)</li>
                                                         <li>• Built-in Bluetooth speakers</li>
                                                         <li>• LED interior and exterior ambiance lighting</li>
                                                     </ul>
@@ -1195,7 +1211,7 @@ export default function ProductPage({
                                 <span>
                                     Built entirely from{" "}
                                     <strong className="text-white">Black Stainless Steel</strong>{" "}
-                                    — including grates, racks, and flame tamers — for superior
+                                    - including grates, racks, and flame tamers - for superior
                                     durability and corrosion resistance.
                                 </span>
                             </li>
@@ -1210,7 +1226,7 @@ export default function ProductPage({
                         </ul>
 
                         <p className="text-xs text-white/60">
-                            Engineered for precision and longevity — crafted to elevate every
+                            Engineered for precision and longevity - crafted to elevate every
                             backyard culinary moment.
                         </p>
                     </div>
@@ -1330,14 +1346,14 @@ export default function ProductPage({
 
                         <p className="text-sm leading-relaxed text-white/80 md:text-base">
                             Take your gatherings to the next level with a built-in
-                            <strong className="text-white"> 42” / 26” Smart TV</strong>.
+                            <strong className="text-white"> 42' / 26' Smart TV</strong>.
                             Seamlessly stream your favorite shows, sports, or cooking videos
                             right from your outdoor kitchen.
                         </p>
 
                         <p className="text-sm leading-relaxed text-white/80 md:text-base">
                             Integrated premium in-wall Bluetooth speakers deliver rich,
-                            immersive sound—perfect for ambient music, movie nights, or lively
+                            immersive sound-perfect for ambient music, movie nights, or lively
                             social moments.
                         </p>
                     </div>
@@ -1408,7 +1424,7 @@ export default function ProductPage({
                             </li>
                             <li>
                                 Engineered to operate reliably in temperatures exceeding{" "}
-                                <strong className="text-white">100°F</strong>.
+                                <strong className="text-white">100Â°F</strong>.
                             </li>
                             <li>Optimized shelving ensures even cooling and organized access.</li>
                         </ul>
@@ -1442,7 +1458,7 @@ export default function ProductPage({
                         </h2>
                         <p className="mx-auto mt-3 max-w-2xl text-sm text-white/75 md:text-base">
                             A few simple steps ensure your ELEV8 kitchen arrives, installs,
-                            and performs exactly the way it was designed—flawless from day
+                            and performs exactly the way it was designed-flawless from day
                             one.
                         </p>
                     </div>
@@ -1485,7 +1501,7 @@ export default function ProductPage({
                                 key={item.step}
                                 className="flex flex-col items-center text-center text-white/80"
                             >
-                                {/* Circular “illustration” */}
+                                {/* Circular 'illustration' */}
                                 <div className="mb-5 flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-[#151515] via-[#1f1a15] to-[#050505] ring-2 ring-[#C1A88B]/40 shadow-[0_18px_60px_rgba(0,0,0,0.75)]">
                                     <div className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-black/80 ring-1 ring-white/15">
                                         <span className="text-[11px] uppercase tracking-[0.2em] text-white/60">
@@ -1531,15 +1547,15 @@ export default function ProductPage({
                             {/* Card 1 */}
                             <div className="bg-black px-6 py-10 text-center md:px-10">
                                 <p className="mb-4 text-sm text-white italic md:text-base">
-                                    “The heart of every gathering.”
+                                    'The heart of every gathering.'
                                 </p>
                                 <p className="text-sm leading-relaxed text-white/80 md:text-base">
-                                    Friends don’t ask to sit inside anymore. The ELEV8 has become
-                                    the natural place to gather—TV on, music low, and dinner on
+                                    Friends don't ask to sit inside anymore. The ELEV8 has become
+                                    the natural place to gather-TV on, music low, and dinner on
                                     the grill. It changed how we use our home.
                                 </p>
                                 <p className="mt-5 text-sm font-semibold text-white">
-                                    – Lauren M.
+                                    - Lauren M.
                                 </p>
                                 <p className="text-xs uppercase tracking-wide text-white/65">
                                     Verified Buyer
@@ -1549,7 +1565,7 @@ export default function ProductPage({
                             {/* Card 2 */}
                             <div className="bg-black px-6 py-10 text-center md:px-10">
                                 <p className="mb-4 text-sm text-white italic md:text-base">
-                                    “Hotel feel, at home.”
+                                    'Hotel feel, at home.'
                                 </p>
                                 <p className="text-sm leading-relaxed text-white/80 md:text-base">
                                     The finishes, lighting, and layout feel like something from a
@@ -1557,7 +1573,7 @@ export default function ProductPage({
                                     and late-night cocktails.
                                 </p>
                                 <p className="mt-5 text-sm font-semibold text-white">
-                                    – Michael &amp; Dana S.
+                                    - Michael &amp; Dana S.
                                 </p>
                                 <p className="text-xs uppercase tracking-wide text-white/65">
                                     Verified Buyers
@@ -1567,15 +1583,15 @@ export default function ProductPage({
                             {/* Card 3 */}
                             <div className="bg-black px-6 py-10 text-center md:px-10">
                                 <p className="mb-4 text-sm text-white italic md:text-base">
-                                    “Winter? We still use it.”
+                                    'Winter? We still use it.'
                                 </p>
                                 <p className="text-sm leading-relaxed text-white/80 md:text-base">
                                     We live where winters are harsh, and I worried about
-                                    durability. The ELEV8 hasn’t missed a beat—no rust, no issues.
-                                    It’s as solid as the day it arrived.
+                                    durability. The ELEV8 hasn't missed a beat-no rust, no issues.
+                                    It's as solid as the day it arrived.
                                 </p>
                                 <p className="mt-5 text-sm font-semibold text-white">
-                                    – Chris T.
+                                    - Chris T.
                                 </p>
                                 <p className="text-xs uppercase tracking-wide text-white/65">
                                     Verified Buyer
@@ -1585,7 +1601,7 @@ export default function ProductPage({
                             {/* Card 4 */}
                             <div className="bg-black px-6 py-10 text-center md:px-10">
                                 <p className="mb-4 text-sm text-white italic md:text-base">
-                                    “The upgrade our backyard needed.”
+                                    'The upgrade our backyard needed.'
                                 </p>
                                 <p className="text-sm leading-relaxed text-white/80 md:text-base">
                                     Between the sound system, the TV, and the grill setup, our
@@ -1593,7 +1609,7 @@ export default function ProductPage({
                                     ask where we got it.
                                 </p>
                                 <p className="mt-5 text-sm font-semibold text-white">
-                                    – Priya K.
+                                    - Priya K.
                                 </p>
                                 <p className="text-xs uppercase tracking-wide text-white/65">
                                     Verified Buyer
@@ -1604,11 +1620,84 @@ export default function ProductPage({
                 </div>
             </section>
 
+
+            <AnimatePresence>
+                {showContactModal && (
+                    <motion.div
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 12 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 12 }}
+                            className="w-full max-w-lg rounded-3xl bg-gradient-to-b from-[#0f0f0f] to-[#0a0a0a] p-6 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
+                        >
+                            <div className="flex items-start justify-between gap-3">
+                                <div>
+                                    <p className="text-[11px] uppercase tracking-[0.22em] text-[#C1A88B]/80">
+                                        Connect with us
+                                    </p>
+                                    <h3 className="mt-1 text-xl font-semibold text-white">
+                                        Talk to a Specialist
+                                    </h3>
+                                </div>
+                                <button
+                                    onClick={() => setShowContactModal(false)}
+                                    className="rounded-full bg-white/10 px-3 py-1 text-lg text-white hover:bg-white/15"
+                                    aria-label="Close"
+                                >
+                                    ×
+                                </button>
+                            </div>
+
+                            <div className="mt-4 space-y-4 text-sm text-white/85">
+                                <p>
+                                    Reach us any way you prefer and we&apos;ll guide you through sizes,
+                                    finishes, delivery, and installation.
+                                </p>
+                                <div className="space-y-3 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
+                                    <a
+                                        href="tel:+19056930028"
+                                        className="flex items-center justify-between rounded-xl bg-black/40 px-4 py-3 ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
+                                    >
+                                        <span className="text-white">Call</span>
+                                        <span className="font-semibold text-[#C1A88B]">+1 (905) 693-0028</span>
+                                    </a>
+                                    <a
+                                        href="mailto:sales.elev8@habitat28.com"
+                                        className="flex items-center justify-between rounded-xl bg-black/40 px-4 py-3 ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
+                                    >
+                                        <span className="text-white">Email</span>
+                                        <span className="font-semibold text-[#C1A88B]">sales.elev8@habitat28.com</span>
+                                    </a>
+                                    <a
+                                        href="https://wa.me/19056930028?text=Hi%2C%20I%27d%20like%20to%20talk%20to%20a%20specialist%20about%20ELEV8%20Kitchens."
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center justify-between rounded-xl bg-black/40 px-4 py-3 ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
+                                    >
+                                        <span className="text-white">WhatsApp</span>
+                                        <span className="font-semibold text-[#C1A88B]">Chat now</span>
+                                    </a>
+                                </div>
+                                <p className="text-xs text-white/60">
+                                    We can also arrange showroom visits and provide shipping quotations after your payment
+                                    preference (full or deposit).
+                                </p>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <StickyATC
                 visible={stuck}
-                title={`${product.title} — ${size} / ${color}`}
+                title={`${product.title} - ${size} / ${color}`}
                 price={price}
-                onClick={handleAddToCart}
+                onClick={() => setShowContactModal(true)}
             />
 
             {lightbox && (
@@ -1635,7 +1724,7 @@ export default function ProductPage({
                             <div>
                                 <p className="font-medium">Added to cart</p>
                                 <p className="text-xs text-white/70">
-                                    {product.title} — {size} / {color}
+                                    {product.title} - {size} / {color}
                                 </p>
                             </div>
                         </div>
@@ -1645,4 +1734,9 @@ export default function ProductPage({
         </section>
     );
 }
+
+
+
+
+
 
