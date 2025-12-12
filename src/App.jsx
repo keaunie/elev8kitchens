@@ -158,9 +158,9 @@ function Home() {
 
   // Placeholder carousel images — replace with provided assets when ready
   const thanksImages = [
-    "src/assets/showcase1.jpg",
-    "src/assets/showcase2.jpg",
-    "src/assets/showcase3.jpg",
+    "https://raw.githubusercontent.com/keaunie/elev8kitchens/refs/heads/main/src/assets/showcase1.jpg",
+    "https://raw.githubusercontent.com/keaunie/elev8kitchens/refs/heads/main/src/assets/showcase2.jpg",
+    "https://raw.githubusercontent.com/keaunie/elev8kitchens/refs/heads/main/src/assets/showcase3.jpg",
   ];
 
   return (
