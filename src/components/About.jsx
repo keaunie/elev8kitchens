@@ -12,11 +12,11 @@ export default function About({
     ],
     cta = { label: "Order Now", href: "/Elev8Kitchens" },
     leftImage = {
-        src: "https://elev8kitchens.com/cdn/shop/files/about-left.jpg?v=1",
+        src: "https://cdn.shopify.com/s/files/1/0692/3147/6903/files/about-left.jpg?v=1745774151",
         alt: "ELEV8 black outdoor kitchen",
     },
     rightImage = {
-        src: "https://elev8kitchens.com/cdn/shop/files/about-right.jpg?v=1",
+        src: "https://cdn.shopify.com/s/files/1/0692/3147/6903/files/about-right.webp?v=1745773971",
         alt: "ELEV8 light outdoor kitchen by pool",
     },
 }) {

@@ -26,7 +26,7 @@ export default function Footer() {
                     {/* Brand + pitch */}
                     <div className="md:col-span-4">
                         <img
-                            src="https://elev8kitchens.com/cdn/shop/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896&width=240"
+                            src="https://cdn.shopify.com/s/files/1/0692/3147/6903/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896"
                             alt="ELEV8 Crafted Kitchens"
                             className="h-15 w-auto"
                         />

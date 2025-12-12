@@ -281,7 +281,7 @@ function ThanksModal({ open, onClose, images = [] }) {
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-6">
               <div className="flex-1 space-y-3 text-center md:text-left md:justify-center md:flex md:flex-col">
                 <img
-                  src="https://elev8kitchens.com/cdn/shop/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896&width=480"
+                  src="https://cdn.shopify.com/s/files/1/0692/3147/6903/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896"
                   alt="Elev8 Crafted Kitchens"
                   className="mx-auto h-auto w-auto max-w-[200px] opacity-85 md:mx-0 object-contain"
                 />

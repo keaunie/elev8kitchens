@@ -1234,7 +1234,7 @@ export default function ProductPage({
                     <div className="md:pl-4">
                         <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] p-4 ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)]">
                             <motion.img
-                                src="https://elev8kitchens.com/cdn/shop/files/elev8-grill-station-rotisserie-burners.png?v=1748400731&width=750"
+                                src="https://cdn.shopify.com/s/files/1/0692/3147/6903/files/elev8-grill-station-rotisserie-burners.png?v=1748400731"
                                 alt="ELEV8 outdoor kitchen grilling system"
                                 className="h-full w-full object-contain"
                                 initial={{ scale: 1.03, opacity: 0 }}
@@ -1260,7 +1260,7 @@ export default function ProductPage({
                     <div className="md:pr-4">
                         <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] p-4 ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)]">
                             <motion.img
-                                src="https://elev8kitchens.com/cdn/shop/files/elev8-outdoor-kitchen-hydraulic-door-ambient-lighting.png?v=1748400659&width=900"
+                                src="https://cdn.shopify.com/s/files/1/0692/3147/6903/files/elev8-outdoor-kitchen-hydraulic-door-ambient-lighting.png?v=1748400659"
                                 alt="Hydraulic Lift Door & Ambient Lighting"
                                 className="h-full w-full object-contain"
                                 initial={{ scale: 1.03, opacity: 0 }}
@@ -1361,7 +1361,7 @@ export default function ProductPage({
                     <div className="md:pl-4">
                         <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] p-4 ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)]">
                             <motion.img
-                                src="https://elev8kitchens.com/cdn/shop/files/elev8-bbq-kitchen-smart-tv-bluetooth-speakers.png?v=1748400701&width=750"
+                                src="https://cdn.shopify.com/s/files/1/0692/3147/6903/files/elev8-bbq-kitchen-smart-tv-bluetooth-speakers.png?v=1748400701"
                                 alt="Outdoor Smart TV & Bluetooth Speakers"
                                 className="h-full w-full object-contain"
                                 initial={{ scale: 1.03, opacity: 0 }}
@@ -1387,7 +1387,7 @@ export default function ProductPage({
                     <div className="md:pr-4">
                         <div className="relative overflow-hidden rounded-3xl bg-[#0f0f0f] p-4 ring-1 ring-white/10 shadow-[0_18px_60px_rgba(0,0,0,0.7)]">
                             <motion.img
-                                src="https://elev8kitchens.com/cdn/shop/files/elev8-outdoor-bar-fridge-3-layer-storage.png?v=1748400762&width=750"
+                                src="https://cdn.shopify.com/s/files/1/0692/3147/6903/files/elev8-outdoor-bar-fridge-3-layer-storage.png?v=1748400762"
                                 alt="Outdoor fridge performance and storage"
                                 className="h-full w-full object-contain"
                                 initial={{ scale: 1.03, opacity: 0 }}

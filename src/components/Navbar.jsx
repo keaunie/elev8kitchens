@@ -27,21 +27,21 @@ export default function Navbar() {
         scrolled ? "shadow-[0_1px_0_0_rgba(193,168,139,0.22)]" : "",
       ].join(" ")}
     >
-        <div
-          className={[
-            // background + blur
-            "w-full backdrop-blur supports-[backdrop-filter]:bg-black/75",
-            scrolled ? "bg-black/90" : "bg-black/95",
-            // height + spacing animate
-            "transition-[padding,background-color] duration-300 ease-out",
-            scrolled ? "py-3" : "py-4 md:py-6",
-          ].join(" ")}
-        >
+      <div
+        className={[
+          // background + blur
+          "w-full backdrop-blur supports-[backdrop-filter]:bg-black/75",
+          scrolled ? "bg-black/90" : "bg-black/95",
+          // height + spacing animate
+          "transition-[padding,background-color] duration-300 ease-out",
+          scrolled ? "py-3" : "py-4 md:py-6",
+        ].join(" ")}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 md:px-6">
           {/* Left: Logo */}
           <a href="/" className="flex items-center gap-3">
             <img
-              src="https://elev8kitchens.com/cdn/shop/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896&width=480"
+              src="https://cdn.shopify.com/s/files/1/0692/3147/6903/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896"
               alt="ELEV8 Crafted Kitchens logo"
               className={[
                 "w-auto transition-all duration-300 ease-out will-change-transform",
