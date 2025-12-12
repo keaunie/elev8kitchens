@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import Navbar from "./components/Navbar.jsx";
 import HeroCarousel from "./components/HeroCarousel.jsx";
@@ -80,8 +81,13 @@ function Home() {
     setNewsletterOpen(true);
   }, []);
 
+  // Toggle Klaviyo popup; set to false to disable the auto modal
+  const enableKlaviyoModal = false;
+
   // Ensure Klaviyo onsite script loads, then open the new form (RwT5WS)
   useEffect(() => {
+    if (!enableKlaviyoModal) return;
+
     const formId = "RwT5WS";
     let retries = 0;
 
@@ -106,7 +112,7 @@ function Home() {
 
     loadScriptIfNeeded();
     openForm();
-  }, []);
+  }, [enableKlaviyoModal]);
 
   // Remove any Klaviyo teaser bars/buttons that still render
   useEffect(() => {
@@ -132,12 +138,43 @@ function Home() {
     return () => observer.disconnect();
   }, []);
 
+  // Post-show appreciation modal (once per session)
+  const [thanksOpen, setThanksOpen] = useState(false);
+  const thanksKey = "elev8_fs_thanks_seen";
+
+  useEffect(() => {
+    const seen = sessionStorage.getItem(thanksKey);
+    if (!seen) {
+      const t = setTimeout(() => setThanksOpen(true), 800);
+      return () => clearTimeout(t);
+    }
+    return undefined;
+  }, []);
+
+  const handleThanksClose = () => {
+    sessionStorage.setItem(thanksKey, "true");
+    setThanksOpen(false);
+  };
+
+  // Placeholder carousel images — replace with provided assets when ready
+  const thanksImages = [
+    "src/assets/showcase1.jpg",
+    "src/assets/showcase2.jpg",
+    "src/assets/showcase3.jpg",
+  ];
+
   return (
     <>
       {/* <NewsletterModal
         open={newsletterOpen}
         onClose={() => setNewsletterOpen(false)}
       /> */}
+
+      <ThanksModal
+        open={thanksOpen}
+        onClose={handleThanksClose}
+        images={thanksImages}
+      />
       <HeroCarousel slides={slides} interval={6000} />
       <FeaturesSection
         kicker="What we offer"
@@ -203,5 +240,86 @@ export default function App() {
       <FloatingSocials />
       {/* <Elev8ChatWidget endpoint="/api/chat" /> */}
     </BrowserRouter>
+  );
+}
+
+function ThanksModal({ open, onClose, images = [] }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (!open || images.length === 0) return undefined;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % images.length);
+    }, 2800);
+    return () => clearInterval(id);
+  }, [open, images.length]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/50 backdrop-blur-sm px-3 sm:px-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.25 }}
+            className="relative w-full max-w-4xl overflow-hidden rounded-3xl bg-[#0a0a0a] p-4 sm:p-6 md:p-7 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
+          >
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              className="absolute right-3 top-3 text-lg text-white/60 transition hover:text-white sm:right-4 sm:top-4"
+            >
+              ×
+            </button>
+
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-6">
+              <div className="flex-1 space-y-3 text-center md:text-left md:justify-center md:flex md:flex-col">
+                <img
+                  src="https://elev8kitchens.com/cdn/shop/files/ELEV8-Crafted-Kitchens-Logo.png?v=1748394896&width=480"
+                  alt="Elev8 Crafted Kitchens"
+                  className="mx-auto h-auto w-auto max-w-[200px] opacity-85 md:mx-0 object-contain"
+                />
+                <h3 className="font-heading text-xl text-[#C1A88B] sm:text-2xl md:text-3xl">
+                  Thank You, FutureScape USA
+                </h3>
+                <p className="text-sm leading-relaxed text-white/80 sm:text-base">
+                  We had a great show and sincerely thank everyone who visited Elev8 Crafted Kitchens.
+                  We look forward to seeing you again at our next exhibition.
+                </p>
+                <p className="text-xs text-white/60">— Team Elev8</p>
+                <div className="hidden text-left text-xs text-white/50 md:block">
+                  <p className="font-semibold text-white/70">Highlights</p>
+                  <p className="mt-1">Showcase | Live demos | Outdoor luxury craft</p>
+                </div>
+              </div>
+
+              {images.length > 0 && (
+                <div className="relative hidden flex-1 overflow-hidden rounded-2xl ring-1 ring-white/10 md:block aspect-[4/3]">
+                  <motion.img
+                    key={index}
+                    src={images[index]}
+                    alt="Elev8 showcase"
+                    className="h-full w-full object-cover"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                  />
+                  <div className="absolute bottom-3 right-3 rounded-full bg-black/60 px-3 py-1 text-[11px] uppercase tracking-[0.16em] text-white/70">
+                    FutureScape Recap
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

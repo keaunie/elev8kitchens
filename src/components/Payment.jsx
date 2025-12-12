@@ -158,7 +158,17 @@ function BurnCard({ icon, title, description, bullets = [], cta, onSpecialistCli
           ) : (
             <a
               href={cta.href || "#"}
-              className="inline-flex w-full items-center justify-center rounded-full bg-[#C1A88B] px-6 py-3 text-sm font-medium text-black shadow-lg transition-transform duration-300 hover:scale-105 hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1A88B]/60"
+              onClick={(e) => {
+                if (cta.disabled) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
+              className={`inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-medium text-black shadow-lg transition-transform duration-300 ${
+                cta.disabled
+                  ? "bg-[#C1A88B]/60 cursor-not-allowed"
+                  : "bg-[#C1A88B] hover:scale-105 hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C1A88B]/60"
+              }`}
             >
               {cta.label}
             </a>
@@ -172,15 +182,15 @@ function BurnCard({ icon, title, description, bullets = [], cta, onSpecialistCli
 const defaultOptions = [
   {
     icon: <CreditCard className="h-12 w-12 text-[#C1A88B]" />,
-    title: "Stripe Secure Checkout",
-    description: "Pay in full via Stripe with major cards and wallets.",
+    title: "Stripe Secure Checkout (Coming Soon)",
+    description: "Pay in full via Stripe with major cards and wallets. Coming soon.",
     bullets: [
       "All major credit/debit cards",
       "Apple Pay / Google Pay support",
       "Encrypted, PCI-compliant payments",
       "Instant confirmation & receipts",
     ],
-    cta: { label: "Proceed to Checkout", href: "/checkout" },
+    cta: { label: "Coming Soon", href: "#", disabled: true },
   },
   {
     icon: <ShieldCheck className="h-12 w-12 text-[#C1A88B]" />,
@@ -204,6 +214,6 @@ const defaultOptions = [
       "Keep your cash flow flexible",
       "Integrates with our checkout soon",
     ],
-    cta: { label: "Coming Soon", href: "#" },
+    cta: { label: "Coming Soon", href: "#", disabled: true },
   },
 ];
