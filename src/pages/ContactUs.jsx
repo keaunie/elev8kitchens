@@ -140,7 +140,7 @@ export default function ContactPage() {
 
                   {/* Instagram */}
                   <a
-                    href="https://www.instagram.com/habitat28modular/"
+                    href="https://www.instagram.com/elev8kitchens/"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Instagram"

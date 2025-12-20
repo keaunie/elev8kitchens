@@ -22,7 +22,7 @@ import {
     ChevronRight as ChevronRightIcon,
 } from "lucide-react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import catalog from "../data/products.json"; // <- path to the JSON file
 import { useCart } from "../context/CartContext";
 import Payment from "../components/Payment";
@@ -543,9 +543,16 @@ export default function ProductPage({
     handle = "elev8-modular-outdoor-bbq-kitchen",
 }) {
     const product = useMemo(() => getProductByHandle(handle), [handle]);
+    const [searchParams] = useSearchParams();
 
-    const defaultSize = product.options.find((o) => o.name === "Size").values[0];
-    const defaultColor = product.options.find((o) => o.name === "Color").values[0];
+    const sizeValues = product.options.find((o) => o.name === "Size").values;
+    const colorValues = product.options.find((o) => o.name === "Color").values;
+
+    const sizeParam = searchParams.get("size");
+    const colorParam = searchParams.get("color");
+
+    const defaultSize = sizeParam && sizeValues.includes(sizeParam) ? sizeParam : sizeValues[0];
+    const defaultColor = colorParam && colorValues.includes(colorParam) ? colorParam : colorValues[0];
 
     const [size, setSize] = useState(defaultSize);
     const [color, setColor] = useState(defaultColor);
@@ -554,7 +561,6 @@ export default function ProductPage({
     const [toastVisible, setToastVisible] = useState(false);
     const [showAllFeatures, setShowAllFeatures] = useState(false);
     const [newsletterOpen, setNewsletterOpen] = useState(false);
-    const [showContactModal, setShowContactModal] = useState(false);
 
     const variant = useMemo(
         () => getVariant(product, size, color),
@@ -564,14 +570,30 @@ export default function ProductPage({
     const price = variant?.price ?? 0;
     const compareAt = variant?.compare_at_price ?? null;
 
-    const colorSwatches = product.options
-        .find((o) => o.name === "Color")
-        .values.map((c) => ({
-            id: c.toLowerCase(),
-            name: c,
-            swatch: product.swatches?.[c] || "#d4d4d4",
-        }));
-    const sizes = product.options.find((o) => o.name === "Size").values;
+    const colorSwatches = useMemo(() => {
+        const allowedColors = new Set(
+            product.variants
+                .filter((v) => v.options.Size === size)
+                .map((v) => v.options.Color)
+        );
+
+        return product.options
+            .find((o) => o.name === "Color")
+            .values.filter((c) => allowedColors.has(c))
+            .map((c) => ({
+                id: c.toLowerCase(),
+                name: c,
+                swatch: product.swatches?.[c] || "#d4d4d4",
+            }));
+    }, [product, size]);
+
+    useEffect(() => {
+        if (!colorSwatches.length) return;
+        if (!colorSwatches.find((c) => c.name === color)) {
+            setColor(colorSwatches[0].name);
+        }
+    }, [color, colorSwatches]);
+    const sizes = sizeValues;
 
     const topRef = useRef(null);
     const stuck = useSticky(topRef);
@@ -855,9 +877,15 @@ export default function ProductPage({
                                 <button
                                     className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
                                     disabled={!variant}
-                                    onClick={() => setShowContactModal(true)}
+                                    onClick={() =>
+                                        navigate(
+                                            `/customize/size?size=${encodeURIComponent(
+                                                size
+                                            )}`
+                                        )
+                                    }
                                 >
-                                    Talk to Specialist
+                                    Customize
                                 </button>
                             </div>
 
@@ -1618,80 +1646,6 @@ export default function ProductPage({
                     </div>
                 </div>
             </section>
-
-
-            <AnimatePresence>
-                {showContactModal && (
-                    <motion.div
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0, y: 12 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.95, opacity: 0, y: 12 }}
-                            className="w-full max-w-lg rounded-3xl bg-gradient-to-b from-[#0f0f0f] to-[#0a0a0a] p-6 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
-                        >
-                            <div className="flex items-start justify-between gap-3">
-                                <div>
-                                    <p className="text-[11px] uppercase tracking-[0.22em] text-[#C1A88B]/80">
-                                        Connect with us
-                                    </p>
-                                    <h3 className="mt-1 text-xl font-semibold text-white">
-                                        Talk to a Specialist
-                                    </h3>
-                                </div>
-                                <button
-                                    onClick={() => setShowContactModal(false)}
-                                    className="rounded-full bg-white/10 px-3 py-1 text-lg text-white hover:bg-white/15"
-                                    aria-label="Close"
-                                >
-                                    ×
-                                </button>
-                            </div>
-
-                            <div className="mt-4 space-y-4 text-sm text-white/85">
-                                <p>
-                                    Reach us any way you prefer and we&apos;ll guide you through sizes,
-                                    finishes, delivery, and installation.
-                                </p>
-                                <div className="space-y-3 rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-                                    <a
-                                        href="tel:+19056930028"
-                                        className="flex items-center justify-between rounded-xl bg-black/40 px-4 py-3 ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
-                                    >
-                                        <span className="text-white">Call</span>
-                                        <span className="font-semibold text-[#C1A88B]">+1 (905) 693-0028</span>
-                                    </a>
-                                    <a
-                                        href="mailto:sales.elev8@habitat28.com"
-                                        className="flex items-center justify-between rounded-xl bg-black/40 px-4 py-3 ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
-                                    >
-                                        <span className="text-white">Email</span>
-                                        <span className="font-semibold text-[#C1A88B]">sales.elev8@habitat28.com</span>
-                                    </a>
-                                    <a
-                                        href="https://wa.me/19056930028?text=Hi%2C%20I%27d%20like%20to%20talk%20to%20a%20specialist%20about%20ELEV8%20Kitchens."
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="flex items-center justify-between rounded-xl bg-black/40 px-4 py-3 ring-1 ring-white/10 hover:ring-[#C1A88B]/50"
-                                    >
-                                        <span className="text-white">WhatsApp</span>
-                                        <span className="font-semibold text-[#C1A88B]">Chat now</span>
-                                    </a>
-                                </div>
-                                <p className="text-xs text-white/60">
-                                    We can also arrange showroom visits and provide shipping quotations after your payment
-                                    preference (full or deposit).
-                                </p>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
             <StickyATC
                 visible={stuck}
                 title={`${product.title} - ${size} / ${color}`}
@@ -1733,9 +1687,5 @@ export default function ProductPage({
         </section>
     );
 }
-
-
-
-
 
 

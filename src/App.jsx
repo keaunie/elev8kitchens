@@ -18,6 +18,8 @@ import FaqPage from "./pages/FaqPage.jsx";
 import Consultation from "./pages/Consultation.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import ContactPage from "./pages/ContactUs.jsx";
+import CustomizeSize from "./pages/CustomizeSize.jsx";
+import CustomizeFinish from "./pages/CustomizeFinish.jsx";
 
 // NEW: import your Story page
 import Story from "./pages/Story.jsx";
@@ -80,39 +82,6 @@ function Home() {
   useEffect(() => {
     setNewsletterOpen(true);
   }, []);
-
-  // Toggle Klaviyo popup; set to false to disable the auto modal
-  const enableKlaviyoModal = false;
-
-  // Ensure Klaviyo onsite script loads, then open the new form (RwT5WS)
-  useEffect(() => {
-    if (!enableKlaviyoModal) return;
-
-    const formId = "RwT5WS";
-    let retries = 0;
-
-    const loadScriptIfNeeded = () => {
-      const existing = document.querySelector("script[data-klaviyo-onsite]");
-      if (existing) return;
-      const s = document.createElement("script");
-      s.setAttribute("data-klaviyo-onsite", "true");
-      s.async = true;
-      s.src = "https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=Twa6qJ";
-      document.head.appendChild(s);
-    };
-
-    const openForm = () => {
-      if (window?._klOnsite) {
-        window._klOnsite.push(["openForm", formId]);
-      } else if (retries < 12) {
-        retries += 1;
-        setTimeout(openForm, 400);
-      }
-    };
-
-    loadScriptIfNeeded();
-    openForm();
-  }, [enableKlaviyoModal]);
 
   // Remove any Klaviyo teaser bars/buttons that still render
   useEffect(() => {
@@ -201,6 +170,8 @@ export default function App() {
           <Route index element={<Home />} />          {/* "/" */}
           <Route path="/story" element={<Story />} /> {/* "/story" */}
           <Route path="/Elev8Kitchens" element={<ProductPage />} /> {/* "/Elev8Kitchens" */}
+          <Route path="/customize/size" element={<CustomizeSize />} /> {/* "/customize/size" */}
+          <Route path="/customize/finish" element={<CustomizeFinish />} /> {/* "/customize/finish" */}
           <Route path="/FAQ" element={<FaqPage />} /> {/* "/FAQs" */}
           <Route path="/consultation" element={<Consultation />} /> {/* "/consultation" */}
           <Route path="/cart" element={<CartPage />} /> {/* "/cart" */}
