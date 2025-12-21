@@ -561,6 +561,7 @@ export default function ProductPage({
     const [toastVisible, setToastVisible] = useState(false);
     const [showAllFeatures, setShowAllFeatures] = useState(false);
     const [newsletterOpen, setNewsletterOpen] = useState(false);
+    const [showContactModal, setShowContactModal] = useState(false);
 
     const variant = useMemo(
         () => getVariant(product, size, color),
@@ -877,15 +878,9 @@ export default function ProductPage({
                                 <button
                                     className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
                                     disabled={!variant}
-                                    onClick={() =>
-                                        navigate(
-                                            `/customize/size?size=${encodeURIComponent(
-                                                size
-                                            )}`
-                                        )
-                                    }
+                                    onClick={() => setShowContactModal(true)}
                                 >
-                                    Customize
+                                    Talk to Specialist
                                 </button>
                             </div>
 
@@ -1684,8 +1679,79 @@ export default function ProductPage({
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Contact modal */}
+            <AnimatePresence>
+                {showContactModal && (
+                    <motion.div
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 12 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 12 }}
+                            className="w-full max-w-lg rounded-3xl bg-gradient-to-b from-[#0f0f0f] to-[#0a0a0a] p-6 ring-1 ring-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.6)]"
+                        >
+                            <div className="flex items-start justify-between gap-3">
+                                <div>
+                                    <p className="text-[11px] uppercase tracking-[0.22em] text-white/60">
+                                        Connect with us
+                                    </p>
+                                    <h3 className="mt-1 text-xl font-semibold text-[#C1A88B]">
+                                        Talk to a Specialist
+                                    </h3>
+                                </div>
+                                <button
+                                    onClick={() => setShowContactModal(false)}
+                                    className="rounded-full bg-white/10 px-3 py-1 text-lg text-white hover:bg-white/15"
+                                    aria-label="Close"
+                                >
+                                    ×
+                                </button>
+                            </div>
+
+                            <div className="mt-4 space-y-4 text-sm text-white/85">
+                                <p className="text-white/85">
+                                    Reach us any way you prefer and we&apos;ll guide you through sizes,
+                                    finishes, delivery, and installation.
+                                </p>
+                                <div className="space-y-3 rounded-2xl bg-black/60 p-4 ring-1 ring-white/10">
+                                    <a
+                                        href="tel:+19056930028"
+                                        className="flex items-center justify-between rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-3 hover:border-[#C1A88B]/60"
+                                    >
+                                        <span className="text-white font-semibold">Call</span>
+                                        <span className="font-semibold text-[#C1A88B]">+1 (905) 693-0028</span>
+                                    </a>
+                                    <a
+                                        href="mailto:sales.elev8@habitat28.com"
+                                        className="flex items-center justify-between rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-3 hover:border-[#C1A88B]/60"
+                                    >
+                                        <span className="text-white font-semibold">Email</span>
+                                        <span className="font-semibold text-[#C1A88B]">sales.elev8@habitat28.com</span>
+                                    </a>
+                                    <a
+                                        href="https://wa.me/19056930028?text=Hi%2C%20I%27d%20like%20to%20talk%20to%20a%20specialist%20about%20ELEV8%20Kitchens."
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center justify-between rounded-xl border border-white/10 bg-[#1a1a1a] px-4 py-3 hover:border-[#C1A88B]/60"
+                                    >
+                                        <span className="text-white font-semibold">WhatsApp</span>
+                                        <span className="font-semibold text-[#C1A88B]">Chat now</span>
+                                    </a>
+                                </div>
+                                <p className="text-xs text-white/60">
+                                    We can also arrange showroom visits and provide shipping quotations after your payment
+                                    preference (full or deposit).
+                                </p>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }
-
-
