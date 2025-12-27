@@ -17,6 +17,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "About Us", href: "/story" },
     { label: "Products", href: "/Elev8Kitchens" },
+    { label: "Customization", href: "/customize/size" },
     { label: "Book a Consultation", href: "/consultation" },
   ];
 
@@ -166,4 +167,3 @@ function IconButton({ children, ariaLabel, compact = false }) {
     </button>
   );
 }
-

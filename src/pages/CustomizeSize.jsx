@@ -16,35 +16,73 @@ export default function CustomizeSizePage() {
     const initialSize = sizeParam && sizeValues.includes(sizeParam) ? sizeParam : sizeValues[0];
 
     const [size, setSize] = useState(initialSize);
+    const [isExiting, setIsExiting] = useState(false);
 
     const variantForSize =
         product.variants.find((v) => v.options.Size === size) || product.variants[0];
     const heroImage = variantForSize?.images?.[0] || product.variants[0]?.images?.[0];
 
     const handleContinue = () => {
+        setIsExiting(true);
         const firstColor =
             product.variants.find((v) => v.options.Size === size)?.options.Color ||
             product.options.find((o) => o.name === "Color").values[0];
 
-        navigate(
-            `/customize/finish?size=${encodeURIComponent(size)}&color=${encodeURIComponent(
-                firstColor
-            )}`
-        );
+        setTimeout(() => {
+            navigate(
+                `/customize/finish?size=${encodeURIComponent(size)}&color=${encodeURIComponent(
+                    firstColor
+                )}`
+            );
+        }, 2000);
+    };
+
+    const handleBackToCollection = () => {
+        setIsExiting(true);
+        setTimeout(() => {
+            navigate("/Elev8Kitchens");
+        }, 2000);
     };
 
     return (
-        <section className="relative min-h-screen overflow-hidden bg-gradient-to-b from-black via-[#0a0a0a] to-[#050505] text-white">
+        <motion.section
+            className="relative min-h-screen overflow-hidden bg-gradient-to-b from-black via-[#0a0a0a] to-[#050505] text-white"
+            initial={{ opacity: 1, y: 0 }}
+            animate={
+                isExiting
+                    ? { opacity: 0.9, scale: 0.96, filter: "blur(2px)" }
+                    : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+            }
+            transition={{ duration: isExiting ? 1 : 0.5, ease: "easeInOut" }}
+        >
             <div className="pointer-events-none absolute inset-0">
                 <div className="absolute left-12 top-16 h-72 w-72 rounded-full bg-[#C1A88B]/12 blur-3xl" />
                 <div className="absolute right-[-80px] top-20 h-96 w-96 rounded-full bg-[#8b6d46]/20 blur-3xl" />
                 <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-b from-[#C1A88B]/15 via-transparent to-[#C1A88B]/8 blur-3xl" />
             </div>
+            {/* Vignette fade-out overlay */}
+            <motion.div
+                className="pointer-events-none absolute inset-0 z-20"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isExiting ? 1 : 0 }}
+                transition={{ duration: 1, ease: "easeInOut" }}
+                style={{
+                    background:
+                        "radial-gradient(circle at center, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.9) 90%, rgba(0,0,0,1) 100%)",
+                }}
+            />
+            {/* Solid blackout layer to hold for loading feel */}
+            <motion.div
+                className="pointer-events-none absolute inset-0 z-10 bg-black"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isExiting ? 1 : 0 }}
+                transition={{ duration: 1, delay: 1, ease: "easeInOut" }}
+            />
 
             <div className="mx-auto max-w-7xl px-6 py-12 relative">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <button
-                        onClick={() => navigate("/Elev8Kitchens")}
+                        onClick={handleBackToCollection}
                         className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:border-[#C1A88B]/50 hover:text-white"
                     >
                         <ArrowLeft className="h-4 w-4" />
@@ -58,42 +96,9 @@ export default function CustomizeSizePage() {
                     </div>
                 </div>
 
-                <div className="mt-10 grid gap-10 lg:grid-cols-[420px,1fr] items-start">
-                    {/* Size selector + chosen card */}
-                    <div className="space-y-6">
-                        <div>
-                            <p className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                Size selection
-                            </p>
-                            <h2 className="text-3xl font-semibold text-[#C1A88B]">
-                                Set your platform
-                            </h2>
-                            <p className="mt-2 text-sm text-white/70">
-                                Choose the footprint that fits your backyard—then we’ll fine-tune the finishes.
-                            </p>
-                        </div>
-
-                        {/* Carousel options */}
-                        <SizeCarousel sizeValues={sizeValues} size={size} setSize={setSize} />
-
-                        {/* Chosen size card */}
-                        <div className="rounded-2xl border border-[#C1A88B]/30 bg-[#C1A88B]/10 p-4 shadow-[0_15px_40px_rgba(0,0,0,0.4)]">
-                            <p className="text-sm text-[#C1A88B]">Chosen size</p>
-                            <p className="text-lg font-semibold text-white mt-1">{size}</p>
-                            <p className="mt-2 text-xs text-white/70">
-                                Continue to finishes to unlock available colorways and Special Edition treatments.
-                            </p>
-                            <button
-                                onClick={handleContinue}
-                                className="mt-4 w-full rounded-full bg-[#C1A88B] px-4 py-3 text-sm font-semibold text-black shadow-lg transition hover:brightness-95"
-                            >
-                                Continue to finishes
-                            </button>
-                        </div>
-                    </div>
-
+                <div className="relative mt-10 flex flex-col gap-10 lg:flex-row lg:items-start">
                     {/* Showroom stage */}
-                    <div className="relative h-full">
+                    <div className="relative h-full min-h-[650px] flex-1">
                         <div className="absolute inset-0 -z-10 rounded-[32px] border border-white/5 bg-gradient-to-b from-white/5 via-white/0 to-white/5 blur-xl" />
                         <div className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-[#0b0b0b]/80 p-6 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
                             <div className="flex items-start justify-between">
@@ -157,27 +162,56 @@ export default function CustomizeSizePage() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Size selector + chosen card */}
+                    <div className="w-full lg:max-w-[420px]">
+                        <div className="space-y-6 flex flex-col w-full">
+                            <div>
+                                <p className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                    Size selection
+                                </p>
+                                <h2 className="text-3xl font-semibold text-[#C1A88B]">
+                                    Set your platform
+                                </h2>
+                                <p className="mt-2 text-sm text-white/70">
+                                    Choose the footprint that fits your backyard—then we’ll fine-tune the finishes.
+                                </p>
+                            </div>
+
+                            <SizeCarousel sizeValues={sizeValues} size={size} setSize={setSize} />
+
+                            <div className="rounded-2xl border border-[#C1A88B]/30 bg-[#C1A88B]/10 p-4 shadow-[0_15px_40px_rgba(0,0,0,0.4)]">
+                                <p className="text-sm text-[#C1A88B]">Chosen size</p>
+                                <p className="text-lg font-semibold text-white mt-1">{size}</p>
+                                <p className="mt-2 text-xs text-white/70">
+                                    Continue to finishes to unlock available colorways and Special Edition treatments.
+                                </p>
+                                <button
+                                    onClick={handleContinue}
+                                    className="mt-4 w-full rounded-full bg-[#C1A88B] px-4 py-3 text-sm font-semibold text-black shadow-lg transition hover:brightness-95"
+                                >
+                                    Continue to finishes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </motion.section>
     );
 }
 
 function SizeCarousel({ sizeValues, size, setSize }) {
     const total = sizeValues.length || 1;
     const currentIndex = Math.max(sizeValues.indexOf(size), 0);
-    const visibleCount = Math.min(3, total);
-    const halfWindow = Math.floor(visibleCount / 2);
-    const maxOffset = Math.max(total - visibleCount, 0);
-    const targetOffset = Math.max(0, Math.min(currentIndex - halfWindow, maxOffset));
-    const slideWidth = 100 / visibleCount;
-    const perItemShift = 100 / total;
+    const slideWidth = 100; // show one at a time
+    const trackWidth = total * slideWidth;
 
     return (
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0a]/80 p-4">
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0a]/80 p-4 min-h-[260px]">
             <div className="mb-3 flex items-center justify-between">
                 <span className="text-sm font-semibold text-[#c7e19a] uppercase tracking-[0.14em]">
-                    Rim Styles • Sizes
+                    Sizes
                 </span>
                 <div className="h-1 w-28 rounded-full bg-white/10">
                     <div
@@ -211,21 +245,21 @@ function SizeCarousel({ sizeValues, size, setSize }) {
                     ›
                 </button>
 
-                <div className="overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-r from-white/5 via-[#111] to-white/5 px-4 py-5">
+                <div className="overflow-hidden rounded-2xl border border-white/5 bg-gradient-to-r from-white/5 via-[#111] to-white/5 px-4 py-5 min-h-[200px] flex items-center">
                     <motion.div
                         className="flex items-center"
                         animate={{
-                            x: sizeValues.length ? `-${targetOffset * perItemShift}%` : "0%",
+                            x: sizeValues.length ? `-${currentIndex * slideWidth}%` : "0%",
                         }}
                         transition={{ type: "spring", stiffness: 120, damping: 18 }}
-                        style={{ width: "100%" }}
+                        style={{ width: `${trackWidth}%` }}
                     >
                         {sizeValues.map((s) => {
                             const selected = size === s;
                             return (
                                 <div
                                     key={s}
-                                    className="flex flex-col items-center gap-3"
+                                    className="flex flex-col items-center justify-center gap-3 min-h-[180px]"
                                     style={{ flex: `0 0 ${slideWidth}%` }}
                                 >
                                     <button

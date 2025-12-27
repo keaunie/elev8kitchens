@@ -153,67 +153,6 @@
                     "payment_link": "https://square.link/u/InhkLZzA"
                 },
                 {
-                    "sku": "ELEV8-XXXL-TITANIUM",
-                    "options": {
-                        "Size": "XXXL (Special Edition)",
-                        "Color": "TITANIUM"
-                    },
-                    "price": 25899,
-                    "compare_at_price": "",
-                    "images": [
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-titanium-canada_bmeykg.png",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286663/Untitled_design_copy_tpqrpg.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286651/NF-101_17_copy_ydwdhm.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286650/NF-101_10_copy_gcozbn.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286618/Elev8_Front_Facing_1200_X_1200_-_Xxl_TiDim_copy_yvaabr.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp"
-                    ],
-                    "available": true,
-                    "payment_link": ""
-                },
-                {
-                    "sku": "ELEV8-XXXL-PLATINUM",
-                    "options": {
-                        "Size": "XXXL (Special Edition)",
-                        "Color": "PLATINUM"
-                    },
-                    "price": 25899,
-                    "compare_at_price": "",
-                    "images": [
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-platinum-canada_v0huwz.png",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286621/Enscape_2025-04-23-16-45-32_copy_uvsddh.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286619/elev8_1_without_bg_copy_t6yuqf.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286619/elev8_2_without_bg_copy_m873us.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286618/Elev8_Front_Facing_1200_X_1200_-_Xxl_PlDim_copy_rqa1zu.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/k2_copy_qcz1bi.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/k1_copy_ij8xt4.webp"
-                    ],
-                    "available": true,
-                    "payment_link": ""
-                },
-                {
-                    "sku": "ELEV8-XXXL-ANTHRACITE",
-                    "options": {
-                        "Size": "XXXL (Special Edition)",
-                        "Color": "ANTHRACITE"
-                    },
-                    "price": 25899,
-                    "compare_at_price": "",
-                    "images": [
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762804001/elev8-modular-outdoor-bbq-kitchen-xxl-anthracite-canada_bswk07.png",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286652/NF-101_20_copy_mewtvm.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286626/Enscape_2025-04-28-16-55-12_copy_zrhv78.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286609/NF-101_25_copy_phd0or.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286620/elev8_kitchen_bg_copy_rcjdjn.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286617/Elev8_Front_Facing_1200_X_1200_-_Xxl_anDim_copy_gzkqgd.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286603/NF-101_12_copy_on3yzt.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286602/NF-101_7_copy_rozn9p.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1761439478/Elev8_Front_Facing_1200_X_1200_-_Xxl_an_wqnmrg.webp"
-                    ],
-                    "available": true,
-                    "payment_link": ""
-                },
-                {
                     "sku": "ELEV8-XXXL-CALIFORNIA-SE",
                     "options": {
                         "Size": "XXXL (Special Edition)",
@@ -222,8 +161,10 @@
                     "price": 25899,
                     "compare_at_price": "",
                     "images": [
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/k1_copy_ij8xt4.webp",
-                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1762286601/k2_copy_qcz1bi.webp"
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1766811762/elev8kitchensXXXL_Beige3_yqwcgy.jpg",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1766811762/elev8kitchensXXXL_Beige4_cbe4hs.jpg",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1766811762/elev8kitchensXXXL_Beige2_lpfjxx.jpg",
+                        "https://res.cloudinary.com/dczzibbkw/image/upload/v1766811762/elev8kitchensXXXL_Beige_tsog9a.jpg"
                     ],
                     "available": true,
                     "availability_note": "Limited availability; Special Edition only available in XXXL (Special Edition).",
