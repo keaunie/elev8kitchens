@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import CartButton from "./CartButton";
 // If you prefer <Link> from react-router, swap <a> with <Link to=...>
@@ -6,6 +7,7 @@ import CartButton from "./CartButton";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -20,6 +22,22 @@ export default function Navbar() {
     { label: "Customization", href: "/customize/size" },
     { label: "Book a Consultation", href: "/consultation" },
   ];
+
+  const triggerTransitionAndNavigate = (href) => {
+    if (typeof document === "undefined") {
+      navigate(href);
+      return;
+    }
+    document.documentElement.classList.add("page-fade-out");
+    document.body.classList.add("page-fade-out");
+    setTimeout(() => {
+      navigate(href);
+      setTimeout(() => {
+        document.documentElement.classList.remove("page-fade-out");
+        document.body.classList.remove("page-fade-out");
+      }, 50);
+    }, 280);
+  };
 
   return (
     <header
@@ -66,6 +84,12 @@ export default function Navbar() {
                 <li key={item.href}>
                   <a
                     href={item.href}
+                    onClick={(e) => {
+                      if (item.label === "Customization") {
+                        e.preventDefault();
+                        triggerTransitionAndNavigate(item.href);
+                      }
+                    }}
                     className={[
                       "tracking-widest transition-colors focus:outline-none",
                       "text-[#C1A88B] hover:text-white",
@@ -123,8 +147,16 @@ export default function Navbar() {
                   <li key={item.href}>
                     <a
                       href={item.href}
+                      onClick={(e) => {
+                        if (item.label === "Customization") {
+                          e.preventDefault();
+                          triggerTransitionAndNavigate(item.href);
+                          setOpen(false);
+                        } else {
+                          setOpen(false);
+                        }
+                      }}
                       className="block rounded-md px-3 py-3 text-sm tracking-widest text-[#C1A88B] hover:bg-[#C1A88B]/10"
-                      onClick={() => setOpen(false)}
                     >
                       {item.label.toUpperCase()}
                     </a>

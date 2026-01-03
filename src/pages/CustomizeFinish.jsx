@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Palette, Ruler, Gauge, Sparkles, Flame } from "lucide-react";
 import catalog from "../data/products.json";
 
@@ -15,6 +15,7 @@ export default function CustomizeFinishPage() {
     const [plumbing, setPlumbing] = useState(false); // Plumbing hookup
     const [countertop, setCountertop] = useState("Stainless Steel"); // Countertop material
     const [showSpecialistModal, setShowSpecialistModal] = useState(false);
+    const [showMobileLightbox, setShowMobileLightbox] = useState(false);
 
     const sizeValues = product.options.find((o) => o.name === "Size").values;
     const sizeParam = searchParams.get("size");
@@ -54,9 +55,39 @@ export default function CustomizeFinishPage() {
         );
     }, [product, size, color]);
 
-    const heroImage = variant?.images?.[0] || product.variants[0]?.images?.[0];
+    // Always use only the first photo from the images array
+    const heroImage =
+        (variant?.images && variant.images.length > 0 ? variant.images[0] : undefined) ||
+        product.variants[0]?.images?.[0];
     const swatches = product.swatches || {};
     const stoveLabel = stoveUpgrade ? "4 Burner w/ Side Stove" : "Standard";
+    const hotspotPositions = {
+        fuel: {
+            default: { top: "65%", left: "46%" },
+            XL: { top: "56%", left: "49%" },
+            XXL: { top: "80%", left: "55%" },
+            "XXXL (Special Edition)": { top: "70%", left: "46%" },
+        },
+        burner: {
+            default: { top: "53%", left: "44%" },
+            XL: { top: "59%", left: "53%" },
+            XXL: { top: "69%", left: "55%" },
+            "XXXL (Special Edition)": { top: "57%", left: "45%" },
+        },
+        plumbing: {
+            default: { top: "60%", left: "29%" },
+            XL: { top: "62%", left: "27%" },
+            XXL: { top: "63%", left: "39%" },
+            "XXXL (Special Edition)": { top: "60%", left: "29%" },
+        },
+        countertop: {
+            default: { top: "57%", left: "57%" },
+            XL: { top: "64%", left: "69%" },
+            XXL: { top: "65%", left: "75%" },
+            "XXXL (Special Edition)": { top: "57%", left: "57%" },
+        },
+    };
+
     const hotspots = useMemo(
         () => [
             {
@@ -64,7 +95,6 @@ export default function CustomizeFinishPage() {
                 label: "Stove / Countertop",
                 description: "Choose your fuel source for the cooktop & grill.",
                 options: ["Propane", "Natural Gas"],
-                position: { top: "65%", left: "46%" },
                 icon: Flame,
                 pricing: {
                     Propane: "Included",
@@ -76,7 +106,6 @@ export default function CustomizeFinishPage() {
                 label: "Burner Setup",
                 description: "Upgrade to a 4-burner package with side stove.",
                 options: ["Standard", "4 Burner w/ Side Stove"],
-                position: { top: "53%", left: "44%" },
                 icon: Sparkles,
                 pricing: {
                     Standard: "Included",
@@ -88,7 +117,6 @@ export default function CustomizeFinishPage() {
                 label: "Plumbing",
                 description: "Add water + drain prep near the sink.",
                 options: ["No Plumbing", "Add Plumbing"],
-                position: { top: "60%", left: "29%" },
                 icon: Sparkles,
                 pricing: {
                     "No Plumbing": "Included",
@@ -100,7 +128,6 @@ export default function CustomizeFinishPage() {
                 label: "Countertop",
                 description: "Choose your worktop material.",
                 options: ["Stainless Steel", "Sintered Stone"],
-                position: { top: "57%", left: "57%" },
                 icon: Palette,
                 pricing: {
                     "Stainless Steel": "Included",
@@ -128,6 +155,7 @@ export default function CustomizeFinishPage() {
         length: (xxxlDimensionsIn.length / 12).toFixed(2),
         height: (xxxlDimensionsIn.height / 12).toFixed(2),
     };
+    const tintColor = swatches[color] || "#C1A88B";
     const displayPrice = variant?.price ? variant.price + totalUpcharge : null;
 
     const handleBack = () => {
@@ -230,16 +258,16 @@ export default function CustomizeFinishPage() {
                 transition={{ duration: 1, delay: 1, ease: "easeInOut" }}
             />
 
-            <div className="mx-auto max-w-7xl px-6 py-12 relative">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mx-auto max-w-7xl px-4 md:px-6 py-10 md:py-12 relative">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <button
                         onClick={handleBack}
-                        className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:border-[#C1A88B]/50 hover:text-white"
+                        className="inline-flex w-full justify-center sm:w-auto items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:border-[#C1A88B]/50 hover:text-white"
                     >
                         <ArrowLeft className="h-4 w-4" />
                         Back to size
                     </button>
-                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em] text-white/70">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs uppercase tracking-[0.16em] text-white/70">
                         <span className="rounded-full bg-white/10 px-3 py-1">Step 2 of 2</span>
                         <span className="rounded-full bg-[#C1A88B]/15 px-3 py-1 text-[#C1A88B]">
                             Choose Finish
@@ -247,41 +275,41 @@ export default function CustomizeFinishPage() {
                     </div>
                 </div>
 
-                <div className="relative mt-10 space-y-10">
+                <div className="relative mt-6 md:mt-10 space-y-6 md:space-y-10">
                     {/* Showroom stage */}
-                    <div className="relative h-full min-h-[650px] w-full">
+                    <div className="relative h-full min-h-[360px] md:min-h-[650px] w-full">
                         <div className="absolute inset-0 -z-10 rounded-[32px] border border-white/5 bg-gradient-to-b from-white/5 via-white/0 to-white/5 blur-xl" />
-                        <div className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-[#0b0b0b]/80 p-6 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
-                            <div className="flex items-start justify-between">
+                        <div className="relative h-full overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 bg-[#0b0b0b]/80 p-4 md:p-6 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
+                            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                                 <div>
                                     <p className="text-xs uppercase tracking-[0.18em] text-white/60">
                                         Showroom stage
                                     </p>
-                                    <h3 className="text-2xl font-semibold text-white">
+                                    <h3 className="text-xl md:text-2xl font-semibold text-white">
                                         {product.title}
                                     </h3>
                                     <p className="text-sm text-white/65">
                                         Finish the build with a curated palette.
                                     </p>
                                 </div>
-                                <div className="flex gap-2">
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                            <div className="hidden md:flex flex-wrap gap-2 md:justify-end">
+                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
                                         <Ruler className="h-4 w-4" />
                                         {size}
                                     </span>
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
                                         <Palette className="h-4 w-4" />
                                         {color}
                                     </span>
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
                                         <Flame className="h-4 w-4" />
                                         {fuelType}
                                     </span>
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
                                         <Sparkles className="h-4 w-4" />
                                         {stoveLabel}
                                     </span>
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
                                         <Gauge className="h-4 w-4" />
                                         {displayPrice ? `$${displayPrice.toLocaleString()}` : "Pricing TBD"}
                                     </span>
@@ -290,21 +318,27 @@ export default function CustomizeFinishPage() {
 
                             <div className="relative mt-6">
                                 <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,_rgba(193,168,139,0.18),_transparent_55%)]" />
-                                <div className="relative aspect-video overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-b from-black via-[#0d0d0d] to-black shadow-inner">
-                                    <motion.img
+                                <div
+                                    className="relative aspect-video overflow-hidden rounded-[22px] md:rounded-[28px] border border-white/10 bg-gradient-to-b from-black via-[#0d0d0d] to-black shadow-inner"
+                                    onClick={() => setShowMobileLightbox(true)}
+                                >
+                                    <img
                                         key={`${size}-${color}`}
                                         src={heroImage}
                                         alt={`${product.title} in ${color}`}
-                                        className="h-full w-full object-cover"
-                                        initial={{ opacity: 0.4, scale: 1.02 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ duration: 0.6 }}
+                                        className="h-full w-full object-cover transition-none cursor-zoom-in md:cursor-default"
                                     />
-                                    <div className="pointer-events-none absolute inset-0 rounded-[28px] shadow-[inset_0_0_120px_rgba(0,0,0,0.4)]" />
+                                    <motion.div
+        aria-hidden
+        className="absolute inset-0 rounded-[22px] md:rounded-[28px] mix-blend-soft-light"
+        animate={{ backgroundColor: tintColor, opacity: 0.26 }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+                                    />
+                                    <div className="pointer-events-none absolute inset-0 rounded-[22px] md:rounded-[28px] shadow-[inset_0_0_120px_rgba(0,0,0,0.4)]" />
                                     <div className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-xs text-white/80">
                                         {size} • {color}
                                     </div>
-                                    <div className="absolute right-4 bottom-4 flex gap-2">
+                                    <div className="absolute left-3 right-3 bottom-3 md:left-auto md:right-4 md:bottom-4 flex flex-col items-start md:items-center md:flex-row gap-2">
                                         <span className="rounded-full bg-black/60 px-3 py-1 text-xs text-white/75">
                                             {variant?.availability_note || "Build ready"}
                                         </span>
@@ -317,86 +351,94 @@ export default function CustomizeFinishPage() {
                                             </span>
                                         )}
                                     </div>
-                                    {hotspots.map((spot) => {
-                                        const Icon = spot.icon || Flame;
-                                        return (
-                                            <React.Fragment key={spot.id}>
-                                                <button
-                                                    type="button"
-                                                    aria-label={`${spot.label} hotspot`}
-                                                    onClick={() =>
-                                                        setActiveHotspot((prev) =>
-                                                            prev === spot.id ? null : spot.id
-                                                        )
-                                                    }
-                                                    className="absolute z-20 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/60 ring-2 ring-[#C1A88B]/60 backdrop-blur hover:ring-[#C1A88B]"
-                                                    style={spot.position}
-                                                >
-                                                    <Icon className="h-5 w-5 text-[#C1A88B]" />
-                                                </button>
-                                                {activeHotspot === spot.id && (
-                                                    <div
-                                                        className="absolute z-30 min-w-[220px] -translate-x-1/2 -translate-y-full rounded-2xl border border-white/10 bg-black/80 p-4 text-left shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur"
-                                                        style={{
-                                                            top: `calc(${spot.position.top} - 12px)`,
-                                                            left: spot.position.left,
-                                                        }}
+                                    <div className="hidden md:block">
+                                        {hotspots.map((spot) => {
+                                            const Icon = spot.icon || Flame;
+                                            const hotspotSize =
+                                                size === "XXXL (Special Edition)" ? "h-12 w-12" : "h-10 w-10";
+                                            const position =
+                                                hotspotPositions[spot.id]?.[size] ||
+                                                hotspotPositions[spot.id]?.default ||
+                                                { top: "50%", left: "50%" };
+                                            return (
+                                                <React.Fragment key={spot.id}>
+                                                    <button
+                                                        type="button"
+                                                        aria-label={`${spot.label} hotspot`}
+                                                        onClick={() =>
+                                                            setActiveHotspot((prev) =>
+                                                                prev === spot.id ? null : spot.id
+                                                            )
+                                                        }
+                                                        className={`absolute z-20 grid ${hotspotSize} md:h-12 md:w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/60 ring-2 ring-[#C1A88B]/60 backdrop-blur hover:ring-[#C1A88B]`}
+                                                        style={position}
                                                     >
-                                                        <p className="text-xs uppercase tracking-[0.14em] text-white/60">
-                                                            {spot.label}
-                                                        </p>
-                                                        <p className="text-sm font-semibold text-white">
-                                                            Select an option
-                                                        </p>
-                                                        <p className="mt-1 text-xs text-white/65">
-                                                            {spot.description}
-                                                        </p>
-                                                        <div className="mt-3 flex flex-wrap gap-2">
-                                                            {spot.options.map((opt) => (
-                                                                <button
-                                                                    key={opt}
-                                                                    onClick={() => {
-                                                                        if (spot.id === "fuel") {
-                                                                            setFuelType(opt);
-                                                                        } else if (spot.id === "burner") {
-                                                                            setStoveUpgrade(opt === "4 Burner w/ Side Stove");
-                                                                        } else if (spot.id === "plumbing") {
-                                                                            setPlumbing(opt === "Add Plumbing");
-                                                                        } else if (spot.id === "countertop") {
-                                                                            setCountertop(opt);
-                                                                        }
-                                                                        setActiveHotspot(null);
-                                                                    }}
-                                                                    className={`rounded-full border px-3 py-2 text-xs font-semibold transition ${
-                                                                        (spot.id === "fuel"
-                                                                            ? fuelType === opt
-                                                                            : spot.id === "burner"
-                                                                                ? stoveLabel === opt
-                                                                                : spot.id === "plumbing"
-                                                                                    ? (plumbing ? opt === "Add Plumbing" : opt === "No Plumbing")
-                                                                                    : spot.id === "countertop"
-                                                                                        ? countertop === opt
-                                                                                    : false)
-                                                                            ? "border-[#C1A88B]/70 bg-[#C1A88B]/15 text-[#C1A88B]"
-                                                                            : "border-white/15 bg-white/5 text-white hover:border-[#C1A88B]/40 hover:text-[#C1A88B]"
-                                                                    }`}
-                                                                >
-                                                                    <span className="flex items-center gap-2">
-                                                                        <span>{opt}</span>
-                                                                        {spot.pricing?.[opt] && (
-                                                                            <span className="text-[10px] text-[#C1A88B]">
-                                                                                {spot.pricing[opt]}
-                                                                            </span>
-                                                                        )}
-                                                                    </span>
-                                                                </button>
-                                                            ))}
+                                                        <Icon className="h-5 w-5 text-[#C1A88B]" />
+                                                    </button>
+                                                    {activeHotspot === spot.id && (
+                                                        <div
+                                                            className="absolute z-30 min-w-[220px] -translate-x-1/2 -translate-y-full rounded-2xl border border-white/10 bg-black/80 p-4 text-left shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur"
+                                                            style={{
+                                                                top: `calc(${position.top} - 12px)`,
+                                                                left: position.left,
+                                                            }}
+                                                        >
+                                                            <p className="text-xs uppercase tracking-[0.14em] text-white/60">
+                                                                {spot.label}
+                                                            </p>
+                                                            <p className="text-sm font-semibold text-white">
+                                                                Select an option
+                                                            </p>
+                                                            <p className="mt-1 text-xs text-white/65">
+                                                                {spot.description}
+                                                            </p>
+                                                            <div className="mt-3 flex flex-wrap gap-2">
+                                                                {spot.options.map((opt) => (
+                                                                    <button
+                                                                        key={opt}
+                                                                        onClick={() => {
+                                                                            if (spot.id === "fuel") {
+                                                                                setFuelType(opt);
+                                                                            } else if (spot.id === "burner") {
+                                                                                setStoveUpgrade(opt === "4 Burner w/ Side Stove");
+                                                                            } else if (spot.id === "plumbing") {
+                                                                                setPlumbing(opt === "Add Plumbing");
+                                                                            } else if (spot.id === "countertop") {
+                                                                                setCountertop(opt);
+                                                                            }
+                                                                            setActiveHotspot(null);
+                                                                        }}
+                                                                        className={`rounded-full border px-3 py-2 text-xs font-semibold transition ${
+                                                                            (spot.id === "fuel"
+                                                                                ? fuelType === opt
+                                                                                : spot.id === "burner"
+                                                                                    ? stoveLabel === opt
+                                                                                    : spot.id === "plumbing"
+                                                                                        ? (plumbing ? opt === "Add Plumbing" : opt === "No Plumbing")
+                                                                                        : spot.id === "countertop"
+                                                                                            ? countertop === opt
+                                                                                        : false)
+                                                                                ? "border-[#C1A88B]/70 bg-[#C1A88B]/15 text-[#C1A88B]"
+                                                                                : "border-white/15 bg-white/5 text-white hover:border-[#C1A88B]/40 hover:text-[#C1A88B]"
+                                                                        }`}
+                                                                    >
+                                                                        <span className="flex items-center gap-2">
+                                                                            <span>{opt}</span>
+                                                                            {spot.pricing?.[opt] && (
+                                                                                <span className="text-[10px] text-[#C1A88B]">
+                                                                                    {spot.pricing[opt]}
+                                                                                </span>
+                                                                            )}
+                                                                        </span>
+                                                                    </button>
+                                                                ))}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                )}
-                                            </React.Fragment>
-                                        );
-                                    })}
+                                                    )}
+                                                </React.Fragment>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -418,28 +460,30 @@ export default function CustomizeFinishPage() {
                             </div>
 
                             <div className="columns-1 md:columns-2 gap-5 [column-fill:balance]">
-                                <div className="mb-5 break-inside-avoid rounded-2xl border border-white/10 bg-white/5 p-4">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="text-xs uppercase tracking-[0.18em] text-white/60">
-                                                Details
-                                            </p>
-                                            <h3 className="text-lg font-semibold text-white">XXXL Dimensions</h3>
+                                {size.includes("XXXL") && (
+                                    <div className="mb-5 break-inside-avoid rounded-2xl border border-white/10 bg-white/5 p-4">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-xs uppercase tracking-[0.18em] text-white/60">
+                                                    Details
+                                                </p>
+                                                <h3 className="text-lg font-semibold text-white">XXXL Dimensions</h3>
+                                            </div>
+                                            <Sparkles className="h-5 w-5 text-[#C1A88B]" />
                                         </div>
-                                        <Sparkles className="h-5 w-5 text-[#C1A88B]" />
+                                        <p className="mt-2 text-sm text-white/80">
+                                            Special Edition footprint to complete your outdoor kitchen experience.
+                                        </p>
+                                        <ul className="mt-3 space-y-1 text-sm text-white/80">
+                                            <li className="font-semibold text-white">
+                                                XXXL: {xxxlDimensionsFt.width}ft W | {xxxlDimensionsFt.length}ft L | {xxxlDimensionsFt.height}ft H
+                                            </li>
+                                            <li className="text-white/60 text-xs">
+                                                ({xxxlDimensionsIn.length}" × {xxxlDimensionsIn.width}" × {xxxlDimensionsIn.height}")
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <p className="mt-2 text-sm text-white/80">
-                                        Special Edition footprint to complete your outdoor kitchen experience.
-                                    </p>
-                                    <ul className="mt-3 space-y-1 text-sm text-white/80">
-                                        <li className="font-semibold text-white">
-                                            XXXL: {xxxlDimensionsFt.width}ft W | {xxxlDimensionsFt.length}ft L | {xxxlDimensionsFt.height}ft H
-                                        </li>
-                                        <li className="text-white/60 text-xs">
-                                            ({xxxlDimensionsIn.length}" × {xxxlDimensionsIn.width}" × {xxxlDimensionsIn.height}")
-                                        </li>
-                                    </ul>
-                                </div>
+                                )}
 
                                 <div className="mb-5 break-inside-avoid rounded-2xl border border-white/10 bg-white/5 p-4">
                                     <div className="flex items-center justify-between">
@@ -655,6 +699,12 @@ export default function CustomizeFinishPage() {
                 </div>
             </div>
         </motion.section>
+        <MobileLightbox
+            open={showMobileLightbox}
+            onClose={() => setShowMobileLightbox(false)}
+            image={heroImage}
+            label={`${size} • ${color}`}
+        />
         <SpecialistModal key="specialist-modal" open={showSpecialistModal} onClose={() => setShowSpecialistModal(false)} />
         </>
     );
@@ -702,6 +752,30 @@ function SpecialistModal({ open, onClose }) {
                     >
                         Email a Specialist
                     </a>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function MobileLightbox({ open, onClose, image, label }) {
+    if (!open) return null;
+    return (
+        <div className="fixed inset-0 z-[140] bg-black/90 backdrop-blur-sm md:hidden">
+            <button
+                onClick={onClose}
+                className="absolute right-4 top-4 z-10 rounded-full bg-white/10 px-3 py-2 text-sm text-white"
+            >
+                Close
+            </button>
+            <div className="flex h-full w-full items-center justify-center p-4">
+                <div className="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/10 bg-black">
+                    {label && (
+                        <div className="absolute left-3 top-3 z-10 rounded-full bg-black/70 px-3 py-1 text-xs text-white">
+                            {label}
+                        </div>
+                    )}
+                    <img src={image} alt={label || "Preview"} className="h-full w-full object-contain" />
                 </div>
             </div>
         </div>

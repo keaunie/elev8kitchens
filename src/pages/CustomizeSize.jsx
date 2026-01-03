@@ -20,7 +20,11 @@ export default function CustomizeSizePage() {
 
     const variantForSize =
         product.variants.find((v) => v.options.Size === size) || product.variants[0];
-    const heroImage = variantForSize?.images?.[0] || product.variants[0]?.images?.[0];
+    // Always use only the first photo from the images array
+    const heroImage =
+        (variantForSize?.images && variantForSize.images.length > 0
+            ? variantForSize.images[0]
+            : undefined) || product.variants[0]?.images?.[0];
 
     const handleContinue = () => {
         setIsExiting(true);
@@ -79,7 +83,7 @@ export default function CustomizeSizePage() {
                 transition={{ duration: 1, delay: 1, ease: "easeInOut" }}
             />
 
-            <div className="mx-auto max-w-7xl px-6 py-12 relative">
+            <div className="mx-auto max-w-7xl px-4 md:px-6 py-10 md:py-12 relative">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <button
                         onClick={handleBackToCollection}
@@ -96,11 +100,11 @@ export default function CustomizeSizePage() {
                     </div>
                 </div>
 
-                <div className="relative mt-10 flex flex-col gap-10 lg:flex-row lg:items-start">
+                <div className="relative mt-8 md:mt-10 flex flex-col gap-8 md:gap-10 lg:flex-row lg:items-start">
                     {/* Showroom stage */}
-                    <div className="relative h-full min-h-[650px] flex-1">
+                    <div className="relative h-full min-h-[460px] md:min-h-[650px] flex-1">
                         <div className="absolute inset-0 -z-10 rounded-[32px] border border-white/5 bg-gradient-to-b from-white/5 via-white/0 to-white/5 blur-xl" />
-                        <div className="relative h-full overflow-hidden rounded-[32px] border border-white/10 bg-[#0b0b0b]/80 p-6 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
+                        <div className="relative h-full overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 bg-[#0b0b0b]/80 p-4 md:p-6 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
                             <div className="flex items-start justify-between">
                                 <div>
                                     <p className="text-xs uppercase tracking-[0.18em] text-white/60">
@@ -127,7 +131,7 @@ export default function CustomizeSizePage() {
                                 </div>
                             </div>
 
-                            <div className="relative mt-6 h-[55vh] max-h-[520px]">
+                            <div className="relative mt-6 h-[38vh] min-h-[240px] md:h-[55vh] md:max-h-[520px]">
                                 <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,_rgba(193,168,139,0.18),_transparent_55%)]" />
                                 <div className="relative h-full overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-b from-black via-[#0d0d0d] to-black shadow-inner">
                                     <motion.img

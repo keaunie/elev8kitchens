@@ -38,6 +38,12 @@ body {
   color: #fff;
 }
 
+html.page-fade-out,
+body.page-fade-out {
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
 /* Headings use Garamond */
 h1,
 h2,

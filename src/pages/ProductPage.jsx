@@ -242,7 +242,7 @@ function StickyATC({ visible, title, price, onClick }) {
                                 onClick={onClick}
                                 className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                                Talk to Specialist
+                                Customize
                             </button>
                         </div>
                     </div>
@@ -704,6 +704,10 @@ export default function ProductPage({
         navigate("/cart");
     };
 
+    const goToFinishStep = () => {
+        navigate(`/customize/finish?size=${encodeURIComponent(size)}&color=${encodeURIComponent(color)}`);
+    };
+
     const closeNewsletter = () => {
         markNewsletterDismissed();
         setNewsletterOpen(false);
@@ -878,9 +882,9 @@ export default function ProductPage({
                                 <button
                                     className="rounded-full bg-[#C1A88B] px-6 py-4 font-medium text-black shadow hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
                                     disabled={!variant}
-                                    onClick={() => setShowContactModal(true)}
+                                    onClick={goToFinishStep}
                                 >
-                                    Talk to Specialist
+                                    Customize
                                 </button>
                             </div>
 
@@ -1645,7 +1649,7 @@ export default function ProductPage({
                 visible={stuck}
                 title={`${product.title} - ${size} / ${color}`}
                 price={price}
-                onClick={() => setShowContactModal(true)}
+                onClick={goToFinishStep}
             />
 
             {lightbox && (
