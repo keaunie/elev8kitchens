@@ -64,25 +64,25 @@ export default function CustomizeFinishPage() {
     const hotspotPositions = {
         fuel: {
             default: { top: "65%", left: "46%" },
-            XL: { top: "56%", left: "49%" },
+            XL: { top: "70%", left: "40%" },
             XXL: { top: "80%", left: "55%" },
             "XXXL (Special Edition)": { top: "70%", left: "46%" },
         },
         burner: {
             default: { top: "53%", left: "44%" },
-            XL: { top: "59%", left: "53%" },
+            XL: { top: "59%", left: "40%" },
             XXL: { top: "69%", left: "55%" },
             "XXXL (Special Edition)": { top: "57%", left: "45%" },
         },
         plumbing: {
             default: { top: "60%", left: "29%" },
-            XL: { top: "62%", left: "27%" },
+            XL: { top: "55%", left: "22%" },
             XXL: { top: "63%", left: "39%" },
             "XXXL (Special Edition)": { top: "60%", left: "29%" },
         },
         countertop: {
             default: { top: "57%", left: "57%" },
-            XL: { top: "64%", left: "69%" },
+            XL: { top: "55%", left: "55%" },
             XXL: { top: "65%", left: "75%" },
             "XXXL (Special Edition)": { top: "57%", left: "57%" },
         },
@@ -281,7 +281,7 @@ export default function CustomizeFinishPage() {
                         <div className="absolute inset-0 -z-10 rounded-[32px] border border-white/5 bg-gradient-to-b from-white/5 via-white/0 to-white/5 blur-xl" />
                         <div className="relative h-full overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 bg-[#0b0b0b]/80 p-4 md:p-6 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
                             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                                <div>
+                                <div className="text-center md:text-left">
                                     <p className="text-xs uppercase tracking-[0.18em] text-white/60">
                                         Showroom stage
                                     </p>
@@ -292,27 +292,48 @@ export default function CustomizeFinishPage() {
                                         Finish the build with a curated palette.
                                     </p>
                                 </div>
-                            <div className="hidden md:flex flex-wrap gap-2 md:justify-end">
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
-                                        <Ruler className="h-4 w-4" />
-                                        {size}
-                                    </span>
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
-                                        <Palette className="h-4 w-4" />
-                                        {color}
-                                    </span>
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
-                                        <Flame className="h-4 w-4" />
-                                        {fuelType}
-                                    </span>
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
-                                        <Sparkles className="h-4 w-4" />
-                                        {stoveLabel}
-                                    </span>
-                                    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] md:px-3 md:py-1 md:text-xs text-white/80">
-                                        <Gauge className="h-4 w-4" />
-                                        {displayPrice ? `$${displayPrice.toLocaleString()}` : "Pricing TBD"}
-                                    </span>
+                                <div className="hidden md:flex flex-col gap-2 md:items-end md:justify-end">
+                                    <div className="flex flex-wrap gap-2 justify-end">
+                                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                                            <Ruler className="h-4 w-4" />
+                                            {size}
+                                        </span>
+                                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                                            <Palette className="h-4 w-4" />
+                                            {color}
+                                        </span>
+                                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                                            <Flame className="h-4 w-4" />
+                                            {fuelType}
+                                        </span>
+                                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                                            <Sparkles className="h-4 w-4" />
+                                            {stoveLabel}
+                                        </span>
+                                        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                                            <Gauge className="h-4 w-4" />
+                                            {displayPrice ? `$${displayPrice.toLocaleString()}` : "Pricing TBD"}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-2 justify-end">
+                                        {allowedColors.map((c) => (
+                                            <button
+                                                key={c}
+                                                onClick={() => setColor(c)}
+                                                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold transition ${
+                                                    color === c
+                                                        ? "border-[#C1A88B]/70 bg-[#C1A88B]/15 text-[#C1A88B]"
+                                                        : "border-white/15 bg-white/5 text-white hover:border-[#C1A88B]/40 hover:text-[#C1A88B]"
+                                                }`}
+                                            >
+                                                <span
+                                                    className="h-4 w-4 rounded-full border border-white/15"
+                                                    style={{ background: swatches[c] || "#d4d4d4" }}
+                                                />
+                                                {c}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 

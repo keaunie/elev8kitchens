@@ -105,8 +105,8 @@ export default function CustomizeSizePage() {
                     <div className="relative h-full min-h-[460px] md:min-h-[650px] flex-1">
                         <div className="absolute inset-0 -z-10 rounded-[32px] border border-white/5 bg-gradient-to-b from-white/5 via-white/0 to-white/5 blur-xl" />
                         <div className="relative h-full overflow-hidden rounded-[24px] md:rounded-[32px] border border-white/10 bg-[#0b0b0b]/80 p-4 md:p-6 shadow-[0_30px_100px_rgba(0,0,0,0.55)]">
-                            <div className="flex items-start justify-between">
-                                <div>
+                            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                <div className="text-center md:text-left">
                                     <p className="text-xs uppercase tracking-[0.18em] text-white/60">
                                         Showroom stage
                                     </p>
@@ -117,7 +117,7 @@ export default function CustomizeSizePage() {
                                         Preview your platform before dialing in finishes.
                                     </p>
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex flex-wrap justify-center md:justify-end gap-2">
                                     <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
                                         <Ruler className="h-4 w-4" />
                                         {size}
@@ -214,12 +214,12 @@ function SizeCarousel({ sizeValues, size, setSize }) {
     return (
         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0a]/80 p-4 min-h-[260px]">
             <div className="mb-3 flex items-center justify-between">
-                <span className="text-sm font-semibold text-[#c7e19a] uppercase tracking-[0.14em]">
+                <span className="text-sm font-semibold text-[#C1A88B] uppercase tracking-[0.14em]">
                     Sizes
                 </span>
                 <div className="h-1 w-28 rounded-full bg-white/10">
                     <div
-                        className="h-1 rounded-full bg-[#c7e19a]"
+                        className="h-1 rounded-full bg-[#C1A88B]"
                         style={{
                             width: total ? `${Math.min(100, ((currentIndex + 1) / total) * 100)}%` : "0%",
                         }}
@@ -232,7 +232,7 @@ function SizeCarousel({ sizeValues, size, setSize }) {
                     aria-label="Previous size"
                     onClick={() => setSize(sizeValues[Math.max(currentIndex - 1, 0)])}
                     disabled={currentIndex === 0}
-                    className={`absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/60 px-1.5 py-1 text-white ring-1 ring-white/15 hover:ring-[#c7e19a] ${
+                    className={`absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/60 px-1.5 py-1 text-white ring-1 ring-white/15 hover:ring-[#C1A88B] ${
                         currentIndex === 0 ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                 >
@@ -242,7 +242,7 @@ function SizeCarousel({ sizeValues, size, setSize }) {
                     aria-label="Next size"
                     onClick={() => setSize(sizeValues[Math.min(currentIndex + 1, total - 1)])}
                     disabled={currentIndex === total - 1}
-                    className={`absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/60 px-1.5 py-1 text-white ring-1 ring-white/15 hover:ring-[#c7e19a] ${
+                    className={`absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/60 px-1.5 py-1 text-white ring-1 ring-white/15 hover:ring-[#C1A88B] ${
                         currentIndex === total - 1 ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                 >
@@ -270,13 +270,13 @@ function SizeCarousel({ sizeValues, size, setSize }) {
                                         onClick={() => setSize(s)}
                                         className={`flex h-20 w-20 items-center justify-center rounded-full border-2 transition ${
                                             selected
-                                                ? "border-[#c7e19a] bg-white/20 shadow-[0_0_0_6px_rgba(199,225,154,0.12)]"
-                                                : "border-white/20 bg-white/10 hover:border-[#c7e19a]/80"
+                                                ? "border-[#C1A88B] bg-white/20 shadow-[0_0_0_6px_rgba(193,168,139,0.12)]"
+                                                : "border-white/20 bg-white/10 hover:border-[#C1A88B]/80"
                                         }`}
                                     >
-                                        <Ruler className="h-7 w-7 text-[#c7e19a]" />
+                                        <Ruler className="h-7 w-7 text-[#C1A88B]" />
                                     </button>
-                                    <p className={`text-sm font-semibold ${selected ? "text-[#c7e19a]" : "text-white/80"}`}>
+                                    <p className={`text-sm font-semibold ${selected ? "text-[#C1A88B]" : "text-white/80"}`}>
                                         {s}
                                     </p>
                                 </div>
@@ -293,7 +293,7 @@ function SizeCarousel({ sizeValues, size, setSize }) {
                         aria-label={`Go to ${s}`}
                         onClick={() => setSize(s)}
                         className={`h-2 w-6 rounded-full transition ${
-                            i === currentIndex ? "bg-[#c7e19a]" : "bg-white/20 hover:bg-white/40"
+                            i === currentIndex ? "bg-[#C1A88B]" : "bg-white/20 hover:bg-white/40"
                         }`}
                     />
                 ))}

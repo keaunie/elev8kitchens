@@ -28,15 +28,16 @@ export default function Navbar() {
       navigate(href);
       return;
     }
-    document.documentElement.classList.add("page-fade-out");
-    document.body.classList.add("page-fade-out");
+    document.documentElement.classList.add("page-fade");
+    document.body.classList.add("page-fade");
+    // Allow fade-out, then navigate; fade-in happens as the class is removed after navigation
     setTimeout(() => {
       navigate(href);
       setTimeout(() => {
-        document.documentElement.classList.remove("page-fade-out");
-        document.body.classList.remove("page-fade-out");
-      }, 50);
-    }, 280);
+        document.documentElement.classList.remove("page-fade");
+        document.body.classList.remove("page-fade");
+      }, 350);
+    }, 180);
   };
 
   return (

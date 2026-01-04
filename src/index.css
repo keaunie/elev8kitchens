@@ -44,6 +44,61 @@ body.page-fade-out {
   opacity: 0;
 }
 
+html.page-wipe,
+body.page-wipe {
+  position: relative;
+}
+
+html.page-wipe::after,
+body.page-wipe::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(193,168,139,0.9), rgba(120,98,73,0.9), rgba(18,18,18,0.95));
+  transform: translateX(-100%);
+  animation: page-wipe 0.45s ease forwards;
+}
+
+@keyframes page-wipe {
+  0% {
+    transform: translateX(-100%);
+  }
+  60% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+html.page-fade,
+body.page-fade {
+  position: relative;
+}
+
+html.page-fade::after,
+body.page-fade::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: #000;
+  opacity: 0;
+  animation: page-fade-black 0.35s ease forwards;
+}
+
+@keyframes page-fade-black {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Headings use Garamond */
 h1,
 h2,

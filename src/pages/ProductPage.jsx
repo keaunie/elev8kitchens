@@ -738,7 +738,7 @@ export default function ProductPage({
                         images={gallery}
                         onOpen={(i) => setLightbox({ index: i })}
                     />
-                    <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-white/80">
+                    <div className="mt-6 hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-3 text-white/80">
                         {badges.map((b) => (
                             <div
                                 key={b}
@@ -771,6 +771,21 @@ export default function ProductPage({
                             This isn't just a BBQ. It's the kitchen you've been dreaming
                             about. Trusted by 100s. Own yours today!
                         </div>
+
+                        {/* Mobile badges relocated below product info */}
+                        {badges.length > 0 && (
+                            <div className="mb-4 grid grid-cols-1 gap-3 text-white/80 lg:hidden">
+                                {badges.map((b) => (
+                                    <div
+                                        key={b}
+                                        className="flex items-center gap-2 rounded-xl bg-white/5 p-3 ring-1 ring-white/10"
+                                    >
+                                        <Check className="h-4 w-4 text-[#C1A88B]" />
+                                        <span className="text-sm">{b}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
 
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:gap-3">
                             <div className="flex items-baseline gap-1">
@@ -998,6 +1013,10 @@ export default function ProductPage({
                                                             • <strong className="text-white">XXL:</strong> 3ft
                                                             WIDE | 11.7ft LONG | 7.8ft TALL
                                                         </li>
+                                                        <li>
+                                                            • <strong className="text-white">XXXL (Special Edition):</strong>{" "}
+                                                            3.33ft WIDE | 12.33ft LONG | 7.75ft TALL
+                                                        </li>
                                                     </ul>
                                                     <p className="mt-1 text-xs text-white/70">
                                                         The XXL comes with the upgraded Smart TV, extra
@@ -1026,6 +1045,13 @@ export default function ProductPage({
                                                                 Anthracite:
                                                             </strong>{" "}
                                                             Black exterior, black cabinet, beige countertop
+                                                        </li>
+                                                        <li>
+                                                            • <strong className="text-white">
+                                                                California (SE):
+                                                            </strong>{" "}
+                                                            Special Edition beige exterior with coordinated cabinetry and counter;
+                                                            only available in XXXL (Special Edition).
                                                         </li>
                                                     </ul>
                                                 </div>
