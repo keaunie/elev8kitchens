@@ -108,29 +108,29 @@ function Home() {
   }, []);
 
   // Post-show appreciation modal (once per session)
-  const [thanksOpen, setThanksOpen] = useState(false);
-  const thanksKey = "elev8_fs_thanks_seen";
+  // const [thanksOpen, setThanksOpen] = useState(false);
+  // const thanksKey = "elev8_fs_thanks_seen";
 
-  useEffect(() => {
-    const seen = sessionStorage.getItem(thanksKey);
-    if (!seen) {
-      const t = setTimeout(() => setThanksOpen(true), 800);
-      return () => clearTimeout(t);
-    }
-    return undefined;
-  }, []);
+  // useEffect(() => {
+  //   const seen = sessionStorage.getItem(thanksKey);
+  //   if (!seen) {
+  //     const t = setTimeout(() => setThanksOpen(true), 800);
+  //     return () => clearTimeout(t);
+  //   }
+  //   return undefined;
+  // }, []);
 
-  const handleThanksClose = () => {
-    sessionStorage.setItem(thanksKey, "true");
-    setThanksOpen(false);
-  };
+  // const handleThanksClose = () => {
+  //   sessionStorage.setItem(thanksKey, "true");
+  //   setThanksOpen(false);
+  // };
 
   // Placeholder carousel images — replace with provided assets when ready
-  const thanksImages = [
-    "https://raw.githubusercontent.com/keaunie/elev8kitchens/refs/heads/main/src/assets/showcase1.jpg",
-    "https://raw.githubusercontent.com/keaunie/elev8kitchens/refs/heads/main/src/assets/showcase2.jpg",
-    "https://raw.githubusercontent.com/keaunie/elev8kitchens/refs/heads/main/src/assets/showcase3.jpg",
-  ];
+  // const thanksImages = [
+  //   "https://raw.githubusercontent.com/keaunie/elev8kitchens/refs/heads/main/src/assets/showcase1.jpg",
+  //   "https://raw.githubusercontent.com/keaunie/elev8kitchens/refs/heads/main/src/assets/showcase2.jpg",
+  //   "https://raw.githubusercontent.com/keaunie/elev8kitchens/refs/heads/main/src/assets/showcase3.jpg",
+  // ];
 
   return (
     <>
@@ -139,11 +139,11 @@ function Home() {
         onClose={() => setNewsletterOpen(false)}
       /> */}
 
-      <ThanksModal
+      {/* <ThanksModal
         open={thanksOpen}
         onClose={handleThanksClose}
         images={thanksImages}
-      />
+      /> */}
       <HeroCarousel slides={slides} interval={6000} />
       <FeaturesSection
         kicker="What we offer"
@@ -214,6 +214,7 @@ export default function App() {
   );
 }
 
+/*
 function ThanksModal({ open, onClose, images = [] }) {
   const [index, setIndex] = useState(0);
 
@@ -294,3 +295,4 @@ function ThanksModal({ open, onClose, images = [] }) {
     </AnimatePresence>
   );
 }
+*/
