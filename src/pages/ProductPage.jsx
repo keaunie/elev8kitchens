@@ -253,7 +253,7 @@ function StickyATC({ visible, title, price, onClick }) {
 }
 
 /** ===================== NEWSLETTER MODAL (IMPROVED) ===================== **/
-
+/*
 const NEWSLETTER_STATUS = {
     DISMISSED: "dismissed",
     SUBSCRIBED: "subscribed",
@@ -408,6 +408,7 @@ export function NewsletterModal({ open, onClose, onSubscribed }) {
         </AnimatePresence>
     );
 }
+*/
 
 /* ===================== FULL-BLEED STORY (PARALLAX) ===================== */
 
@@ -537,7 +538,7 @@ function ProductStoryParallax() {
 
 /* ===================== END STORY ===================== */
 
-const NEWSLETTER_STORAGE_KEY = "elev8_newsletter_status";
+/* const NEWSLETTER_STORAGE_KEY = "elev8_newsletter_status"; */
 
 export default function ProductPage({
     handle = "elev8-modular-outdoor-bbq-kitchen",
@@ -560,7 +561,7 @@ export default function ProductPage({
     const [lightbox, setLightbox] = useState(null);
     const [toastVisible, setToastVisible] = useState(false);
     const [showAllFeatures, setShowAllFeatures] = useState(false);
-    const [newsletterOpen, setNewsletterOpen] = useState(false);
+    // const [newsletterOpen, setNewsletterOpen] = useState(false);
     const [showContactModal, setShowContactModal] = useState(false);
 
     const variant = useMemo(
@@ -604,74 +605,74 @@ export default function ProductPage({
     const { addItem } = useCart();
     const navigate = useNavigate();
 
-    const markNewsletterDismissed = () => {
-        if (typeof window === "undefined") return;
-        window.localStorage.setItem(
-            NEWSLETTER_STORAGE_KEY,
-            NEWSLETTER_STATUS.DISMISSED
-        );
-    };
+    // const markNewsletterDismissed = () => {
+    //     if (typeof window === "undefined") return;
+    //     window.localStorage.setItem(
+    //         NEWSLETTER_STORAGE_KEY,
+    //         NEWSLETTER_STATUS.DISMISSED
+    //     );
+    // };
 
-    const markNewsletterSubscribed = () => {
-        if (typeof window === "undefined") return;
-        window.localStorage.setItem(
-            NEWSLETTER_STORAGE_KEY,
-            NEWSLETTER_STATUS.SUBSCRIBED
-        );
-    };
+    // const markNewsletterSubscribed = () => {
+    //     if (typeof window === "undefined") return;
+    //     window.localStorage.setItem(
+    //         NEWSLETTER_STORAGE_KEY,
+    //         NEWSLETTER_STATUS.SUBSCRIBED
+    //     );
+    // };
 
-    // Smart newsletter triggers: delay + scroll-depth + exit-intent
-    useEffect(() => {
-        if (typeof window === "undefined") return;
+    // // Smart newsletter triggers: delay + scroll-depth + exit-intent
+    // useEffect(() => {
+    //     if (typeof window === "undefined") return;
 
-        const status = window.localStorage.getItem(NEWSLETTER_STORAGE_KEY);
-        if (status === NEWSLETTER_STATUS.DISMISSED ||
-            status === NEWSLETTER_STATUS.SUBSCRIBED) {
-            return;
-        }
+    //     const status = window.localStorage.getItem(NEWSLETTER_STORAGE_KEY);
+    //     if (status === NEWSLETTER_STATUS.DISMISSED ||
+    //         status === NEWSLETTER_STATUS.SUBSCRIBED) {
+    //         return;
+    //     }
 
-        let hasOpened = false;
+    //     let hasOpened = false;
 
-        const openModal = () => {
-            if (hasOpened || newsletterOpen) return;
-            hasOpened = true;
-            setNewsletterOpen(true);
-        };
+    //     const openModal = () => {
+    //         if (hasOpened || newsletterOpen) return;
+    //         hasOpened = true;
+    //         setNewsletterOpen(true);
+    //     };
 
-        // Time delay (e.g., 15s)
-        const timerId = window.setTimeout(openModal, 15000);
+    //     // Time delay (e.g., 15s)
+    //     const timerId = window.setTimeout(openModal, 15000);
 
-        // Scroll trigger (50% of page)
-        const handleScroll = () => {
-            if (hasOpened || newsletterOpen) return;
-            const scrollHeight =
-                document.documentElement.scrollHeight - window.innerHeight;
-            if (scrollHeight <= 0) return;
-            const depth = window.scrollY / scrollHeight;
-            if (depth > 0.5) {
-                openModal();
-                window.removeEventListener("scroll", handleScroll);
-            }
-        };
+    //     // Scroll trigger (50% of page)
+    //     const handleScroll = () => {
+    //         if (hasOpened || newsletterOpen) return;
+    //         const scrollHeight =
+    //             document.documentElement.scrollHeight - window.innerHeight;
+    //         if (scrollHeight <= 0) return;
+    //         const depth = window.scrollY / scrollHeight;
+    //         if (depth > 0.5) {
+    //             openModal();
+    //             window.removeEventListener("scroll", handleScroll);
+    //         }
+    //     };
 
-        // Exit intent (desktop)
-        const handleMouseLeave = (e) => {
-            if (hasOpened || newsletterOpen) return;
-            if (e.clientY <= 0) {
-                openModal();
-                window.removeEventListener("mouseleave", handleMouseLeave);
-            }
-        };
+    //     // Exit intent (desktop)
+    //     const handleMouseLeave = (e) => {
+    //         if (hasOpened || newsletterOpen) return;
+    //         if (e.clientY <= 0) {
+    //             openModal();
+    //             window.removeEventListener("mouseleave", handleMouseLeave);
+    //         }
+    //     };
 
-        window.addEventListener("scroll", handleScroll);
-        window.addEventListener("mouseleave", handleMouseLeave);
+    //     window.addEventListener("scroll", handleScroll);
+    //     window.addEventListener("mouseleave", handleMouseLeave);
 
-        return () => {
-            window.clearTimeout(timerId);
-            window.removeEventListener("scroll", handleScroll);
-            window.removeEventListener("mouseleave", handleMouseLeave);
-        };
-    }, [newsletterOpen]);
+    //     return () => {
+    //         window.clearTimeout(timerId);
+    //         window.removeEventListener("scroll", handleScroll);
+    //         window.removeEventListener("mouseleave", handleMouseLeave);
+    //     };
+    // }, [newsletterOpen]);
 
     const handleAddToCart = () => {
         if (!variant) return;
@@ -708,18 +709,18 @@ export default function ProductPage({
         navigate(`/customize/finish?size=${encodeURIComponent(size)}&color=${encodeURIComponent(color)}`);
     };
 
-    const closeNewsletter = () => {
-        markNewsletterDismissed();
-        setNewsletterOpen(false);
-    };
+    // const closeNewsletter = () => {
+    //     markNewsletterDismissed();
+    //     setNewsletterOpen(false);
+    // };
 
     return (
         <section className="relative bg-black text-white">
-            <NewsletterModal
+            {/* <NewsletterModal
                 open={newsletterOpen}
                 onClose={closeNewsletter}
                 onSubscribed={() => markNewsletterSubscribed()}
-            />
+            /> */}
 
             {/* Ambient gold glows */}
             <div className="pointer-events-none absolute inset-0 -z-10">

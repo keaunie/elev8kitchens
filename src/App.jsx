@@ -30,7 +30,7 @@ import PrivacyPolicyPage from "./policies/PrivacyPolicy.jsx";
 import GalleryPage from "./pages/GalleryPage.jsx";
 import ScrollToHash from "./components/ScrollToHash.jsx";
 import OrderComplete from "./pages/OrderComplete.jsx";
-import { NewsletterModal } from "./pages/ProductPage.jsx";
+// import { NewsletterModal } from "./pages/ProductPage.jsx";
 
 
 const slides = [
